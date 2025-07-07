@@ -55,9 +55,10 @@ const Home = ({ navigation }) => {
                 </View>
 
                 <View style={styles.content}>
-                    <View style={styles.section}>
-                        <View style={styles.sectionHeaderSimple}>
-                            <Text style={styles.sectionTitle}>Get started</Text>
+                    <View style={styles.featuredSection}>
+                        <View style={styles.featuredSectionHeader}>
+                            <Text style={styles.featuredSectionTitle}>Get started</Text>
+                            <Text style={styles.featuredSectionSubtitle}>Quick actions to enhance your reading experience</Text>
                         </View>
                         <View style={styles.verticalCardContainer}>
                             <TouchableOpacity style={styles.getStartedCard} onPress={onTrackReading}>
@@ -199,11 +200,38 @@ const styles = StyleSheet.create({
         // Removed horizontal padding - now handled by individual sections
     },
     section: {
-        marginBottom: 36,
+        marginBottom: 28,
     },
     sectionWithExtraPadding: {
-        marginBottom: 36,
-        marginTop: 20,
+        marginBottom: 28,
+        marginTop: 16,
+    },
+    featuredSection: {
+        marginBottom: 32,
+        backgroundColor: '#FAFAF9',
+        borderRadius: 16,
+        padding: 20,
+        marginHorizontal: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 2,
+    },
+    featuredSectionHeader: {
+        marginBottom: 16,
+    },
+    featuredSectionTitle: {
+        fontSize: 20,
+        fontFamily: 'LibreBaskerville_700Bold',
+        color: '#1D1D1D',
+        marginBottom: 4,
+    },
+    featuredSectionSubtitle: {
+        fontSize: 14,
+        fontFamily: 'System',
+        color: '#71727A',
+        lineHeight: 18,
     },
     sectionHeader: {
         flexDirection: 'row',
@@ -246,7 +274,6 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
     },
     verticalCardContainer: {
-        paddingHorizontal: 20,
         gap: 12,
     },
     getStartedCard: {
@@ -359,30 +386,33 @@ const styles = StyleSheet.create({
     },
     abstractShape1: {
         position: 'absolute',
-        width: 22,
-        height: 22,
-        backgroundColor: '#6B7280',
-        borderRadius: 11,
-        top: 4,
-        left: 4,
+        width: 24,
+        height: 18,
+        backgroundColor: '#8B5A3C',
+        borderRadius: 2,
+        top: 6,
+        left: 5,
+        transform: [{ rotate: '-15deg' }],
     },
     abstractShape2: {
         position: 'absolute',
-        width: 16,
-        height: 16,
-        backgroundColor: '#9CA3AF',
-        borderRadius: 4,
-        top: 9,
-        right: 7,
+        width: 20,
+        height: 14,
+        backgroundColor: '#A0522D',
+        borderRadius: 2,
+        top: 12,
+        right: 6,
+        transform: [{ rotate: '10deg' }],
     },
     abstractShape3: {
         position: 'absolute',
-        width: 14,
-        height: 14,
-        backgroundColor: '#D1D5DB',
-        borderRadius: 7,
-        bottom: 7,
-        left: 14,
+        width: 16,
+        height: 12,
+        backgroundColor: '#D2B48C',
+        borderRadius: 2,
+        bottom: 8,
+        left: 12,
+        transform: [{ rotate: '25deg' }],
     },
     moodMatcherText: {
         flex: 1,
@@ -430,30 +460,30 @@ const styles = StyleSheet.create({
     },
     communityShape1: {
         position: 'absolute',
-        width: 20,
-        height: 20,
-        backgroundColor: '#4B5563',
-        borderRadius: 10,
-        top: 7,
-        left: 7,
+        width: 18,
+        height: 18,
+        backgroundColor: '#2E0A09',
+        borderRadius: 9,
+        top: 8,
+        left: 8,
     },
     communityShape2: {
         position: 'absolute',
-        width: 15,
-        height: 15,
-        backgroundColor: '#6B7280',
-        borderRadius: 3,
-        top: 14,
-        right: 9,
+        width: 12,
+        height: 12,
+        backgroundColor: '#5D4037',
+        borderRadius: 6,
+        top: 6,
+        right: 10,
     },
     communityShape3: {
         position: 'absolute',
-        width: 17,
-        height: 17,
-        backgroundColor: '#9CA3AF',
-        borderRadius: 8,
-        bottom: 9,
-        left: 11,
+        width: 15,
+        height: 15,
+        backgroundColor: '#8D6E63',
+        borderRadius: 3,
+        bottom: 10,
+        left: 12,
     },
     communityText: {
         flex: 1,

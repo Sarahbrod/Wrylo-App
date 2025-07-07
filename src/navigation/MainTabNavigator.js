@@ -1,5 +1,6 @@
 import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
 
 import Home from '../screens/Home';
 import RecommendationsScreen from '../screens/RecommendationsScreen';
@@ -9,21 +10,28 @@ import AccountScreen from '../screens/AccountScreen';
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
-    //const paddingHorizontal = 12; // Padding on each side
+    const [fontsLoaded] = useFonts({
+        LibreBaskerville_400Regular,
+        LibreBaskerville_700Bold,
+    });
+
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return (
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: '#7FABC7',
-                tabBarInactiveTintColor: '#1D1D1D',
+                tabBarActiveTintColor: '#2E0A09',
+                tabBarInactiveTintColor: '#8D6E63',
                 tabBarStyle: {
                     position: 'absolute',
                     bottom: 30,
                     marginLeft: 20,
                     marginRight: 20,
-                    backgroundColor: '#F6F4F1',
+                    backgroundColor: '#FFFFFF',
                     borderTopWidth: 0,
                     borderRadius: 16,
                     paddingBottom: 12,
@@ -35,10 +43,12 @@ const MainTabNavigator = () => {
                     shadowRadius: 10,
                     elevation: 8,
                     zIndex: 1000,
+                    borderWidth: 1,
+                    borderColor: '#F0F0F0',
                 },
                 tabBarLabelStyle: {
-                    fontSize: 12,
-                    fontWeight: '600',
+                    fontSize: 11,
+                    fontFamily: 'LibreBaskerville_400Regular',
                     marginTop: 4,
                 },
                 tabBarItemStyle: {
@@ -54,7 +64,7 @@ const MainTabNavigator = () => {
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color }) => (
-                        <TabIcon name="🏠" color={color} />
+                        <TabIcon name="📖" color={color} />
                     ),
                 }}
             />
@@ -64,7 +74,7 @@ const MainTabNavigator = () => {
                 options={{
                     tabBarLabel: 'Discover',
                     tabBarIcon: ({ color }) => (
-                        <TabIcon name="🔍" color={color} />
+                        <TabIcon name="✨" color={color} />
                     ),
                 }}
             />
@@ -84,7 +94,7 @@ const MainTabNavigator = () => {
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: ({ color }) => (
-                        <TabIcon name="👤" color={color} />
+                        <TabIcon name="📝" color={color} />
                     ),
                 }}
             />
@@ -93,11 +103,15 @@ const MainTabNavigator = () => {
 };
 
 const TabIcon = ({ name, color }) => {
+    const isActive = color === '#2E0A09';
     return (
         <Text style={{
-            fontSize: 20,
+            fontSize: isActive ? 22 : 20,
             color: color,
-            opacity: color === '#7FABC7' ? 1 : 0.6
+            opacity: isActive ? 1 : 0.7,
+            textShadowColor: isActive ? '#2E0A09' : 'transparent',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: isActive ? 2 : 0,
         }}>
             {name}
         </Text>
