@@ -6,6 +6,7 @@ const SplashScreen = ({ navigation }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const scaleAnim = useRef(new Animated.Value(0.3)).current;
     const slideAnim = useRef(new Animated.Value(0)).current;
+    const pulseAnim = useRef(new Animated.Value(1)).current;
     
     const [fontsLoaded] = useFonts({
         LibreBaskerville_400Regular,
@@ -17,21 +18,39 @@ const SplashScreen = ({ navigation }) => {
             return;
         }
 
+        const pulseAnimation = Animated.loop(
+            Animated.sequence([
+                Animated.timing(pulseAnim, {
+                    toValue: 1.1,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(pulseAnim, {
+                    toValue: 1,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+            ]),
+            { iterations: 1 }
+        );
+
         const animationSequence = Animated.sequence([
             Animated.parallel([
                 Animated.timing(fadeAnim, {
                     toValue: 1,
-                    duration: 800,
+                    duration: 600,
                     useNativeDriver: true,
                 }),
                 Animated.spring(scaleAnim, {
                     toValue: 1,
-                    tension: 10,
-                    friction: 3,
+                    tension: 15,
+                    friction: 4,
                     useNativeDriver: true,
                 }),
             ]),
-            Animated.delay(1500),
+            Animated.delay(100),
+            pulseAnimation,
+            Animated.delay(200),
             Animated.parallel([
                 Animated.timing(fadeAnim, {
                     toValue: 0,
@@ -39,7 +58,7 @@ const SplashScreen = ({ navigation }) => {
                     useNativeDriver: true,
                 }),
                 Animated.timing(slideAnim, {
-                    toValue: -50,
+                    toValue: -100,
                     duration: 500,
                     useNativeDriver: true,
                 }),
@@ -72,7 +91,12 @@ const SplashScreen = ({ navigation }) => {
                     ]
                 }
             ]}>
-                <Text style={styles.logoText}>wrylo</Text>
+                <Animated.Text style={[
+                    styles.logoText,
+                    {
+                        transform: [{ scale: pulseAnim }]
+                    }
+                ]}>wrylo</Animated.Text>
             </Animated.View>
         </View>
     );

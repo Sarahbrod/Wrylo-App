@@ -48,7 +48,6 @@ const SignUpScreen = ({ navigation }) => {
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.container}>
                 <Text style={styles.title}>Create Account</Text>
-                <Text style={styles.subtitle}>Start your reading journey with Wrylo</Text>
                 
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputLabel}>Username</Text>
@@ -80,7 +79,6 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
                 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Confirm Password</Text>
                     <CustomInput
                         placeholder="Confirm your password"
                         value={confirmPassword}
@@ -92,9 +90,8 @@ const SignUpScreen = ({ navigation }) => {
                 <CustomButton text="Sign Up" onPress={onSignUpPressed} />
                 
                 <View style={styles.dividerSpacing}>
-                    <Divider />
+                    <Divider text="Or continue with" />
                 </View>
-                <Text style={styles.orContinueText}>Or continue with</Text>
                 
                 <View style={styles.alt}>
                     <CustomButton onPress={onSignUpGoogle} bgColor='#212121' fgColor="#FCF7F7" type="ICON" iconName="google" iconLibrary="AntDesign" />
@@ -125,43 +122,27 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontFamily: 'LibreBaskerville_700Bold',
         color: '#333',
-        marginBottom: 8,
-        textAlign: 'left',
-    },
-    subtitle: {
-        fontSize: 16,
-        fontFamily: 'LibreBaskerville_400Regular',
-        color: '#71727A',
-        marginBottom: 16,
-        paddingBottom: 8,
+        marginBottom: 32,
         textAlign: 'left',
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 12,
+        marginBottom: 10,
     },
     inputLabel: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '600',
         color: '#333',
-        marginBottom: 8,
+        marginBottom: 4,
         marginLeft: 4,
     },
     dividerSpacing: {
-        paddingTop: 16,
-        paddingBottom: 6,
-    },
-
-    orContinueText: {
-        paddingTop: 6,
-        color: '#4A4A4A',
-        textAlign: 'center',
-        fontSize: 14,
-        fontFamily: 'LibreBaskerville_400Regular',
+        paddingTop: 24,
+        paddingBottom: 16,
     },
     
     alt: {
-        paddingTop: 12,
+        paddingTop: 16,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
@@ -172,7 +153,7 @@ const styles = StyleSheet.create({
     bottomLogin: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 24,
+        paddingTop: 32,
         paddingBottom: 16,
         justifyContent: 'center',
     },

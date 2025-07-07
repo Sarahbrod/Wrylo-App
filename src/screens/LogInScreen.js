@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import CustomInput from '../../src/components/CustomInput';
+import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import Divider from '../components/Divider';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
@@ -47,7 +47,7 @@ const LogInScreen = ({ navigation }) => {
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.container}>
                 <Text style={styles.welcomeText}>Welcome back</Text>
-                <Text style={styles.loginSubtext}>Sign in to continue your reading journey</Text>
+                <Text style={styles.loginSubtext}>Log in to continue your reading journey</Text>
 
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputLabel}>Username</Text>
@@ -68,9 +68,8 @@ const LogInScreen = ({ navigation }) => {
                 </View>
                 <CustomButton text="Log In" onPress={onLogInPressed} />
                 <View style={styles.dividerSpacing}>
-                    <Divider />
+                    <Divider text="Or continue with" />
                 </View>
-                <Text style={styles.orContinueText}>Or continue with</Text>
                 <View style={styles.alt}>
                     <CustomButton onPress={onLogInGoogle} bgColor='#212121' fgColor="#FCF7F7" type="ICON" iconName="google" iconLibrary="AntDesign" />
                     <CustomButton onPress={onLogInFacebook} bgColor='#212121' fgColor="#FCF7F7" type="ICON" iconName="facebook-square" iconLibrary="FontAwesome" />
@@ -92,8 +91,8 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'stretch',
         paddingHorizontal: 24,
-        paddingTop: 120,
-        paddingBottom: 120,
+        paddingTop: 100,
+        paddingBottom: 40,
         //minHeight: Dimensions.get('window').height,
         justifyContent: 'center',
     },
@@ -110,8 +109,8 @@ const styles = StyleSheet.create({
         fontFamily: 'LibreBaskerville_400Regular',
         color: '#71727A',
         textAlign: 'left',
-        marginBottom: 16,
-        paddingBottom: 8,
+        marginBottom: 20,
+        paddingBottom: 12,
     },
     inputContainer: {
         width: '100%',
@@ -126,16 +125,8 @@ const styles = StyleSheet.create({
     },
 
     dividerSpacing: {
-        paddingTop: 20,
-        paddingBottom: 8,
-    },
-
-    orContinueText: {
-        paddingTop: 8,
-        color: '#4A4A4A',
-        textAlign: 'center',
-        fontSize: 14,
-        fontFamily: 'LibreBaskerville_400Regular',
+        paddingTop: 24,
+        paddingBottom: 16,
     },
 
     alt: {
@@ -150,9 +141,9 @@ const styles = StyleSheet.create({
     bottomSignup: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 60,
+        paddingTop: 32,
         paddingBottom: 20,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
 
     bottomSignupText: {

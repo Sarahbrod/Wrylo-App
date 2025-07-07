@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import theme from '../styles/theme';
+import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
 import {
     StyledText,
     StyledCard,
@@ -13,6 +14,11 @@ import {
 } from '../components/StyledComponents';
 
 const Home = ({ navigation }) => {
+    const [fontsLoaded] = useFonts({
+        LibreBaskerville_400Regular,
+        LibreBaskerville_700Bold,
+    });
+
     const onViewLibrary = () => {
         navigation.navigate('Library');
     };
@@ -29,6 +35,14 @@ const Home = ({ navigation }) => {
         navigation.navigate('MoodFlow');
     };
 
+    const onJoinCommunity = () => {
+        navigation.navigate('BookForum');
+    };
+
+    if (!fontsLoaded) {
+        return null;
+    }
+
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -42,118 +56,89 @@ const Home = ({ navigation }) => {
 
                 <View style={styles.content}>
                     <View style={styles.section}>
-                        <View style={styles.sectionHeader}>
+                        <View style={styles.sectionHeaderSimple}>
                             <Text style={styles.sectionTitle}>Get Started</Text>
                         </View>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            style={styles.cardContainer}
-                            contentContainerStyle={styles.cardContentContainer}
-                        >
-                            <View style={styles.getStartedCard}>
+                        <View style={styles.verticalCardContainer}>
+                            <TouchableOpacity style={styles.getStartedCard} onPress={onTrackReading}>
                                 <Text style={styles.cardIcon}>📚</Text>
-                                <Text style={styles.cardTitle}>Add Books</Text>
-                                <Text style={styles.cardDesc}>Start building your library</Text>
-                                <TouchableOpacity style={styles.plusButton} onPress={onTrackReading}>
-                                    <Text style={styles.plusButtonText}>+</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.getStartedCard}>
+                                <View style={styles.cardContent}>
+                                    <Text style={styles.cardTitle}>Add Books</Text>
+                                    <Text style={styles.cardDesc}>Start building your library</Text>
+                                </View>
+                                <View style={styles.arrowButton}>
+                                    <Text style={styles.arrowButtonText}>→</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.getStartedCard} onPress={onViewLibrary}>
                                 <Text style={styles.cardIcon}>🎯</Text>
-                                <Text style={styles.cardTitle}>Set Goals</Text>
-                                <Text style={styles.cardDesc}>Create reading targets</Text>
-                                <TouchableOpacity style={styles.plusButton} onPress={onViewLibrary}>
-                                    <Text style={styles.plusButtonText}>+</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.getStartedCard}>
+                                <View style={styles.cardContent}>
+                                    <Text style={styles.cardTitle}>Set Goals</Text>
+                                    <Text style={styles.cardDesc}>Create reading targets</Text>
+                                </View>
+                                <View style={styles.arrowButton}>
+                                    <Text style={styles.arrowButtonText}>→</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.getStartedCard} onPress={onViewLibrary}>
                                 <Text style={styles.cardIcon}>⭐</Text>
-                                <Text style={styles.cardTitle}>Rate Books</Text>
-                                <Text style={styles.cardDesc}>Share your thoughts</Text>
-                                <TouchableOpacity style={styles.plusButton} onPress={onViewLibrary}>
-                                    <Text style={styles.plusButtonText}>+</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </ScrollView>
+                                <View style={styles.cardContent}>
+                                    <Text style={styles.cardTitle}>Rate Books</Text>
+                                    <Text style={styles.cardDesc}>Share your thoughts</Text>
+                                </View>
+                                <View style={styles.arrowButton}>
+                                    <Text style={styles.arrowButtonText}>→</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
-                    <View style={styles.section}>
-                        <View style={styles.sectionHeaderSimple}>
+                    <View style={styles.sectionWithExtraPadding}>
+                        <View style={styles.sectionHeaderReduced}>
                             <Text style={styles.sectionTitle}>Mood Curator</Text>
                         </View>
 
                         <View style={styles.moodMatcherContainer}>
                             <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
                                 <View style={styles.moodMatcherContent}>
-                                    <View style={styles.moodMatcherEmojis}>
-                                        <Text style={styles.moodEmoji}>😊</Text>
-                                        <Text style={styles.moodEmoji}>📚</Text>
-                                        <Text style={styles.moodEmoji}>💕</Text>
+                                    <View style={styles.moodMatcherImage}>
+                                        <View style={styles.abstractShape1} />
+                                        <View style={styles.abstractShape2} />
+                                        <View style={styles.abstractShape3} />
                                     </View>
                                     <View style={styles.moodMatcherText}>
                                         <Text style={styles.moodMatcherTitle}>Personalized Recommendations</Text>
                                         <Text style={styles.moodMatcherDesc}>Discover books that resonate with your current state of mind</Text>
                                     </View>
-                                    <View style={styles.moodMatcherArrow}>
-                                        <Text style={styles.arrowText}>✨</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.sectionWithExtraPadding}>
+                        <View style={styles.sectionHeaderReduced}>
+                            <Text style={styles.sectionTitle}>Community</Text>
+                        </View>
+
+                        <View style={styles.communityContainer}>
+                            <TouchableOpacity style={styles.communityCard} onPress={onJoinCommunity}>
+                                <View style={styles.communityContent}>
+                                    <View style={styles.communityImage}>
+                                        <View style={styles.communityShape1} />
+                                        <View style={styles.communityShape2} />
+                                        <View style={styles.communityShape3} />
+                                    </View>
+                                    <View style={styles.communityText}>
+                                        <Text style={styles.communityTitle}>Join the Book Community</Text>
+                                        <Text style={styles.communityDesc}>Connect with fellow readers, share thoughts, and discover new perspectives</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <View style={[styles.section, styles.recommendationsSection]}>
-                        <View style={styles.sectionHeaderCentered}>
-                            <Text style={styles.sectionTitle}>Recommendations for You</Text>
-                            <TouchableOpacity onPress={onGetRecommendations}>
-                                <Text style={styles.seeAllText}>See All</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            style={styles.cardContainer}
-                            contentContainerStyle={styles.cardContentContainer}
-                        >
-                            <TouchableOpacity style={styles.recommendationCard} onPress={onGetRecommendations}>
-                                <View style={styles.bookCover}>
-                                    <Text style={styles.bookCoverText}>📖</Text>
-                                </View>
-                                <Text style={styles.bookTitle}>The Seven Husbands of Evelyn Hugo</Text>
-                                <Text style={styles.bookAuthor}>Taylor Jenkins Reid</Text>
-                                <View style={styles.ratingContainer}>
-                                    <Text style={styles.ratingStars}>⭐⭐⭐⭐⭐</Text>
-                                    <Text style={styles.ratingText}>4.5</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.recommendationCard} onPress={onGetRecommendations}>
-                                <View style={styles.bookCover}>
-                                    <Text style={styles.bookCoverText}>📚</Text>
-                                </View>
-                                <Text style={styles.bookTitle}>Where the Crawdads Sing</Text>
-                                <Text style={styles.bookAuthor}>Delia Owens</Text>
-                                <View style={styles.ratingContainer}>
-                                    <Text style={styles.ratingStars}>⭐⭐⭐⭐⭐</Text>
-                                    <Text style={styles.ratingText}>4.3</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.recommendationCard} onPress={onGetRecommendations}>
-                                <View style={styles.bookCover}>
-                                    <Text style={styles.bookCoverText}>📝</Text>
-                                </View>
-                                <Text style={styles.bookTitle}>Atomic Habits</Text>
-                                <Text style={styles.bookAuthor}>James Clear</Text>
-                                <View style={styles.ratingContainer}>
-                                    <Text style={styles.ratingStars}>⭐⭐⭐⭐⭐</Text>
-                                    <Text style={styles.ratingText}>4.7</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </ScrollView>
-                    </View>
-
-                    <View style={styles.section}>
-                        <View style={styles.sectionHeaderSimple}>
+                    <View style={styles.sectionWithExtraPadding}>
+                        <View style={styles.sectionHeaderReduced}>
                             <Text style={styles.sectionTitle}>Your Reading Stats</Text>
                         </View>
                         <View style={styles.statsContainer}>
@@ -197,7 +182,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 28,
-        fontWeight: 'bold',
+        fontFamily: 'LibreBaskerville_700Bold',
         color: '#1D1D1D',
         marginBottom: 8,
         //textAlign: 'center',
@@ -213,10 +198,11 @@ const styles = StyleSheet.create({
         // Removed horizontal padding - now handled by individual sections
     },
     section: {
-        marginBottom: 32,
+        marginBottom: 36,
     },
-    recommendationsSection: {
-        marginTop: 36,
+    sectionWithExtraPadding: {
+        marginBottom: 36,
+        marginTop: 20,
     },
     sectionHeader: {
         flexDirection: 'row',
@@ -225,20 +211,17 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         paddingHorizontal: 20,
     },
-    sectionHeaderCentered: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 8,
-        gap: 16,
-    },
     sectionHeaderSimple: {
         marginBottom: 16,
         paddingHorizontal: 20,
     },
+    sectionHeaderReduced: {
+        marginBottom: 8,
+        paddingHorizontal: 20,
+    },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontFamily: 'LibreBaskerville_700Bold',
         color: '#1D1D1D',
         letterSpacing: 0.5,
         marginBottom: 8,
@@ -261,96 +244,52 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 6,
     },
+    verticalCardContainer: {
+        paddingHorizontal: 20,
+        gap: 12,
+    },
     getStartedCard: {
-        backgroundColor: '#F6F4F1',
-        borderRadius: 16,
-        padding: 20,
-        marginRight: 16,
-        width: 180,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
+        padding: 16,
+        width: '100%',
+        flexDirection: 'row',
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 6,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     cardIcon: {
-        fontSize: 32,
-        marginBottom: 12,
+        fontSize: 24,
+        marginRight: 16,
+    },
+    cardContent: {
+        flex: 1,
     },
     cardTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '600',
         color: '#1D1D1D',
-        marginBottom: 6,
-        textAlign: 'center',
+        marginBottom: 2,
     },
     cardDesc: {
         fontSize: 12,
-        color: '#1D1D1D',
-        textAlign: 'center',
-        marginBottom: 16,
+        color: '#71727A',
     },
-    plusButton: {
-        backgroundColor: '#2E0A09',
+    arrowButton: {
+        backgroundColor: '#F6F4F1',
         width: 32,
         height: 32,
         borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    plusButtonText: {
-        color: '#FFFFFF',
-        fontSize: 18,
+    arrowButtonText: {
+        color: '#2E0A09',
+        fontSize: 16,
         fontWeight: 'bold',
-    },
-    recommendationCard: {
-        backgroundColor: '#F6F4F1',
-        borderRadius: 12,
-        padding: 16,
-        marginRight: 16,
-        width: 200,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 6,
-    },
-    bookCover: {
-        backgroundColor: '#F0F0F0',
-        borderRadius: 8,
-        height: 120,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    bookCoverText: {
-        fontSize: 32,
-    },
-    bookTitle: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#1D1D1D',
-        marginBottom: 4,
-        numberOfLines: 2,
-    },
-    bookAuthor: {
-        fontSize: 12,
-        color: '#1D1D1D',
-        marginBottom: 8,
-    },
-    ratingContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    ratingStars: {
-        fontSize: 10,
-    },
-    ratingText: {
-        fontSize: 12,
-        color: '#1D1D1D',
-        fontWeight: '600',
     },
     statsContainer: {
         flexDirection: 'row',
@@ -358,9 +297,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     statCard: {
-        backgroundColor: '#F6F4F1',
+        backgroundColor: '#FFFFFF',
         borderRadius: 12,
-        padding: 16,
+        padding: 12,
         flex: 1,
         marginHorizontal: 4,
         alignItems: 'center',
@@ -394,7 +333,7 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     moodMatcherCard: {
-        backgroundColor: '#EFEBEB',
+        backgroundColor: '#FFFFFF',
         borderRadius: 16,
         padding: 20,
         shadowColor: '#000',
@@ -402,27 +341,51 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 8,
         elevation: 5,
-        borderWidth: 2,
-        borderColor: '#2E0A09',
     },
     moodMatcherContent: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    moodMatcherEmojis: {
-        flexDirection: 'column',
-        alignItems: 'center',
+    moodMatcherImage: {
+        width: 50,
+        height: 50,
         marginRight: 16,
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    moodEmoji: {
-        fontSize: 20,
-        marginBottom: 4,
+    abstractShape1: {
+        position: 'absolute',
+        width: 20,
+        height: 20,
+        backgroundColor: '#A8A8A8',
+        borderRadius: 10,
+        top: 5,
+        left: 5,
+    },
+    abstractShape2: {
+        position: 'absolute',
+        width: 15,
+        height: 15,
+        backgroundColor: '#D1D1D1',
+        borderRadius: 3,
+        top: 10,
+        right: 8,
+    },
+    abstractShape3: {
+        position: 'absolute',
+        width: 12,
+        height: 12,
+        backgroundColor: '#C0C0C0',
+        borderRadius: 6,
+        bottom: 8,
+        left: 15,
     },
     moodMatcherText: {
         flex: 1,
     },
     moodMatcherTitle: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: '500',
         color: '#1D1D1D',
         marginBottom: 6,
@@ -436,12 +399,75 @@ const styles = StyleSheet.create({
         opacity: 0.8,
         letterSpacing: 0.2,
     },
-    moodMatcherArrow: {
-        alignItems: 'center',
-        justifyContent: 'center',
+    communityContainer: {
+        paddingHorizontal: 20,
     },
-    arrowText: {
-        fontSize: 24,
+    communityCard: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 5,
+    },
+    communityContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    communityImage: {
+        width: 50,
+        height: 50,
+        marginRight: 16,
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    communityShape1: {
+        position: 'absolute',
+        width: 18,
+        height: 18,
+        backgroundColor: '#9A9A9A',
+        borderRadius: 9,
+        top: 8,
+        left: 8,
+    },
+    communityShape2: {
+        position: 'absolute',
+        width: 14,
+        height: 14,
+        backgroundColor: '#B8B8B8',
+        borderRadius: 2,
+        top: 15,
+        right: 10,
+    },
+    communityShape3: {
+        position: 'absolute',
+        width: 16,
+        height: 16,
+        backgroundColor: '#CACACA',
+        borderRadius: 8,
+        bottom: 10,
+        left: 12,
+    },
+    communityText: {
+        flex: 1,
+    },
+    communityTitle: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#1D1D1D',
+        marginBottom: 6,
+        letterSpacing: 0.3,
+    },
+    communityDesc: {
+        fontSize: 14,
+        fontWeight: '400',
+        color: '#1D1D1D',
+        lineHeight: 20,
+        opacity: 0.8,
+        letterSpacing: 0.2,
     },
     bottomSpacer: {
         height: 108, // Navigation height (70) + bottom margin (30) + extra padding (8)

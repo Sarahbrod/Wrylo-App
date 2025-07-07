@@ -1,18 +1,41 @@
 
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
-const CustomerInput = ({ value, setValue, placeholder, secureTextEntry, numeric }) => {
+const CustomInput = ({ value, setValue, placeholder, secureTextEntry, numeric, keyboardType }) => {
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+    const [isFocused, setIsFocused] = useState(false)
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible)
+    }
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isFocused && styles.focusedContainer]}>
             <TextInput
                 value={value}
                 onChangeText={setValue}
                 placeholder={placeholder}
                 style={styles.input}
-                secureTextEntry={secureTextEntry}
-                keyboardType={numeric}
+                secureTextEntry={secureTextEntry && !isPasswordVisible}
+                keyboardType={keyboardType || numeric}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                placeholderTextColor="#8F9098"
             />
+            {secureTextEntry && (
+                <TouchableOpacity 
+                    style={styles.eyeIcon}
+                    onPress={togglePasswordVisibility}
+                >
+                    <Ionicons 
+                        name={isPasswordVisible ? 'eye-off' : 'eye'} 
+                        size={20} 
+                        color="#8F9098" 
+                    />
+                </TouchableOpacity>
+            )}
         </View>
     )
 }
@@ -23,13 +46,23 @@ const styles = StyleSheet.create({
         borderColor: '#C5C6CC',
         borderWidth: 1,
         borderRadius: 8,
-        paddingHorizontal: 10,
+        paddingHorizontal: 16,
         marginVertical: 5,
-        padding: 16,
-        color: '#8F9098'
+        paddingVertical: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+    },
+    focusedContainer: {
+        borderColor: '#2E0A09',
     },
     input: {
-
+        flex: 1,
+        fontSize: 16,
+        color: '#333',
+    },
+    eyeIcon: {
+        padding: 4,
     },
 })
-export default CustomerInput;
+export default CustomInput;
