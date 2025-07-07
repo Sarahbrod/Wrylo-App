@@ -57,7 +57,7 @@ const Home = ({ navigation }) => {
                 <View style={styles.content}>
                     <View style={styles.section}>
                         <View style={styles.sectionHeaderSimple}>
-                            <Text style={styles.sectionTitle}>Get Started</Text>
+                            <Text style={styles.sectionTitle}>Get started</Text>
                         </View>
                         <View style={styles.verticalCardContainer}>
                             <TouchableOpacity style={styles.getStartedCard} onPress={onTrackReading}>
@@ -95,7 +95,7 @@ const Home = ({ navigation }) => {
 
                     <View style={styles.sectionWithExtraPadding}>
                         <View style={styles.sectionHeaderReduced}>
-                            <Text style={styles.sectionTitle}>Mood Curator</Text>
+                            <Text style={styles.sectionTitle}>Mood curator</Text>
                         </View>
 
                         <View style={styles.moodMatcherContainer}>
@@ -139,7 +139,7 @@ const Home = ({ navigation }) => {
 
                     <View style={styles.sectionWithExtraPadding}>
                         <View style={styles.sectionHeaderReduced}>
-                            <Text style={styles.sectionTitle}>Your Reading Stats</Text>
+                            <Text style={styles.sectionTitle}>Your reading stats</Text>
                         </View>
                         <View style={styles.statsContainer}>
                             <View style={styles.statCard}>
@@ -157,7 +157,7 @@ const Home = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                
+
                 {/* Bottom padding to clear floating navigation */}
                 <View style={styles.bottomSpacer} />
 
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 16,
         fontWeight: '400',
+        fontFamily: 'System',
         color: '#71727A',
         //textAlign: 'center',
         marginBottom: 20,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     sectionHeaderSimple: {
-        marginBottom: 16,
+        marginBottom: 8,
         paddingHorizontal: 20,
     },
     sectionHeaderReduced: {
@@ -276,6 +277,7 @@ const styles = StyleSheet.create({
     },
     cardDesc: {
         fontSize: 12,
+        fontFamily: 'System',
         color: '#71727A',
     },
     arrowButton: {
@@ -317,6 +319,7 @@ const styles = StyleSheet.create({
     },
     statLabel: {
         fontSize: 12,
+        fontFamily: 'System',
         color: '#1D1D1D',
         textAlign: 'center',
     },
@@ -356,30 +359,30 @@ const styles = StyleSheet.create({
     },
     abstractShape1: {
         position: 'absolute',
-        width: 20,
-        height: 20,
-        backgroundColor: '#A8A8A8',
-        borderRadius: 10,
-        top: 5,
-        left: 5,
+        width: 22,
+        height: 22,
+        backgroundColor: '#6B7280',
+        borderRadius: 11,
+        top: 4,
+        left: 4,
     },
     abstractShape2: {
         position: 'absolute',
-        width: 15,
-        height: 15,
-        backgroundColor: '#D1D1D1',
-        borderRadius: 3,
-        top: 10,
-        right: 8,
+        width: 16,
+        height: 16,
+        backgroundColor: '#9CA3AF',
+        borderRadius: 4,
+        top: 9,
+        right: 7,
     },
     abstractShape3: {
         position: 'absolute',
-        width: 12,
-        height: 12,
-        backgroundColor: '#C0C0C0',
-        borderRadius: 6,
-        bottom: 8,
-        left: 15,
+        width: 14,
+        height: 14,
+        backgroundColor: '#D1D5DB',
+        borderRadius: 7,
+        bottom: 7,
+        left: 14,
     },
     moodMatcherText: {
         flex: 1,
@@ -394,6 +397,7 @@ const styles = StyleSheet.create({
     moodMatcherDesc: {
         fontSize: 14,
         fontWeight: '400',
+        fontFamily: 'System',
         color: '#1D1D1D',
         lineHeight: 20,
         opacity: 0.8,
@@ -426,30 +430,30 @@ const styles = StyleSheet.create({
     },
     communityShape1: {
         position: 'absolute',
-        width: 18,
-        height: 18,
-        backgroundColor: '#9A9A9A',
-        borderRadius: 9,
-        top: 8,
-        left: 8,
+        width: 20,
+        height: 20,
+        backgroundColor: '#4B5563',
+        borderRadius: 10,
+        top: 7,
+        left: 7,
     },
     communityShape2: {
         position: 'absolute',
-        width: 14,
-        height: 14,
-        backgroundColor: '#B8B8B8',
-        borderRadius: 2,
-        top: 15,
-        right: 10,
+        width: 15,
+        height: 15,
+        backgroundColor: '#6B7280',
+        borderRadius: 3,
+        top: 14,
+        right: 9,
     },
     communityShape3: {
         position: 'absolute',
-        width: 16,
-        height: 16,
-        backgroundColor: '#CACACA',
+        width: 17,
+        height: 17,
+        backgroundColor: '#9CA3AF',
         borderRadius: 8,
-        bottom: 10,
-        left: 12,
+        bottom: 9,
+        left: 11,
     },
     communityText: {
         flex: 1,
@@ -464,6 +468,7 @@ const styles = StyleSheet.create({
     communityDesc: {
         fontSize: 14,
         fontWeight: '400',
+        fontFamily: 'System',
         color: '#1D1D1D',
         lineHeight: 20,
         opacity: 0.8,

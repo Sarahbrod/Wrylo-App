@@ -76,7 +76,7 @@ const LogInScreen = ({ navigation }) => {
                     <CustomButton onPress={onLogInApple} bgColor='#212121' fgColor="#FCF7F7" type="ICON" iconName="apple1" iconLibrary="AntDesign" />
 
                 </View>
-                
+
                 <View style={styles.bottomSignup}>
                     <Text style={styles.bottomSignupText}>Don't have an account? </Text>
                     <TouchableOpacity onPress={onSignUpPressed}>
@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'stretch',
         paddingHorizontal: 24,
-        paddingTop: 100,
-        paddingBottom: 40,
+        paddingTop: 120,
+        paddingBottom: 120,
         //minHeight: Dimensions.get('window').height,
         justifyContent: 'center',
     },
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
         fontFamily: 'LibreBaskerville_400Regular',
         color: '#71727A',
         textAlign: 'left',
-        marginBottom: 20,
-        paddingBottom: 12,
+        marginBottom: 30,
+        paddingBottom: 24,
     },
     inputContainer: {
         width: '100%',
@@ -133,30 +133,28 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
-        width: '80%',
-        alignSelf: 'center',
+        justifyContent: 'space-around',
+        width: '100%',
     },
 
     bottomSignup: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 32,
+        paddingTop: 40,
         paddingBottom: 20,
         justifyContent: 'flex-start',
     },
 
     bottomSignupText: {
         color: '#71727A',
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'LibreBaskerville_400Regular',
     },
 
     signupLinkText: {
         color: '#2E0A09',
-        fontSize: 16,
-        fontFamily: 'LibreBaskerville_700Bold',
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontFamily: 'LibreBaskerville_400Regular',
         textDecorationLine: 'underline',
     },
 })
