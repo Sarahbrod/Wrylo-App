@@ -1,121 +1,98 @@
-import { Text } from 'react-native';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
+import { Ionicons } from '@expo/vector-icons';
 
 import Home from '../screens/Home';
-import RecommendationsScreen from '../screens/RecommendationsScreen';
 import LibraryScreen from '../screens/LibraryScreen';
+import RecommendationsScreen from '../screens/RecommendationsScreen';
+import CommunityScreen from '../screens/CommunityScreen';
+import StatsScreen from '../screens/StatsScreen';
 import AccountScreen from '../screens/AccountScreen';
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
-    const [fontsLoaded] = useFonts({
-        LibreBaskerville_400Regular,
-        LibreBaskerville_700Bold,
-    });
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
 
-    if (!fontsLoaded) {
-        return null;
-    }
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Library') {
+            iconName = focused ? 'library' : 'library-outline';
+          } else if (route.name === 'Recommendations') {
+            iconName = focused ? 'heart' : 'heart-outline';
+          } else if (route.name === 'Community') {
+            iconName = focused ? 'people' : 'people-outline';
+          } else if (route.name === 'Account') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
 
-    return (
-        <Tab.Navigator
-            initialRouteName="Home"
-            screenOptions={{
-                headerShown: false,
-                tabBarActiveTintColor: '#2E0A09',
-                tabBarInactiveTintColor: '#8D6E63',
-                tabBarStyle: {
-                    position: 'absolute',
-                    bottom: 30,
-                    marginLeft: 20,
-                    marginRight: 20,
-                    backgroundColor: '#FFFFFF',
-                    borderTopWidth: 0,
-                    borderRadius: 16,
-                    paddingBottom: 12,
-                    paddingTop: 8,
-                    height: 70,
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 5 },
-                    shadowOpacity: 0.15,
-                    shadowRadius: 10,
-                    elevation: 8,
-                    zIndex: 1000,
-                    borderWidth: 1,
-                    borderColor: '#F0F0F0',
-                },
-                tabBarLabelStyle: {
-                    fontSize: 11,
-                    fontFamily: 'LibreBaskerville_400Regular',
-                    marginTop: 4,
-                },
-                tabBarItemStyle: {
-                    paddingHorizontal: 8,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                },
-            }}
-        >
-            <Tab.Screen
-                name="Home"
-                component={Home}
-                options={{
-                    tabBarLabel: 'Home',
-                    tabBarIcon: ({ color }) => (
-                        <TabIcon name="📖" color={color} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Discover"
-                component={RecommendationsScreen}
-                options={{
-                    tabBarLabel: 'Discover',
-                    tabBarIcon: ({ color }) => (
-                        <TabIcon name="✨" color={color} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Library"
-                component={LibraryScreen}
-                options={{
-                    tabBarLabel: 'Library',
-                    tabBarIcon: ({ color }) => (
-                        <TabIcon name="📚" color={color} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Account"
-                component={AccountScreen}
-                options={{
-                    tabBarLabel: 'Account',
-                    tabBarIcon: ({ color }) => (
-                        <TabIcon name="📝" color={color} />
-                    ),
-                }}
-            />
-        </Tab.Navigator>
-    );
-};
-
-const TabIcon = ({ name, color }) => {
-    const isActive = color === '#2E0A09';
-    return (
-        <Text style={{
-            fontSize: isActive ? 22 : 20,
-            color: color,
-            opacity: isActive ? 1 : 0.7,
-            textShadowColor: isActive ? '#2E0A09' : 'transparent',
-            textShadowOffset: { width: 0, height: 1 },
-            textShadowRadius: isActive ? 2 : 0,
-        }}>
-            {name}
-        </Text>
-    );
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#2E0A09',
+        tabBarInactiveTintColor: '#71727A',
+        tabBarStyle: {
+          position: 'absolute',
+          backgroundColor: '#FFFFFF',
+          borderRadius: 25,
+          marginHorizontal: 20,
+          marginBottom: 20,
+          paddingTop: 8,
+          paddingBottom: 8,
+          height: 60,
+          elevation: 10,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.15,
+          shadowRadius: 10,
+          borderTopWidth: 0,
+        },
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen 
+        name="Home" 
+        component={Home}
+        options={{
+          tabBarLabel: 'Home',
+        }}
+      />
+      <Tab.Screen 
+        name="Library" 
+        component={LibraryScreen}
+        options={{
+          tabBarLabel: 'Library',
+        }}
+      />
+      <Tab.Screen 
+        name="Recommendations" 
+        component={RecommendationsScreen}
+        options={{
+          tabBarLabel: 'For You',
+        }}
+      />
+      <Tab.Screen 
+        name="Community" 
+        component={CommunityScreen}
+        options={{
+          tabBarLabel: 'Community',
+        }}
+      />
+      <Tab.Screen 
+        name="Account" 
+        component={AccountScreen}
+        options={{
+          tabBarLabel: 'Account',
+        }}
+      />
+    </Tab.Navigator>
+  );
 };
 
 export default MainTabNavigator;

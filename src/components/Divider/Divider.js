@@ -1,51 +1,32 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useFonts, LibreBaskerville_400Regular } from '@expo-google-fonts/libre-baskerville';
 
 const Divider = ({ text }) => {
-    const [fontsLoaded] = useFonts({
-        LibreBaskerville_400Regular,
-    });
-
-    if (!fontsLoaded) {
-        return null;
-    }
-
-    if (text) {
-        return (
-            <View style={styles.dividerWithText}>
-                <View style={styles.line} />
-                <Text style={styles.text}>{text}</Text>
-                <View style={styles.line} />
-            </View>
-        );
-    }
-
-    return <View style={styles.divider} />;
+    return (
+        <View style={styles.container}>
+            <View style={styles.line} />
+            {text && <Text style={styles.text}>{text}</Text>}
+            <View style={styles.line} />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-    divider: {
-        height: 1,
-        width: '100%',
-        backgroundColor: '#D4D6DD',
-        margin: 8,
-    },
-    dividerWithText: {
+    container: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 8,
+        marginVertical: 20,
     },
     line: {
         flex: 1,
         height: 1,
-        backgroundColor: '#D4D6DD',
+        backgroundColor: '#C5C6CC',
     },
     text: {
         marginHorizontal: 16,
         fontSize: 14,
-        color: '#4A4A4A',
-        fontFamily: 'LibreBaskerville_400Regular',
+        color: '#71727A',
+        fontFamily: 'System',
     },
 });
 

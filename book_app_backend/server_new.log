@@ -1,0 +1,8 @@
+Watching for file changes with StatReloader
+Not Found: /
+[08/Jul/2025 22:08:25] "GET / HTTP/1.1" 404 2319
+[08/Jul/2025 22:09:54] "POST /api/auth/register/ HTTP/1.1" 201 49
+Not Found: /
+[08/Jul/2025 22:28:44] "GET / HTTP/1.1" 404 2319
+Not Found: /favicon.ico
+[08/Jul/2025 22:28:45] "GET /favicon.ico HTTP/1.1" 404 2370

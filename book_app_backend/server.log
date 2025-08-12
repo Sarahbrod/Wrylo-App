@@ -1,0 +1,145 @@
+Watching for file changes with StatReloader
+Method Not Allowed: /api/auth/login/
+[13/Jul/2025 23:58:44] "HEAD /api/auth/login/ HTTP/1.1" 405 0
+Unauthorized: /api/auth/login/
+[14/Jul/2025 00:02:08] "POST /api/auth/login/ HTTP/1.1" 401 28
+[14/Jul/2025 00:03:21] "OPTIONS /api/auth/login/ HTTP/1.1" 200 164
+[14/Jul/2025 00:03:41] "POST /api/auth/login/ HTTP/1.1" 200 554
+/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/book_app_backend/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 13, 2025 - 23:58:39
+Django version 5.2.4, using settings 'book_app_backend.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/book_app_backend/urls.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 14, 2025 - 00:27:01
+Django version 5.2.4, using settings 'book_app_backend.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 1009, in _bootstrap_inner
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 946, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/management/commands/runserver.py", line 134, in inner_run
+    self.check(**check_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/management/base.py", line 492, in check
+    all_issues = checks.run_checks(
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/checks/registry.py", line 89, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/checks/urls.py", line 16, in check_url_config
+    return check_resolver(resolver)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/checks/urls.py", line 26, in check_resolver
+    return check_method()
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/resolvers.py", line 531, in check
+    for pattern in self.url_patterns:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/resolvers.py", line 718, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/resolvers.py", line 711, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/book_app_backend/urls.py", line 22, in <module>
+    path('api/books/', include('books.urls')),
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/conf.py", line 39, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/books/urls.py", line 3, in <module>
+    from . import views
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/books/views.py", line 15, in <module>
+    from .services import book_search_service
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/books/services.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/book_app_backend/settings.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 1009, in _bootstrap_inner
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 946, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/management/commands/runserver.py", line 134, in inner_run
+    self.check(**check_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/management/base.py", line 492, in check
+    all_issues = checks.run_checks(
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/checks/registry.py", line 89, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/checks/urls.py", line 16, in check_url_config
+    return check_resolver(resolver)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/core/checks/urls.py", line 26, in check_resolver
+    return check_method()
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/resolvers.py", line 531, in check
+    for pattern in self.url_patterns:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/resolvers.py", line 718, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/resolvers.py", line 711, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/book_app_backend/urls.py", line 22, in <module>
+    path('api/books/', include('books.urls')),
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/django/urls/conf.py", line 39, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/books/urls.py", line 3, in <module>
+    from . import views
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/books/views.py", line 15, in <module>
+    from .services import book_search_service
+  File "/Users/sarahbrodrick/Desktop/Wrylo_App/book_app_backend/books/services.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'

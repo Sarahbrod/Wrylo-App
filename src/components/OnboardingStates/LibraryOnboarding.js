@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const LibraryOnboarding = ({ onAddBooks }) => {
+const LibraryOnboarding = ({ onAddBooks, navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
@@ -24,7 +24,16 @@ const LibraryOnboarding = ({ onAddBooks }) => {
                     </View>
                 </View>
                 
-                <TouchableOpacity style={styles.addBooksButton} onPress={onAddBooks}>
+                <TouchableOpacity style={styles.addBooksButton} onPress={() => {
+                    if (navigation) {
+                        navigation.navigate('Main', {
+                            screen: 'Library',
+                            params: { openAddBook: true }
+                        });
+                    } else if (onAddBooks) {
+                        onAddBooks();
+                    }
+                }}>
                     <Text style={styles.addBooksButtonText}>Add Your First Book</Text>
                 </TouchableOpacity>
             </View>

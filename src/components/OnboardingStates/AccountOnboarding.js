@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const AccountOnboarding = ({ onSetupProfile }) => {
+const AccountOnboarding = ({ onSetupProfile, navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
@@ -24,8 +24,17 @@ const AccountOnboarding = ({ onSetupProfile }) => {
                     </View>
                 </View>
                 
-                <TouchableOpacity style={styles.setupButton} onPress={onSetupProfile}>
-                    <Text style={styles.setupButtonText}>Setup Profile</Text>
+                <TouchableOpacity style={styles.setupButton} onPress={() => {
+                    if (navigation) {
+                        navigation.navigate('Main', {
+                            screen: 'Library',
+                            params: { openAddGoal: true }
+                        });
+                    } else if (onSetupProfile) {
+                        onSetupProfile();
+                    }
+                }}>
+                    <Text style={styles.setupButtonText}>Add Goals</Text>
                 </TouchableOpacity>
             </View>
         </View>

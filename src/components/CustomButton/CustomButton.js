@@ -1,35 +1,39 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
-import React from 'react'
-import { AntDesign, FontAwesome } from '@expo/vector-icons'
+import React from 'react';
+import { Text, StyleSheet, Pressable } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
-const CustomButton = ({ onPress, text, type = "PRIMARY", bgColor, fgColor, iconName, iconLibrary }) => {
-    const renderIcon = () => {
-        if (iconName && iconLibrary) {
-            const IconComponent = iconLibrary === 'AntDesign' ? AntDesign : FontAwesome
-            return <IconComponent name={iconName} size={24} color={fgColor || 'white'} />
-        }
-        return null
-    }
-
+const CustomButton = ({ onPress, text, type, bgColor, fgColor, iconName, iconLibrary }) => {
     return (
-        <Pressable onPress={onPress}
+        <Pressable 
+            onPress={onPress} 
             style={[
-                styles.container,
+                styles.container, 
                 styles[`container_${type}`],
-                bgColor ? { backgroundColor: bgColor } : {}
-            ]}>
-            {type === 'ICON' ? (
-                renderIcon()
-            ) : (
-                <Text style={[
-                    styles.text,
-                    styles[`text_${type}`],
-                    fgColor ? { color: fgColor } : {},
-                ]}>{text}</Text>
+                bgColor ? {backgroundColor: bgColor} : {}
+            ]}
+        >
+            {iconName && (
+                <AntDesign 
+                    name={iconName} 
+                    size={24} 
+                    color={fgColor || '#FCF7F7'} 
+                    style={styles.icon}
+                />
+            )}
+            {text && (
+                <Text 
+                    style={[
+                        styles.text, 
+                        styles[`text_${type}`],
+                        fgColor ? {color: fgColor} : {}
+                    ]}
+                >
+                    {text}
+                </Text>
             )}
         </Pressable>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -38,53 +42,62 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         alignItems: 'center',
         borderRadius: 8,
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
 
     container_PRIMARY: {
         backgroundColor: '#2E0A09',
+    },
 
-
+    container_SECONDARY: {
+        borderColor: '#2E0A09',
+        borderWidth: 2,
     },
 
     container_TERTIARY: {
-    },
-
-
-    container_ICON: {
-        width: 56,
-        height: 56,
-        padding: 16,
-        marginRight: 10,
-        borderRadius: 28,
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'transparent',
     },
 
     container_LINK: {
-        alignItems: 'left',
-        padding: 0,
-        fontSize: 14,
-
+        backgroundColor: 'transparent',
+        padding: 5,
+        alignItems: 'flex-end',
     },
 
-
+    container_ICON: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        padding: 0,
+    },
 
     text: {
         fontWeight: 'bold',
+        fontSize: 16,
+    },
+
+    text_PRIMARY: {
         color: 'white',
     },
 
-    text_TERTIARY: {
-        color: '#212121',
+    text_SECONDARY: {
+        color: '#2E0A09',
+    },
 
+    text_TERTIARY: {
+        color: '#2E0A09',
     },
 
     text_LINK: {
-
-        color: '#212121',
-
+        color: '#2E0A09',
+        fontSize: 14,
+        textDecorationLine: 'underline',
     },
 
-})
+    icon: {
+        marginRight: 8,
+    },
+});
 
-export default CustomButton
+export default CustomButton;

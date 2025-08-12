@@ -1,31 +1,37 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const DiscoverOnboarding = ({ onExplore }) => {
+const DiscoverOnboarding = ({ onExplore, navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.icon}>🔍</Text>
-                <Text style={styles.title}>Discover Amazing Books</Text>
-                <Text style={styles.subtitle}>Find your next favorite read with personalized recommendations</Text>
+                <Text style={styles.icon}>💬</Text>
+                <Text style={styles.title}>Join the Community</Text>
+                <Text style={styles.subtitle}>Connect with fellow readers and share your book journey</Text>
                 
                 <View style={styles.features}>
                     <View style={styles.feature}>
-                        <Text style={styles.featureIcon}>🎯</Text>
-                        <Text style={styles.featureText}>Mood-based recommendations</Text>
+                        <Text style={styles.featureIcon}>👥</Text>
+                        <Text style={styles.featureText}>Connect with fellow readers</Text>
                     </View>
                     <View style={styles.feature}>
-                        <Text style={styles.featureIcon}>⭐</Text>
-                        <Text style={styles.featureText}>Curated book suggestions</Text>
+                        <Text style={styles.featureIcon}>💭</Text>
+                        <Text style={styles.featureText}>Share thoughts and reviews</Text>
                     </View>
                     <View style={styles.feature}>
-                        <Text style={styles.featureIcon}>🔥</Text>
-                        <Text style={styles.featureText}>Trending and popular books</Text>
+                        <Text style={styles.featureIcon}>📖</Text>
+                        <Text style={styles.featureText}>Discover book discussions</Text>
                     </View>
                 </View>
                 
-                <TouchableOpacity style={styles.exploreButton} onPress={onExplore}>
-                    <Text style={styles.exploreButtonText}>Start Exploring</Text>
+                <TouchableOpacity style={styles.exploreButton} onPress={() => {
+                    if (navigation) {
+                        navigation.navigate('Community');
+                    } else if (onExplore) {
+                        onExplore();
+                    }
+                }}>
+                    <Text style={styles.exploreButtonText}>Join Community</Text>
                 </TouchableOpacity>
             </View>
         </View>

@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(python3 manage.py runserver:*)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(pkill:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)",
+      "Bash(python3 manage.py check:*)",
+      "Bash(npx expo:*)",
+      "Bash(npm run start:*)",
+      "Bash(python3 manage.py migrate:*)",
+      "Bash(python manage.py:*)",
+      "Bash(rm:*)",
+      "Bash(cat:*)",
+      "Bash(for:*)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(tail:*)",
+      "Bash(done)",
+      "Bash(npm start)"
+    ],
+    "deny": []
+  }
+}

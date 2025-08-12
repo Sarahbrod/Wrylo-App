@@ -55,6 +55,10 @@ export const colors = {
   // Overlay colors
   overlay: 'rgba(0, 0, 0, 0.5)',
   overlayLight: 'rgba(0, 0, 0, 0.3)',
+
+  // Border and shadow colors
+  border: '#E0E0E0',
+  shadow: '#000000',
 };
 
 export const typography = {
