@@ -7,7 +7,7 @@ const Home = ({ navigation }) => {
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.header}>
         <Text style={styles.greeting}>Good morning</Text>
-        <Text style={styles.title}>Welcome back to Wrylo</Text>
+        <Text style={styles.title}>Welcome back</Text>
         <Text style={styles.subtitle}>Continue your reading journey</Text>
       </View>
       
@@ -22,18 +22,34 @@ const Home = ({ navigation }) => {
         
         <TouchableOpacity 
           style={styles.actionCard}
-          onPress={() => navigation.navigate('Recommendations')}
+          onPress={() => navigation.navigate('Forum')}
         >
-          <Ionicons name="heart" size={24} color="#2E0A09" />
-          <Text style={styles.actionText}>For You</Text>
+          <Ionicons name="chatbubbles" size={24} color="#2E0A09" />
+          <Text style={styles.actionText}>Forum</Text>
         </TouchableOpacity>
         
         <TouchableOpacity 
           style={styles.actionCard}
-          onPress={() => navigation.navigate('Community')}
+          onPress={() => navigation.navigate('Discover')}
         >
-          <Ionicons name="people" size={24} color="#2E0A09" />
-          <Text style={styles.actionText}>Community</Text>
+          <Ionicons name="compass" size={24} color="#2E0A09" />
+          <Text style={styles.actionText}>Discover</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.moodSection}>
+        <TouchableOpacity 
+          style={styles.moodCard}
+          onPress={() => navigation.navigate('MoodFlow')}
+        >
+          <View style={styles.moodIconContainer}>
+            <Ionicons name="color-palette" size={32} color="#FFFFFF" />
+          </View>
+          <View style={styles.moodContent}>
+            <Text style={styles.moodTitle}>Mood-Based Recommendations</Text>
+            <Text style={styles.moodSubtitle}>Discover books that match your current mood</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
@@ -43,6 +59,13 @@ const Home = ({ navigation }) => {
           <Ionicons name="book-outline" size={48} color="#71727A" />
           <Text style={styles.placeholderText}>No books in progress</Text>
           <Text style={styles.placeholderSubtext}>Start reading to see your progress here</Text>
+          <TouchableOpacity 
+            style={styles.addBookButton}
+            onPress={() => navigation.navigate('Library')}
+          >
+            <Ionicons name="add" size={20} color="#FFFFFF" />
+            <Text style={styles.addBookButtonText}>Add Book</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -55,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   contentContainer: {
-    paddingBottom: 100, // Space for floating navigation
+    paddingBottom: 110, // Space for floating navigation
   },
   header: {
     paddingTop: 60,
@@ -143,7 +166,64 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#9CA3AF',
     marginTop: 4,
+    marginBottom: 20,
     textAlign: 'center',
+  },
+  moodSection: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  moodCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2E0A09',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  moodIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  moodContent: {
+    flex: 1,
+  },
+  moodTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  moodSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 18,
+  },
+  addBookButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2E0A09',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 12,
+    gap: 8,
+  },
+  addBookButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });
 
