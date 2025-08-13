@@ -56,7 +56,7 @@ const BookForumScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.header}>
                 <Text style={styles.title}>Book Forum</Text>
                 <Text style={styles.subtitle}>Connect with fellow readers and share your thoughts</Text>
@@ -89,35 +89,36 @@ const BookForumScreen = ({ navigation }) => {
                     type="PRIMARY"
                 />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F6F4F1',
-        paddingHorizontal: 24,
-        paddingTop: 60,
-        paddingBottom: 40,
+        backgroundColor: '#F8F9FA',
+    },
+    contentContainer: {
+        paddingBottom: 110,
     },
     header: {
-        marginBottom: 30,
+        paddingTop: 60,
+        paddingHorizontal: 20,
+        paddingBottom: 12,
+        backgroundColor: '#F8F9FA',
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        marginBottom: 20,
     },
     title: {
         fontSize: 28,
-        fontWeight: '700',
-        fontFamily: 'LibreBaskerville_700Bold',
-        color: '#333',
-        textAlign: 'center',
-        marginBottom: 12,
+        fontWeight: 'bold',
+        color: '#2E0A09',
+        marginBottom: 4,
     },
     subtitle: {
         fontSize: 16,
-        fontFamily: 'LibreBaskerville_400Regular',
         color: '#71727A',
-        textAlign: 'center',
-        lineHeight: 22,
     },
     topicsContainer: {
         flex: 1,

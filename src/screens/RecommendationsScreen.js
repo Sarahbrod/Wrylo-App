@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AddBookSheet from '../components/AddBookSheet';
 
 const RecommendationsScreen = ({ navigation }) => {
   const [activeCategory, setActiveCategory] = useState('trending');
+  const [showAddBookSheet, setShowAddBookSheet] = useState(false);
+
+  const handleAddBook = (bookData) => {
+    console.log('Adding book:', bookData);
+    // Handle book addition logic here
+    // Navigate to library after adding
+    navigation.navigate('Library');
+  };
 
   const categories = [
     { id: 'trending', label: 'Trending', icon: 'trending-up' },
@@ -48,8 +57,8 @@ const RecommendationsScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.header}>
-        <Text style={styles.title}>For You</Text>
-        <Text style={styles.subtitle}>Discover your next great read</Text>
+        <Text style={styles.title}>Discover</Text>
+        <Text style={styles.subtitle}>Find your next great read</Text>
       </View>
 
       <View style={styles.categoriesContainer}>
@@ -96,12 +105,21 @@ const RecommendationsScreen = ({ navigation }) => {
             We're building an AI-powered recommendation engine that will learn your preferences 
             and suggest books you'll love based on your reading history and ratings.
           </Text>
-          <TouchableOpacity style={styles.wishlistButton}>
-            <Ionicons name="heart-outline" size={16} color="#FFFFFF" />
-            <Text style={styles.wishlistButtonText}>Build Your Wishlist</Text>
+          <TouchableOpacity 
+            style={styles.wishlistButton}
+            onPress={() => setShowAddBookSheet(true)}
+          >
+            <Ionicons name="add" size={16} color="#FFFFFF" />
+            <Text style={styles.wishlistButtonText}>Add Book</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      <AddBookSheet
+        visible={showAddBookSheet}
+        onClose={() => setShowAddBookSheet(false)}
+        onAddBook={handleAddBook}
+      />
     </ScrollView>
   );
 };

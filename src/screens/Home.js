@@ -1,74 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AddBookSheet from '../components/AddBookSheet';
 
 const Home = ({ navigation }) => {
+  const [showAddBookSheet, setShowAddBookSheet] = useState(false);
+
+  const handleAddBook = (bookData) => {
+    console.log('Adding book:', bookData);
+    // Handle book addition logic here
+    // Navigate to library after adding
+    navigation.navigate('Library');
+  };
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Welcome back</Text>
-        <Text style={styles.subtitle}>Continue your reading journey</Text>
-      </View>
+    <>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Welcome back</Text>
+          <Text style={styles.subtitle}>Continue your reading journey</Text>
+        </View>
 
-      <View style={styles.quickActions}>
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate('Library')}
-        >
-          <Ionicons name="library" size={24} color="#2E0A09" />
-          <Text style={styles.actionText}>Library</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate('Forum')} i
-        >
-          <Ionicons name="chatbubbles" size={24} color="#2E0A09" />
-          <Text style={styles.actionText}>Forum</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate('Discover')}
-        >
-          <Ionicons name="compass" size={24} color="#2E0A09" />
-          <Text style={styles.actionText}>Discover</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.recentSection}>
-        <Text style={styles.sectionTitle}>Continue Reading</Text>
-        <View style={styles.placeholder}>
-          <Ionicons name="book-outline" size={48} color="#71727A" />
-          <Text style={styles.placeholderText}>No books in progress</Text>
-          <Text style={styles.placeholderSubtext}>Add your reading progress here</Text>
+        <View style={styles.featuresSection}>
           <TouchableOpacity
-            style={styles.addBookButton}
-            onPress={() => navigation.navigate('Library')}
+            style={styles.featureCard}
+            onPress={() => navigation.navigate('BookForum')}
           >
-            <Ionicons name="add" size={20} color="#FFFFFF" />
-            <Text style={styles.addBookButtonText}>Add Book</Text>
+            <View style={styles.featureIconContainer}>
+              <Ionicons name="star" size={32} color="#FFFFFF" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Rate Books</Text>
+              <Text style={styles.featureSubtitle}>Share your thoughts and rate your reads</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.discoveryCard}
+            onPress={() => setShowAddBookSheet(true)}
+          >
+            <View style={styles.discoveryIconContainer}>
+              <Ionicons name="add" size={32} color="#FFFFFF" />
+            </View>
+            <View style={styles.discoveryContent}>
+              <Text style={styles.discoveryTitle}>Add Book</Text>
+              <Text style={styles.discoverySubtitle}>Track a new book in your library</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-      </View>
 
-      <View style={styles.moodSection}>
-        <TouchableOpacity
-          style={styles.moodCard}
-          onPress={() => navigation.navigate('MoodFlow')}
-        >
+        <View style={styles.moodSection}>
+          <TouchableOpacity
+            style={styles.moodCard}
+            onPress={() => navigation.navigate('MoodFlow')}
+          >
+            <View style={styles.moodIconContainer}>
+              <Ionicons name="color-palette" size={32} color="#FFFFFF" />
+            </View>
+            <View style={styles.moodContent}>
+              <Text style={styles.moodTitle}>Mood-Based Recommendations</Text>
+              <Text style={styles.moodSubtitle}>Discover books that match your current mood</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
 
-          <View style={styles.moodIconContainer}>
-            <Ionicons name="color-palette" size={32} color="#FFFFFF" />
-          </View>
-          <View style={styles.moodContent}>
-            <Text style={styles.moodTitle}>Mood-Based Recommendations</Text>
-            <Text style={styles.moodSubtitle}>Discover books that match your current mood</Text>
-          </View>
-          <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      <AddBookSheet
+        visible={showAddBookSheet}
+        onClose={() => setShowAddBookSheet(false)}
+        onAddBook={handleAddBook}
+      />
+    </>
   );
 };
 
@@ -98,86 +103,86 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#71727A',
   },
-  quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  featuresSection: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    gap: 12,
+    gap: 16,
   },
-  actionCard: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  actionText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2E0A09',
-    marginTop: 8,
-  },
-  recentSection: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    marginBottom: 16,
-  },
-  placeholder: {
-    backgroundColor: '#FFFFFF',
-    padding: 40,
-    borderRadius: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  placeholderText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#71727A',
-    marginTop: 12,
-    textAlign: 'center',
-  },
-  placeholderSubtext: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    marginTop: 4,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  addBookButton: {
+  featureCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2E0A09',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 12,
-    gap: 8,
-    marginBottom: 22,
+    backgroundColor: '#FF6B6B',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
   },
-  addBookButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
+  featureIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  featureContent: {
+    flex: 1,
+  },
+  featureTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  featureSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 18,
+  },
+  discoveryCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4ECDC4',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  discoveryIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  discoveryContent: {
+    flex: 1,
+  },
+  discoveryTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  discoverySubtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 18,
   },
   moodSection: {
     paddingHorizontal: 20,

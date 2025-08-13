@@ -34,7 +34,8 @@
       "Bash(nvm alias:*)",
       "Bash(git checkout:*)",
       "Bash(sed:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
