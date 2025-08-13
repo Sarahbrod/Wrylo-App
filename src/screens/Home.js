@@ -1,234 +1,323 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import AddBookSheet from '../components/AddBookSheet';
 
 const Home = ({ navigation }) => {
-  const [showAddBookSheet, setShowAddBookSheet] = useState(false);
-
-  const handleAddBook = (bookData) => {
-    console.log('Adding book:', bookData);
-    // Handle book addition logic here
-    // Navigate to library after adding
+  const onTrackReading = () => {
     navigation.navigate('Library');
   };
 
+  const onViewLibrary = () => {
+    navigation.navigate('Library');
+  };
+
+  const onMoodMatcher = () => {
+    navigation.navigate('MoodFlow');
+  };
+
+  const onJoinCommunity = () => {
+    navigation.navigate('Forum');
+  };
+
   return (
-    <>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome back</Text>
-          <Text style={styles.subtitle}>Continue your reading journey</Text>
+          <Text style={styles.title}>Home</Text>
+          <Text style={styles.subtitle}>Welcome back to your reading journey</Text>
         </View>
 
-        <View style={styles.featuresSection}>
-          <TouchableOpacity
-            style={styles.featureCard}
-            onPress={() => navigation.navigate('BookForum')}
-          >
-            <View style={styles.featureIconContainer}>
-              <Ionicons name="star" size={32} color="#FFFFFF" />
+        <View style={styles.content}>
+          <View style={styles.section}>
+            <View style={styles.sectionHeaderSimple}>
+              <Text style={styles.sectionTitle}>Get started</Text>
             </View>
-            <View style={styles.featureContent}>
-              <Text style={styles.featureTitle}>Rate Books</Text>
-              <Text style={styles.featureSubtitle}>Share your thoughts and rate your reads</Text>
+            <View style={styles.verticalCardContainer}>
+              <TouchableOpacity style={styles.getStartedCard} onPress={onTrackReading}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>Add Books</Text>
+                  <Text style={styles.cardDesc}>Start building your library</Text>
+                </View>
+                <View style={styles.arrowButton}>
+                  <Text style={styles.arrowButtonText}>→</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.getStartedCard} onPress={onViewLibrary}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>Set Goals</Text>
+                  <Text style={styles.cardDesc}>Create reading targets</Text>
+                </View>
+                <View style={styles.arrowButton}>
+                  <Text style={styles.arrowButtonText}>→</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.getStartedCard} onPress={onViewLibrary}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>Rate Books</Text>
+                  <Text style={styles.cardDesc}>Share your thoughts</Text>
+                </View>
+                <View style={styles.arrowButton}>
+                  <Text style={styles.arrowButtonText}>→</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity
-            style={styles.discoveryCard}
-            onPress={() => setShowAddBookSheet(true)}
-          >
-            <View style={styles.discoveryIconContainer}>
-              <Ionicons name="add" size={32} color="#FFFFFF" />
+          <View style={styles.sectionWithExtraPadding}>
+            <View style={styles.sectionHeaderReduced}>
+              <Text style={styles.sectionTitle}>Mood curator</Text>
             </View>
-            <View style={styles.discoveryContent}>
-              <Text style={styles.discoveryTitle}>Add Book</Text>
-              <Text style={styles.discoverySubtitle}>Track a new book in your library</Text>
+
+            <View style={styles.moodMatcherContainer}>
+              <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
+                <View style={styles.moodMatcherContent}>
+                  <View style={styles.moodMatcherText}>
+                    <Text style={styles.moodMatcherTitle}>Personalized Recommendations</Text>
+                    <Text style={styles.moodMatcherDesc}>Discover books that resonate with your current state of mind</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
-            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
+          </View>
+
+          <View style={styles.sectionWithExtraPadding}>
+            <View style={styles.sectionHeaderReduced}>
+              <Text style={styles.sectionTitle}>Community</Text>
+            </View>
+
+            <View style={styles.communityContainer}>
+              <TouchableOpacity style={styles.communityCard} onPress={onJoinCommunity}>
+                <View style={styles.communityContent}>
+                  <View style={styles.communityText}>
+                    <Text style={styles.communityTitle}>Join the Book Community</Text>
+                    <Text style={styles.communityDesc}>Connect with fellow readers, share thoughts, and discover new perspectives</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.sectionWithExtraPadding}>
+            <View style={styles.sectionHeaderReduced}>
+              <Text style={styles.sectionTitle}>Your reading stats</Text>
+            </View>
+            <View style={styles.statsContainer}>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>5</Text>
+                <Text style={styles.statLabel}>Books This Month</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>23</Text>
+                <Text style={styles.statLabel}>Pages Today</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>8</Text>
+                <Text style={styles.statLabel}>Day Streak</Text>
+              </View>
+            </View>
+          </View>
         </View>
 
-        <View style={styles.moodSection}>
-          <TouchableOpacity
-            style={styles.moodCard}
-            onPress={() => navigation.navigate('MoodFlow')}
-          >
-            <View style={styles.moodIconContainer}>
-              <Ionicons name="color-palette" size={32} color="#FFFFFF" />
-            </View>
-            <View style={styles.moodContent}>
-              <Text style={styles.moodTitle}>Mood-Based Recommendations</Text>
-              <Text style={styles.moodSubtitle}>Discover books that match your current mood</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
+        <View style={styles.bottomSpacer} />
       </ScrollView>
-
-      <AddBookSheet
-        visible={showAddBookSheet}
-        onClose={() => setShowAddBookSheet(false)}
-        onAddBook={handleAddBook}
-      />
-    </>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F6F4F1',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
-  contentContainer: {
-    paddingBottom: 110, // Space for floating navigation
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 40,
     paddingHorizontal: 20,
-    paddingBottom: 12,
-    backgroundColor: '#F8F9FA',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    paddingBottom: 30,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2E0A09',
-    marginBottom: 4,
+    color: '#1D1D1D',
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
+    fontWeight: '400',
+    color: '#71727A',
+    marginBottom: 20,
+  },
+  content: {
+  },
+  section: {
+    marginBottom: 36,
+  },
+  sectionWithExtraPadding: {
+    marginBottom: 36,
+    marginTop: 20,
+  },
+  sectionHeaderSimple: {
+    marginBottom: 8,
+    paddingHorizontal: 20,
+  },
+  sectionHeaderReduced: {
+    marginBottom: 8,
+    paddingHorizontal: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1D1D1D',
+    letterSpacing: 0.5,
+    marginBottom: 8,
+  },
+  verticalCardContainer: {
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  getStartedCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1D1D1D',
+    marginBottom: 2,
+  },
+  cardDesc: {
+    fontSize: 12,
     color: '#71727A',
   },
-  featuresSection: {
+  arrowButton: {
+    backgroundColor: '#F6F4F1',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  arrowButtonText: {
+    color: '#2E0A09',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    gap: 16,
   },
-  featureCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FF6B6B',
-    padding: 20,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  featureIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  featureContent: {
+  statCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 12,
     flex: 1,
+    marginHorizontal: 4,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  featureTitle: {
-    fontSize: 18,
+  statNumber: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#2E0A09',
     marginBottom: 4,
   },
-  featureSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
-    lineHeight: 18,
+  statLabel: {
+    fontSize: 12,
+    color: '#1D1D1D',
+    textAlign: 'center',
   },
-  discoveryCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#4ECDC4',
-    padding: 20,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  discoveryIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  discoveryContent: {
-    flex: 1,
-  },
-  discoveryTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  discoverySubtitle: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
-    lineHeight: 18,
-  },
-  moodSection: {
+  moodMatcherContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
   },
-
-  moodCard: {
+  moodMatcherCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  moodMatcherContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2E0A09',
-    padding: 20,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 6,
   },
-
-  moodIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  moodContent: {
+  moodMatcherText: {
     flex: 1,
   },
-  moodTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  moodSubtitle: {
+  moodMatcherTitle: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
-    lineHeight: 18,
+    fontWeight: '500',
+    color: '#1D1D1D',
+    marginBottom: 6,
+    letterSpacing: 0.3,
   },
-
+  moodMatcherDesc: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#1D1D1D',
+    lineHeight: 20,
+    opacity: 0.8,
+    letterSpacing: 0.2,
+  },
+  communityContainer: {
+    paddingHorizontal: 20,
+  },
+  communityCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  communityContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  communityText: {
+    flex: 1,
+  },
+  communityTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#1D1D1D',
+    marginBottom: 6,
+    letterSpacing: 0.3,
+  },
+  communityDesc: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#1D1D1D',
+    lineHeight: 20,
+    opacity: 0.8,
+    letterSpacing: 0.2,
+  },
+  bottomSpacer: {
+    height: 108,
+  },
 });
 
 export default Home;

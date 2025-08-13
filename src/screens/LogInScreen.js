@@ -162,7 +162,6 @@ const LogInScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
         </ScrollView>
     );
 }

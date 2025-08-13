@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors, typography, spacing, borderRadius, shadows, componentStyles } from '../styles/theme';
+import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
+import CreateCategorySheet from '../components/CreateCategorySheet';
 
 const LibraryScreen = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    LibreBaskerville_400Regular,
+    LibreBaskerville_700Bold,
+  });
+
   const [activeTab, setActiveTab] = useState('all');
+  const [showCreateCategorySheet, setShowCreateCategorySheet] = useState(false);
+  const [customCategories, setCustomCategories] = useState([]);
 
   // Sample book data - in a real app this would come from a database/API
   const sampleBooks = [
@@ -14,6 +24,7 @@ const LibraryScreen = ({ navigation }) => {
       status: 'finished',
       rating: 5,
       progress: 100,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/1501161938.01.L.jpg',
     },
     {
       id: 2,
@@ -22,6 +33,7 @@ const LibraryScreen = ({ navigation }) => {
       status: 'reading',
       rating: 0,
       progress: 65,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/0735211299.01.L.jpg',
     },
     {
       id: 3,
@@ -30,330 +42,479 @@ const LibraryScreen = ({ navigation }) => {
       status: 'wishlist',
       rating: 0,
       progress: 0,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/1250301696.01.L.jpg',
+    },
+    {
+      id: 4,
+      title: 'Educated',
+      author: 'Tara Westover',
+      status: 'reading',
+      rating: 0,
+      progress: 30,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/0399590501.01.L.jpg',
+    },
+    {
+      id: 5,
+      title: 'Where the Crawdads Sing',
+      author: 'Delia Owens',
+      status: 'finished',
+      rating: 4,
+      progress: 100,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/0735219095.01.L.jpg',
+    },
+    {
+      id: 6,
+      title: 'The Psychology of Money',
+      author: 'Morgan Housel',
+      status: 'wishlist',
+      rating: 0,
+      progress: 0,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/0857197681.01.L.jpg',
+    },
+    {
+      id: 7,
+      title: 'The Great Gatsby',
+      author: 'F. Scott Fitzgerald',
+      status: 'dnf',
+      rating: 0,
+      progress: 45,
+      coverImage: 'https://images-na.ssl-images-amazon.com/images/P/0743273567.01.L.jpg',
     },
   ];
 
-  const getFilteredBooks = () => {
-    if (activeTab === 'all') return sampleBooks;
-    return sampleBooks.filter(book => book.status === activeTab);
-  };
 
-  const renderStars = (rating) => {
+  const renderTabBar = () => {
+    const tabs = [
+      { id: 'all', title: 'All', icon: 'library' },
+      { id: 'reading', title: 'Reading', icon: 'book' },
+      { id: 'finished', title: 'Finished', icon: 'checkmark-circle' },
+      { id: 'dnf', title: 'Did Not Finish', icon: 'close-circle' },
+      { id: 'wishlist', title: 'Want to Read', icon: 'heart' },
+    ];
+
     return (
-      <View style={styles.starsContainer}>
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Ionicons
-            key={star}
-            name={star <= rating ? 'star' : 'star-outline'}
-            size={12}
-            color={star <= rating ? '#FFD700' : '#E0E0E0'}
-          />
-        ))}
-      </View>
-    );
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'reading': return 'book';
-      case 'finished': return 'checkmark-circle';
-      case 'wishlist': return 'heart';
-      default: return 'library';
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'reading': return '#4ECDC4';
-      case 'finished': return '#96CEB4';
-      case 'wishlist': return '#FF6B6B';
-      default: return '#71727A';
-    }
-  };
-
-  const tabs = [
-    { id: 'all', label: 'All Books', icon: 'library' },
-    { id: 'reading', label: 'Reading', icon: 'book' },
-    { id: 'finished', label: 'Finished', icon: 'checkmark-circle' },
-    { id: 'wishlist', label: 'Wishlist', icon: 'heart' },
-  ];
-
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <Text style={styles.title}>My Library</Text>
-        <Text style={styles.subtitle}>Organize and track your reading journey</Text>
-      </View>
-
-      <View style={styles.categoriesContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoriesScroll}>
+      <View style={styles.tabBar}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabScrollContent}>
           {tabs.map((tab) => (
             <TouchableOpacity
               key={tab.id}
-              style={[styles.categoryChip, activeTab === tab.id && styles.activeCategoryChip]}
+              style={[
+                styles.tab,
+                activeTab === tab.id && styles.activeTab
+              ]}
               onPress={() => setActiveTab(tab.id)}
             >
               <Ionicons
                 name={tab.icon}
-                size={18}
-                color={activeTab === tab.id ? '#FFFFFF' : '#71727A'}
+                size={16}
+                color={activeTab === tab.id ? colors.onPrimary : colors.onSurfaceVariant}
               />
-              <Text style={[styles.categoryText, activeTab === tab.id && styles.activeCategoryText]}>
-                {tab.label}
+              <Text style={[
+                styles.tabText,
+                activeTab === tab.id && styles.activeTabText
+              ]}>
+                {tab.title}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
+    );
+  };
 
-      <View style={styles.content}>
-        {getFilteredBooks().length === 0 ? (
-          <View style={styles.emptyState}>
-            <Ionicons name="book-outline" size={48} color="#71727A" />
-            <Text style={styles.emptyTitle}>No books found</Text>
-            <Text style={styles.emptySubtext}>
-              No books in this category yet. Add some books to get started!
-            </Text>
-          </View>
-        ) : (
-          getFilteredBooks().map((book) => (
-            <View key={book.id} style={styles.bookCard}>
-              <View style={styles.bookHeader}>
-                <View style={styles.bookInfo}>
-                  <Text style={styles.bookTitle}>{book.title}</Text>
-                  <Text style={styles.bookAuthor}>by {book.author}</Text>
-                </View>
-                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(book.status) }]}>
-                  <Ionicons name={getStatusIcon(book.status)} size={16} color="#FFFFFF" />
-                </View>
-              </View>
-              
-              {book.rating > 0 && (
-                <View style={styles.ratingSection}>
-                  <Text style={styles.ratingLabel}>Your Rating:</Text>
-                  {renderStars(book.rating)}
-                </View>
-              )}
-              
-              {book.status === 'reading' && (
-                <View style={styles.progressSection}>
-                  <View style={styles.progressHeader}>
-                    <Text style={styles.progressLabel}>Progress</Text>
-                    <Text style={styles.progressText}>{book.progress}%</Text>
-                  </View>
-                  <View style={styles.progressBarContainer}>
-                    <View style={[styles.progressBar, { width: `${book.progress}%` }]} />
-                  </View>
-                </View>
-              )}
-              
-              <TouchableOpacity style={styles.viewBookButton}>
-                <Text style={styles.viewBookButtonText}>View Details</Text>
-                <Ionicons name="chevron-forward" size={16} color="#2E0A09" />
-              </TouchableOpacity>
+
+  const renderBookLine = (book) => (
+    <TouchableOpacity key={book.id} style={styles.bookLine} activeOpacity={0.8}>
+      <Image source={{ uri: book.coverImage }} style={styles.smallBookCover} />
+      <View style={styles.bookLineInfo}>
+        <Text style={styles.bookLineTitle} numberOfLines={1}>{book.title}</Text>
+        <Text style={styles.bookLineAuthor} numberOfLines={1}>{book.author}</Text>
+
+        {book.status === 'reading' && (
+          <View style={styles.smallProgressContainer}>
+            <View style={styles.smallProgressBar}>
+              <View style={[styles.smallProgressFill, { width: `${book.progress}%` }]} />
             </View>
-          ))
+            <Text style={styles.smallProgressText}>{book.progress}%</Text>
+          </View>
+        )}
+
+        {book.status === 'finished' && book.rating > 0 && (
+          <View style={styles.smallRatingContainer}>
+            {[...Array(5)].map((_, i) => (
+              <Ionicons
+                key={i}
+                name={i < book.rating ? 'star' : 'star-outline'}
+                size={10}
+                color={colors.happyMood}
+              />
+            ))}
+          </View>
         )}
       </View>
 
-    </ScrollView>
+      <Ionicons name="chevron-forward" size={16} color={colors.onSurfaceVariant} />
+    </TouchableOpacity>
+  );
+
+
+  const renderProgressCard = (statusType, statusLabel, count, coverImage) => (
+    <TouchableOpacity
+      style={styles.topicCard}
+      onPress={() => setActiveTab(statusType)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.cardContent}>
+        <Image source={{ uri: coverImage }} style={styles.cardCoverImage} />
+        <View style={styles.cardTextContent}>
+          <View style={styles.topicHeader}>
+            <Text style={styles.topicTitle}>{statusLabel}</Text>
+          </View>
+          <View style={styles.topicStats}>
+            <Text style={styles.topicStat}>{count} total books</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+
+  const renderContent = () => {
+    if (activeTab === 'all') {
+      const readingBooks = sampleBooks.filter(book => book.status === 'reading');
+      const finishedBooks = sampleBooks.filter(book => book.status === 'finished');
+      const wishlistBooks = sampleBooks.filter(book => book.status === 'wishlist');
+
+
+      return (
+        <ScrollView style={styles.topicsContainer} showsVerticalScrollIndicator={false}>
+          {renderProgressCard('reading', 'Reading', readingBooks.length, 'https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif')}
+          {renderProgressCard('finished', 'Finished', finishedBooks.length, 'https://media.giphy.com/media/26BRrSvJUa0crqw4E/giphy.gif')}
+          {renderProgressCard('wishlist', 'Want to Read', wishlistBooks.length, 'https://media.giphy.com/media/l3vRlT2DWr7CqYWNa/giphy.gif')}
+          {renderProgressCard('dnf', 'Did Not Finish', sampleBooks.filter(book => book.status === 'dnf').length, 'https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif')}
+
+
+          <TouchableOpacity
+            style={styles.addGroupCard}
+            onPress={() => setShowCreateCategorySheet(true)}
+          >
+            <View style={styles.addGroupContent}>
+              <View style={styles.addGroupIconContainer}>
+                <Ionicons name="add" size={24} color={colors.primary} />
+              </View>
+              <View style={styles.addGroupTextContent}>
+                <Text style={styles.addGroupTitle}>Add Your Own Group</Text>
+                <Text style={styles.addGroupDescription}>Create a custom reading category</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          {customCategories.map((category) => (
+            renderProgressCard(
+              category.id,
+              category.name,
+              0,
+              'https://via.placeholder.com/300x400/f0f0f0/999999?text=Custom'
+            )
+          ))}
+        </ScrollView>
+      );
+    } else {
+      const filteredBooks = sampleBooks.filter(book => book.status === activeTab);
+
+      if (filteredBooks.length === 0) {
+        return (
+          <View style={styles.emptyState}>
+            <Ionicons name="book-outline" size={48} color={colors.onSurfaceVariant} />
+            <Text style={styles.emptyStateText}>
+              No {activeTab === 'wishlist' ? 'want to read' : activeTab === 'dnf' ? 'did not finish' : activeTab} books
+            </Text>
+            <Text style={styles.emptyStateSubtext}>
+              Add some books to your {activeTab === 'wishlist' ? 'want to read' : activeTab === 'dnf' ? 'did not finish' : activeTab} list
+            </Text>
+          </View>
+        );
+      }
+
+      return (
+        <View style={styles.booksList}>
+          {filteredBooks.map(book => renderBookLine(book))}
+        </View>
+      );
+    }
+  };
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  const handleCreateCategory = (categoryData) => {
+    setCustomCategories(prev => [...prev, categoryData]);
+    console.log('Creating category:', categoryData);
+  };
+
+  return (
+    <>
+      <View style={styles.container}>
+        <View style={styles.stickyHeader}>
+          <View style={styles.header}>
+            <Text style={styles.title}>My Library</Text>
+            <Text style={styles.subtitle}>Organize and track your reading journey</Text>
+          </View>
+          {renderTabBar()}
+        </View>
+
+        <ScrollView style={styles.scrollableContent} contentContainerStyle={styles.contentContainer}>
+          <View style={styles.content}>
+            {renderContent()}
+          </View>
+        </ScrollView>
+      </View>
+
+      <CreateCategorySheet
+        visible={showCreateCategorySheet}
+        onClose={() => setShowCreateCategorySheet(false)}
+        onCreateCategory={handleCreateCategory}
+      />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
+  },
+  stickyHeader: {
+    backgroundColor: colors.background,
+    zIndex: 100,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  scrollableContent: {
+    flex: 1,
   },
   contentContainer: {
     paddingBottom: 110,
   },
   header: {
     paddingTop: 60,
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.screenPadding,
     paddingBottom: 12,
-    backgroundColor: '#F8F9FA',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    backgroundColor: colors.background,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#130504ff',
+    ...typography.displaySmall,
+    color: colors.onBackground,
     marginBottom: 4,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#71727A',
+    ...typography.bodyLarge,
+    color: colors.onSurfaceVariant,
   },
-  categoriesContainer: {
-    paddingVertical: 20,
+  topicsContainer: {
+    flex: 1,
   },
-  categoriesScroll: {
-    paddingHorizontal: 20,
-    gap: 12,
+  topicCard: {
+    ...componentStyles.card.large,
+    marginBottom: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg,
   },
-  categoryChip: {
+  cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    gap: 6,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    gap: spacing.lg,
   },
-  activeCategoryChip: {
+  cardCoverImage: {
+    width: 70,
+    height: 70,
+    borderRadius: borderRadius.small,
+    resizeMode: 'cover',
+  },
+  cardTextContent: {
+    flex: 1,
+  },
+  topicHeader: {
+    marginBottom: spacing.xs,
+  },
+  topicTitle: {
+    ...typography.headlineSmall,
+    color: colors.onSurface,
+    marginBottom: 2,
+  },
+  topicDescription: {
+    ...typography.bodyMedium,
+    color: colors.onSurfaceVariant,
+  },
+  topicStats: {
+    marginBottom: spacing.sm,
+  },
+  topicStat: {
+    ...typography.bodySmall,
+    color: colors.onSurfaceLight,
+  },
+
+  // Tab Bar Styles
+  tabBar: {
+    backgroundColor: colors.background,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.lg,
+  },
+  tabScrollContent: {
+    paddingHorizontal: spacing.screenPadding,
+    gap: spacing.sm,
+  },
+  tab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: 100,
+    backgroundColor: colors.surface,
+    gap: spacing.xs,
+  },
+  activeTab: {
     backgroundColor: '#2E0A09',
   },
-  categoryText: {
+  tabText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#71727A',
+    fontWeight: '500',
+    color: colors.onSurfaceVariant,
   },
-  activeCategoryText: {
-    color: '#FFFFFF',
+  activeTabText: {
+    color: colors.onPrimary,
   },
+
+  // Content Styles
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.screenPadding,
+    paddingTop: spacing.md,
   },
-  emptyState: {
-    backgroundColor: '#FFFFFF',
-    padding: 40,
-    borderRadius: 16,
-    marginBottom: 22,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+
+  // Books List (Individual Tabs)
+  booksList: {
+    gap: spacing.md,
   },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    marginTop: 16,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#71727A',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  bookCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  bookHeader: {
+  bookLine: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.small,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    ...shadows.small,
+    gap: spacing.md,
   },
-  bookInfo: {
+  smallBookCover: {
+    width: 45,
+    height: 65,
+    borderRadius: spacing.xs,
+    resizeMode: 'cover',
+  },
+  bookLineInfo: {
     flex: 1,
-    marginRight: 12,
+    gap: spacing.xs,
   },
-  bookTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    marginBottom: 4,
+  bookLineTitle: {
+    ...typography.titleLarge,
+    color: colors.onSurface,
   },
-  bookAuthor: {
-    fontSize: 14,
-    color: '#71727A',
+  bookLineAuthor: {
+    ...typography.bodyMedium,
+    color: colors.onSurfaceVariant,
   },
-  statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ratingSection: {
+  smallProgressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    gap: 8,
+    gap: spacing.sm,
   },
-  ratingLabel: {
-    fontSize: 14,
-    color: '#71727A',
-    fontWeight: '500',
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    gap: 2,
-  },
-  progressSection: {
-    marginBottom: 12,
-  },
-  progressHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  progressLabel: {
-    fontSize: 14,
-    color: '#71727A',
-    fontWeight: '500',
-  },
-  progressText: {
-    fontSize: 14,
-    color: '#2E0A09',
-    fontWeight: '600',
-  },
-  progressBarContainer: {
-    height: 6,
-    backgroundColor: '#F0F0F0',
-    borderRadius: 3,
+  smallProgressBar: {
+    flex: 1,
+    height: 3,
+    backgroundColor: colors.neutral200,
+    borderRadius: 2,
     overflow: 'hidden',
   },
-  progressBar: {
+  smallProgressFill: {
     height: '100%',
-    backgroundColor: '#4ECDC4',
-    borderRadius: 3,
+    backgroundColor: colors.primary,
   },
-  viewBookButton: {
+  smallProgressText: {
+    ...typography.bodySmall,
+    color: colors.onSurfaceVariant,
+  },
+  smallRatingContainer: {
+    flexDirection: 'row',
+    gap: 1,
+  },
+
+  // Empty State
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 80,
+    gap: spacing.lg,
+  },
+  emptyStateText: {
+    ...typography.headlineMedium,
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+  },
+  emptyStateSubtext: {
+    ...typography.bodyLarge,
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    maxWidth: '80%',
+  },
+
+  // Add Group Card Styles
+  addGroupCard: {
+    ...componentStyles.card.large,
+    marginBottom: spacing.lg,
+    borderWidth: 2,
+    borderColor: colors.primary,
+    borderStyle: 'dashed',
+    backgroundColor: colors.surfaceVariant,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg,
+  },
+  addGroupContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: spacing.lg,
+  },
+  addGroupIconContainer: {
+    width: 70,
+    height: 70,
+    borderRadius: borderRadius.small,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F8F9FA',
-    paddingVertical: 12,
-    borderRadius: 8,
-    gap: 4,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
-  viewBookButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2E0A09',
+  addGroupTextContent: {
+    flex: 1,
   },
+  addGroupTitle: {
+    ...typography.headlineSmall,
+    color: colors.primary,
+    marginBottom: 4,
+  },
+  addGroupDescription: {
+    ...typography.bodyMedium,
+    color: colors.onSurfaceVariant,
+  },
+
 });
 
 export default LibraryScreen;
