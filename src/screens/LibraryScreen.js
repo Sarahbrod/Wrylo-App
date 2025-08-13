@@ -6,10 +6,10 @@ const LibraryScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('all');
 
   const tabs = [
-    { id: 'all', label: 'All Books', icon: 'library' },
-    { id: 'reading', label: 'Reading', icon: 'book' },
-    { id: 'finished', label: 'Finished', icon: 'checkmark-circle' },
-    { id: 'wishlist', label: 'Wishlist', icon: 'heart' },
+    { id: 'all', label: 'All Books' },
+    { id: 'reading', label: 'Reading' },
+    { id: 'finished', label: 'Finished' },
+    { id: 'wishlist', label: 'Wishlist' },
   ];
 
   return (
@@ -26,10 +26,10 @@ const LibraryScreen = ({ navigation }) => {
             style={[styles.tab, activeTab === tab.id && styles.activeTab]}
             onPress={() => setActiveTab(tab.id)}
           >
-            <Ionicons 
-              name={tab.icon} 
-              size={20} 
-              color={activeTab === tab.id ? '#FFFFFF' : '#71727A'} 
+            <Ionicons
+              name={tab.icon}
+              size={20}
+              color={activeTab === tab.id ? '#FFFFFF' : '#71727A'}
             />
             <Text style={[styles.tabText, activeTab === tab.id && styles.activeTabText]}>
               {tab.label}
@@ -40,7 +40,16 @@ const LibraryScreen = ({ navigation }) => {
 
       <View style={styles.content}>
         <View style={styles.emptyState}>
-          <Ionicons name="library-outline" size={64} color="#71727A" />
+          <Text style={styles.emptyTitle}>Your library is empty</Text>
+          <Text style={styles.emptySubtext}>
+            Start building your personal library by adding books you want to read
+          </Text>
+          <TouchableOpacity style={styles.addButton}>
+            <Ionicons name="add" size={20} color="#FFFFFF" />
+            <Text style={styles.addButtonText}>Add Your First Book</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>Your library is empty</Text>
           <Text style={styles.emptySubtext}>
             Start building your personal library by adding books you want to read
@@ -51,6 +60,7 @@ const LibraryScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+
     </ScrollView>
   );
 };
@@ -66,15 +76,15 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 60,
     paddingHorizontal: 20,
-    paddingBottom: 30,
-    backgroundColor: '#FFFFFF',
+    paddingBottom: 12,
+    backgroundColor: '#F8F9FA',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2E0A09',
+    color: '#130504ff',
     marginBottom: 4,
   },
   subtitle: {
@@ -92,14 +102,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+    paddingVertical: 8,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    gap: 6,
+    borderColor: '#414141ff',
+    borderRadius: 100,
   },
   activeTab: {
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#0b0302ff',
   },
   tabText: {
     fontSize: 12,
@@ -117,7 +126,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 40,
     borderRadius: 16,
-    alignItems: 'center',
+    marginBottom: 22,
+    alignItems: 'left',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

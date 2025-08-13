@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import CustomInput from '../components/CustomInput/CustomInput';
 import CustomButton from '../components/CustomButton/CustomButton';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
@@ -74,7 +74,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.safeArea}>
+        <ScrollView style={styles.safeArea} contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
                 <Text style={styles.welcomeText}>Reset Password</Text>
                 <Text style={styles.subtext}>
@@ -105,7 +105,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -114,8 +114,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F6F4F1',
     },
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingBottom: 110,
+    },
     container: {
-        flex: 1,
         alignItems: 'stretch',
         paddingHorizontal: 24,
         paddingTop: 120,

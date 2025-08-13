@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native'
 import CustomInput from '../components/CustomInput/CustomInput';
 import CustomButton from '../components/CustomButton/CustomButton';
 import Divider from '../components/Divider/Divider';
@@ -110,7 +110,7 @@ const LogInScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.safeArea}>
+        <ScrollView style={styles.safeArea} contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
                     <Text style={styles.welcomeText}>Welcome back</Text>
                     <Text style={styles.loginSubtext}>Log in to continue your reading journey</Text>
@@ -163,6 +163,7 @@ const LogInScreen = ({ navigation }) => {
                     </View>
                 </View>
             </View>
+        </ScrollView>
     );
 }
 const styles = StyleSheet.create({
@@ -170,8 +171,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F6F4F1',
     },
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingBottom: 110,
+    },
     container: {
-        flex: 1,
         alignItems: 'stretch',
         paddingHorizontal: 24,
         paddingTop: 80,
