@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const Home = ({ navigation }) => {
+
   const onTrackReading = () => {
     navigation.navigate('Library');
   };
@@ -19,6 +20,7 @@ const Home = ({ navigation }) => {
     navigation.navigate('Forum');
   };
 
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
@@ -28,7 +30,7 @@ const Home = ({ navigation }) => {
         </View>
 
         <View style={styles.content}>
-          <View style={styles.section}>
+          <View style={styles.getStartedSection}>
             <View style={styles.sectionHeaderSimple}>
               <Text style={styles.sectionTitle}>Get started</Text>
             </View>
@@ -70,12 +72,23 @@ const Home = ({ navigation }) => {
 
             <View style={styles.moodMatcherContainer}>
               <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
-                <View style={styles.moodMatcherContent}>
-                  <View style={styles.moodMatcherText}>
-                    <Text style={styles.moodMatcherTitle}>Personalized Recommendations</Text>
-                    <Text style={styles.moodMatcherDesc}>Discover books that resonate with your current state of mind</Text>
+                <ImageBackground
+                  source={{
+                    uri: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMwMCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzJFMEEwOTtzdG9wLW9wYWNpdHk6MC4xIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM3MTcyN0E7c3RvcC1vcGFjaXR5OjAuMDUiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIxODAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+CjxjaXJjbGUgY3g9IjI0MCIgY3k9IjQwIiByPSI4MCIgZmlsbD0iIzJFMEEwOSIgZmlsbC1vcGFjaXR5PSIwLjA4Ii8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iMTQwIiByPSI2MCIgZmlsbD0iIzcxNzI3QSIgZmlsbC1vcGFjaXR5PSIwLjA2Ii8+Cjxwb2x5Z29uIHBvaW50cz0iMjAwLDEwMCAyMjAsMTIwIDI0MCwxMDAgMjYwLDEyMCAyODAsMTAwIDMwMCwxMjAgMzAwLDE4MCAwLDE4MCIgZmlsbD0iIzJFMEEwOSIgZmlsbC1vcGFjaXR5PSIwLjA0Ii8+Cjwvc3ZnPgo='
+                  }}
+                  style={styles.moodMatcherBackground}
+                  imageStyle={styles.moodMatcherBackgroundImage}
+                >
+                  <View style={styles.moodMatcherContent}>
+                    <View style={styles.moodMatcherText}>
+                      <Text style={styles.moodMatcherTitle}>Personalized Recommendations</Text>
+                      <Text style={styles.moodMatcherDesc}>Discover books that resonate with your current state of mind</Text>
+                    </View>
+                    <View style={styles.moodMatcherIcon}>
+                      <Text style={styles.moodMatcherEmoji}>📚</Text>
+                    </View>
                   </View>
-                </View>
+                </ImageBackground>
               </TouchableOpacity>
             </View>
           </View>
@@ -97,25 +110,6 @@ const Home = ({ navigation }) => {
             </View>
           </View>
 
-          <View style={styles.sectionWithExtraPadding}>
-            <View style={styles.sectionHeaderReduced}>
-              <Text style={styles.sectionTitle}>Your reading stats</Text>
-            </View>
-            <View style={styles.statsContainer}>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>5</Text>
-                <Text style={styles.statLabel}>Books This Month</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>23</Text>
-                <Text style={styles.statLabel}>Pages Today</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>8</Text>
-                <Text style={styles.statLabel}>Day Streak</Text>
-              </View>
-            </View>
-          </View>
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -139,24 +133,35 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#1D1D1D',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    fontWeight: '400',
     color: '#71727A',
     marginBottom: 20,
   },
   content: {
   },
   section: {
-    marginBottom: 36,
+    marginBottom: 28,
+  },
+  getStartedSection: {
+    backgroundColor: '#F6F4F1',
+    borderRadius: 16,
+    marginHorizontal: 20,
+    marginBottom: 32,
+    paddingVertical: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
   },
   sectionWithExtraPadding: {
-    marginBottom: 36,
-    marginTop: 20,
+    marginBottom: 28,
+    marginTop: 16,
   },
   sectionHeaderSimple: {
     marginBottom: 8,
@@ -168,27 +173,29 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#1D1D1D',
     letterSpacing: 0.5,
     marginBottom: 8,
   },
   verticalCardContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     gap: 12,
   },
   getStartedCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: 16,
+    padding: 18,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#2E0A09',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   cardContent: {
     flex: 1,
@@ -216,69 +223,59 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  statCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 12,
-    flex: 1,
-    marginHorizontal: 4,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#1D1D1D',
-    textAlign: 'center',
-  },
   moodMatcherContainer: {
     paddingHorizontal: 20,
   },
   moodMatcherCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#2E0A09',
     borderRadius: 16,
-    padding: 20,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
   },
+  moodMatcherBackground: {
+    width: '100%',
+    minHeight: 100,
+  },
+  moodMatcherBackgroundImage: {
+    borderRadius: 16,
+  },
   moodMatcherContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 20,
   },
   moodMatcherText: {
     flex: 1,
   },
   moodMatcherTitle: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#1D1D1D',
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   moodMatcherDesc: {
     fontSize: 14,
-    fontWeight: '400',
-    color: '#1D1D1D',
+    color: '#F6F4F1',
     lineHeight: 20,
-    opacity: 0.8,
+    opacity: 0.9,
     letterSpacing: 0.2,
+  },
+  moodMatcherIcon: {
+    marginLeft: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(246, 244, 241, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  moodMatcherEmoji: {
+    fontSize: 20,
   },
   communityContainer: {
     paddingHorizontal: 20,
@@ -302,14 +299,13 @@ const styles = StyleSheet.create({
   },
   communityTitle: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '700',
     color: '#1D1D1D',
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   communityDesc: {
     fontSize: 14,
-    fontWeight: '400',
     color: '#1D1D1D',
     lineHeight: 20,
     opacity: 0.8,

@@ -14,46 +14,12 @@ if (__DEV__) {
     // Android emulator uses 10.0.2.2 to reach host localhost
     API_BASE_URL = 'http://10.0.2.2:8000/api';
   } else {
-    // iOS simulator and web - use local network IP for better connectivity
-    API_BASE_URL = 'http://10.0.0.252:8000/api';
+    // iOS simulator and web - use localhost for unified development
+    API_BASE_URL = 'http://localhost:8000/api';
   }
   
   console.log(`Using API_BASE_URL: ${API_BASE_URL} for platform: ${Platform.OS}`);
   
-  // Test network connectivity on startup
-  const testConnection = async () => {
-    try {
-      console.log('Testing network connection...');
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
-      const response = await fetch(`${API_BASE_URL}/auth/login/`, {
-        method: 'OPTIONS',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        signal: controller.signal,
-      });
-      
-      clearTimeout(timeoutId);
-      console.log('Network test result:', response.status);
-    } catch (error) {
-      // Handle network test errors more gracefully
-      if (error.name === 'AbortError') {
-        console.warn('Network test timed out - this is normal if backend is not running');
-      } else if (error.code === 'NETWORK_ERROR' || error.message.includes('Network')) {
-        console.warn('Network connectivity issue detected during startup test');
-      } else if (error.message.includes('fetch')) {
-        console.warn('Fetch failed during network test - backend may not be available');
-      } else {
-        console.warn('Network test failed:', error.message);
-      }
-      console.log('Note: The app will still work when backend becomes available.');
-    }
-  };
-  
-  // Run test after a brief delay to let app initialize
-  setTimeout(testConnection, 2000);
   
   // Auto-clear login attempts for configured emails on startup
   const autoClearAttempts = async () => {
@@ -418,29 +384,6 @@ class AuthService {
     }
   }
 
-  // Test network connectivity
-  async testConnection() {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
-      const response = await fetch(`${API_BASE_URL}/auth/login/`, {
-        method: 'OPTIONS',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        signal: controller.signal,
-      });
-      
-      clearTimeout(timeoutId);
-      return { success: true, status: response.status };
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        return { success: false, error: 'Connection timeout' };
-      }
-      return { success: false, error: error.message };
-    }
-  }
 
   // User login
   async login(credentials) {

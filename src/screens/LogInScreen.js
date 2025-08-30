@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native'
 import CustomInput from '../components/CustomInput/CustomInput';
 import CustomButton from '../components/CustomButton/CustomButton';
 import Divider from '../components/Divider/Divider';
@@ -35,16 +35,6 @@ const LogInScreen = ({ navigation }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const testConnection = async () => {
-        try {
-            const result = await authService.testConnection();
-            Alert.alert('Connection Test', result.success ? 
-                `Connection successful! Status: ${result.status}` : 
-                `Connection failed: ${result.error}`);
-        } catch (error) {
-            Alert.alert('Connection Test', `Test failed: ${error.message}`);
-        }
-    };
 
     const onLogInPressed = async () => {
         if (!validateForm()) {
@@ -110,7 +100,10 @@ const LogInScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView style={styles.safeArea} contentContainerStyle={styles.scrollContainer}>
+        <KeyboardAvoidingView 
+            style={styles.safeArea} 
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
             <View style={styles.container}>
                     <Text style={styles.welcomeText}>Welcome back</Text>
                     <Text style={styles.loginSubtext}>Log in to continue your reading journey</Text>
@@ -140,12 +133,7 @@ const LogInScreen = ({ navigation }) => {
                     {loading ? (
                         <ActivityIndicator size="large" color="#2E0A09" style={styles.loadingIndicator} />
                     ) : (
-                        <>
-                            <CustomButton text="Log In" onPress={onLogInPressed} />
-                            {__DEV__ && (
-                                <CustomButton text="Test Connection" onPress={testConnection} type="TERTIARY" />
-                            )}
-                        </>
+                        <CustomButton text="Log In" onPress={onLogInPressed} type="PRIMARY" />
                     )}
                     <View style={styles.dividerSpacing}>
                         <Divider text="Or continue with" />
@@ -162,7 +150,7 @@ const LogInScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-        </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 const styles = StyleSheet.create({
@@ -170,15 +158,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F6F4F1',
     },
-    scrollContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        paddingBottom: 110,
-    },
     container: {
+        flex: 1,
         alignItems: 'stretch',
         paddingHorizontal: 24,
-        paddingTop: 80,
+        paddingTop: 60,
         paddingBottom: 40,
         justifyContent: 'center',
     },
@@ -200,7 +184,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 16,
     },
     inputLabel: {
         fontSize: 16,
@@ -211,8 +195,8 @@ const styles = StyleSheet.create({
     },
 
     dividerSpacing: {
-        paddingTop: 24,
-        paddingBottom: 16,
+        paddingTop: 20,
+        paddingBottom: 12,
     },
 
     alt: {
@@ -227,7 +211,7 @@ const styles = StyleSheet.create({
     bottomSignup: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 40,
+        paddingTop: 32,
         paddingBottom: 20,
         justifyContent: 'center',
     },

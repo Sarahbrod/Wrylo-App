@@ -154,8 +154,11 @@ SIMPLE_JWT = {
 # CORS configuration
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",  # Expo development server
+    "http://localhost:8001",  # Updated Expo port
     "http://127.0.0.1:8081",
+    "http://127.0.0.1:8001",
     "http://10.0.0.252:8081",  # Local network access
+    "http://10.0.2.2:8001",   # Android emulator
 ]
 
 # Allow all origins for development only (React Native apps)

@@ -15,6 +15,8 @@ const { height: screenHeight } = Dimensions.get('window');
 
 const AddBookSheet = ({ visible, onClose, onAddBook }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [bookTitle, setBookTitle] = useState('');
+  const [bookAuthor, setBookAuthor] = useState('');
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [progress, setProgress] = useState('want_to_read');
@@ -27,15 +29,25 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
   ];
 
   const handleSubmit = () => {
+    if (!bookTitle.trim() || !bookAuthor.trim()) {
+      return; // Don't submit if title or author is empty
+    }
+    
     const bookData = {
-      searchQuery,
+      id: Date.now(),
+      title: bookTitle.trim(),
+      author: bookAuthor.trim(),
+      status: progress === 'want_to_read' ? 'wishlist' : progress === 'did_not_finish' ? 'dnf' : progress,
       rating,
-      comment,
-      progress,
+      comment: comment.trim(),
+      progress: progress === 'finished' ? 100 : progress === 'reading' ? 0 : 0,
+      coverImage: 'https://via.placeholder.com/300x400/f0f0f0/999999?text=Book',
     };
     onAddBook(bookData);
     // Reset form
     setSearchQuery('');
+    setBookTitle('');
+    setBookAuthor('');
     setRating(0);
     setComment('');
     setProgress('want_to_read');
@@ -94,6 +106,31 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
                   placeholderTextColor="#71727A"
                 />
               </View>
+              <Text style={styles.orText}>or add manually</Text>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Book Details</Text>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Title *</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter book title"
+                  value={bookTitle}
+                  onChangeText={setBookTitle}
+                  placeholderTextColor="#71727A"
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Author *</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter author name"
+                  value={bookAuthor}
+                  onChangeText={setBookAuthor}
+                  placeholderTextColor="#71727A"
+                />
+              </View>
             </View>
 
             <View style={styles.section}>
@@ -144,7 +181,14 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
               />
             </View>
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <TouchableOpacity 
+              style={[
+                styles.submitButton,
+                (!bookTitle.trim() || !bookAuthor.trim()) && styles.submitButtonDisabled
+              ]} 
+              onPress={handleSubmit}
+              disabled={!bookTitle.trim() || !bookAuthor.trim()}
+            >
               <Ionicons name="add" size={20} color="#FFFFFF" />
               <Text style={styles.submitButtonText}>Add Book</Text>
             </TouchableOpacity>
@@ -225,6 +269,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#2E0A09',
   },
+  orText: {
+    textAlign: 'center',
+    color: '#71727A',
+    fontSize: 14,
+    marginTop: 12,
+    fontStyle: 'italic',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2E0A09',
+    marginBottom: 8,
+  },
+  textInput: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#2E0A09',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
   progressOptions: {
     gap: 8,
   },
@@ -278,6 +348,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  submitButtonDisabled: {
+    backgroundColor: '#CCCCCC',
   },
 });
 

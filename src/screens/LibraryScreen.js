@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, borderRadius, shadows, componentStyles } from '../styles/theme';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
 import CreateCategorySheet from '../components/CreateCategorySheet';
+import AddBookSheet from '../components/AddBookSheet';
 
 const LibraryScreen = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -13,6 +14,7 @@ const LibraryScreen = ({ navigation }) => {
 
   const [activeTab, setActiveTab] = useState('all');
   const [showCreateCategorySheet, setShowCreateCategorySheet] = useState(false);
+  const [showAddBookSheet, setShowAddBookSheet] = useState(false);
   const [customCategories, setCustomCategories] = useState([]);
 
   // Sample book data - in a real app this would come from a database/API
@@ -82,6 +84,12 @@ const LibraryScreen = ({ navigation }) => {
     },
   ];
 
+  const [books, setBooks] = useState(sampleBooks);
+
+  const handleAddBook = (bookData) => {
+    setBooks(prevBooks => [...prevBooks, bookData]);
+    console.log('Book added:', bookData);
+  };
 
   const renderTabBar = () => {
     const tabs = [
@@ -181,9 +189,9 @@ const LibraryScreen = ({ navigation }) => {
 
   const renderContent = () => {
     if (activeTab === 'all') {
-      const readingBooks = sampleBooks.filter(book => book.status === 'reading');
-      const finishedBooks = sampleBooks.filter(book => book.status === 'finished');
-      const wishlistBooks = sampleBooks.filter(book => book.status === 'wishlist');
+      const readingBooks = books.filter(book => book.status === 'reading');
+      const finishedBooks = books.filter(book => book.status === 'finished');
+      const wishlistBooks = books.filter(book => book.status === 'wishlist');
 
 
       return (
@@ -191,7 +199,7 @@ const LibraryScreen = ({ navigation }) => {
           {renderProgressCard('reading', 'Reading', readingBooks.length, 'https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif')}
           {renderProgressCard('finished', 'Finished', finishedBooks.length, 'https://media.giphy.com/media/26BRrSvJUa0crqw4E/giphy.gif')}
           {renderProgressCard('wishlist', 'Want to Read', wishlistBooks.length, 'https://media.giphy.com/media/l3vRlT2DWr7CqYWNa/giphy.gif')}
-          {renderProgressCard('dnf', 'Did Not Finish', sampleBooks.filter(book => book.status === 'dnf').length, 'https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif')}
+          {renderProgressCard('dnf', 'Did Not Finish', books.filter(book => book.status === 'dnf').length, 'https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif')}
 
 
           <TouchableOpacity
@@ -220,7 +228,7 @@ const LibraryScreen = ({ navigation }) => {
         </ScrollView>
       );
     } else {
-      const filteredBooks = sampleBooks.filter(book => book.status === activeTab);
+      const filteredBooks = books.filter(book => book.status === activeTab);
 
       if (filteredBooks.length === 0) {
         return (
@@ -258,8 +266,15 @@ const LibraryScreen = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.stickyHeader}>
           <View style={styles.header}>
-            <Text style={styles.title}>My Library</Text>
-            <Text style={styles.subtitle}>Organize and track your reading journey</Text>
+            <View style={styles.titleRow}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>My Library</Text>
+                <Text style={styles.subtitle}>Organize and track your reading journey</Text>
+              </View>
+              <TouchableOpacity style={styles.addButton} onPress={() => setShowAddBookSheet(true)}>
+                <Ionicons name="add" size={24} color={colors.onPrimary} />
+              </TouchableOpacity>
+            </View>
           </View>
           {renderTabBar()}
         </View>
@@ -275,6 +290,12 @@ const LibraryScreen = ({ navigation }) => {
         visible={showCreateCategorySheet}
         onClose={() => setShowCreateCategorySheet(false)}
         onCreateCategory={handleCreateCategory}
+      />
+
+      <AddBookSheet
+        visible={showAddBookSheet}
+        onClose={() => setShowAddBookSheet(false)}
+        onAddBook={handleAddBook}
       />
     </>
   );
@@ -309,6 +330,15 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     backgroundColor: colors.background,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  titleContainer: {
+    flex: 1,
+    marginRight: spacing.md,
+  },
   title: {
     ...typography.displaySmall,
     color: colors.onBackground,
@@ -317,6 +347,20 @@ const styles = StyleSheet.create({
   subtitle: {
     ...typography.bodyLarge,
     color: colors.onSurfaceVariant,
+  },
+  addButton: {
+    backgroundColor: '#2E0A09',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginTop: 4,
   },
   topicsContainer: {
     flex: 1,

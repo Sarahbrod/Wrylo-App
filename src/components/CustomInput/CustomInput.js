@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
-        minHeight: 64,
+        minHeight: 56,
     },
     focusedContainer: {
         borderColor: '#2E0A09',
@@ -68,11 +68,11 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        fontSize: 17,
+        fontSize: 16,
         color: '#000000',
         fontFamily: 'System',
-        lineHeight: 24,
-        paddingVertical: 16,
+        lineHeight: 22,
+        paddingVertical: 14,
         textAlignVertical: 'center',
         includeFontPadding: false,
     },
