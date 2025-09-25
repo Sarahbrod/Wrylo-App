@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
-        minHeight: 56,
+        minHeight: 64,
     },
     focusedContainer: {
         borderColor: '#2E0A09',

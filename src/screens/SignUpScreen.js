@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import CustomInput from '../components/CustomInput/CustomInput';
 import CustomButton from '../components/CustomButton/CustomButton';
-import Divider from '../components/Divider/Divider';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,8 +10,6 @@ const SignUpScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -60,8 +57,6 @@ const SignUpScreen = ({ navigation }) => {
                 email,
                 password,
                 confirmPassword,
-                firstName,
-                lastName,
             });
 
             if (result.success) {
@@ -88,24 +83,13 @@ const SignUpScreen = ({ navigation }) => {
         navigation.navigate('LogIn');
     };
 
-    const onGoogleSignUp = () => {
-        if (__DEV__) {
-            console.warn('Google sign up not implemented yet');
-        }
-    };
-
-    const onAppleSignUp = () => {
-        if (__DEV__) {
-            console.warn('Apple sign up not implemented yet');
-        }
-    };
 
     if (!fontsLoaded) {
         return null;
     }
 
     return (
-        <ScrollView style={styles.safeArea} contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.safeArea}>
             <View style={styles.container}>
                 <Text style={styles.welcomeText}>Create Account</Text>
                 <Text style={styles.subtext}>Join Wrylo to start your reading journey</Text>
@@ -133,24 +117,6 @@ const SignUpScreen = ({ navigation }) => {
                     {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 </View>
 
-                <View style={styles.nameContainer}>
-                    <View style={styles.nameInputHalf}>
-                        <Text style={styles.inputLabel}>First Name (Optional)</Text>
-                        <CustomInput
-                            placeholder="First name"
-                            value={firstName}
-                            setValue={setFirstName}
-                        />
-                    </View>
-                    <View style={styles.nameInputHalf}>
-                        <Text style={styles.inputLabel}>Last Name (Optional)</Text>
-                        <CustomInput
-                            placeholder="Last name"
-                            value={lastName}
-                            setValue={setLastName}
-                        />
-                    </View>
-                </View>
 
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputLabel}>Password</Text>
@@ -164,7 +130,6 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Confirm Password</Text>
                     <CustomInput
                         placeholder="Confirm your password"
                         value={confirmPassword}
@@ -177,31 +142,9 @@ const SignUpScreen = ({ navigation }) => {
                 {loading ? (
                     <ActivityIndicator size="large" color="#2E0A09" style={styles.loadingIndicator} />
                 ) : (
-                    <CustomButton text="Create Account" onPress={onSignUpPressed} />
+                    <CustomButton text="Create Account" onPress={onSignUpPressed} type="PRIMARY" />
                 )}
 
-                <View style={styles.dividerSpacing}>
-                    <Divider text="Or continue with" />
-                </View>
-
-                <View style={styles.alt}>
-                    <CustomButton 
-                        onPress={onGoogleSignUp} 
-                        bgColor='#212121' 
-                        fgColor="#FCF7F7" 
-                        type="ICON" 
-                        iconName="google" 
-                        iconLibrary="AntDesign" 
-                    />
-                    <CustomButton 
-                        onPress={onAppleSignUp} 
-                        bgColor='#212121' 
-                        fgColor="#FCF7F7" 
-                        type="ICON" 
-                        iconName="apple1" 
-                        iconLibrary="AntDesign" 
-                    />
-                </View>
 
                 <View style={styles.bottomSignin}>
                     <Text style={styles.bottomSigninText}>Already have an account? </Text>
@@ -210,7 +153,7 @@ const SignUpScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </ScrollView>
+        </View>
     );
 };
 
@@ -219,45 +162,33 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F6F4F1',
     },
-    scrollContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-    },
     container: {
+        flex: 1,
         alignItems: 'stretch',
         paddingHorizontal: 24,
-        paddingTop: 80,
-        paddingBottom: 40,
-        minHeight: '100%',
+        paddingTop: 60,
+        paddingBottom: 20,
         justifyContent: 'center',
     },
     welcomeText: {
-        fontSize: 32,
+        fontSize: 28,
         fontWeight: '700',
         fontFamily: 'LibreBaskerville_700Bold',
-        color: '#333',
+        color: '#2E0A09',
         textAlign: 'left',
         marginBottom: 8,
     },
     subtext: {
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'LibreBaskerville_400Regular',
         color: '#71727A',
         textAlign: 'left',
-        marginBottom: 30,
-        paddingBottom: 24,
+        marginBottom: 20,
+        paddingBottom: 12,
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 20,
-    },
-    nameContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-    },
-    nameInputHalf: {
-        width: '48%',
+        marginBottom: 12,
     },
     inputLabel: {
         fontSize: 16,
@@ -266,23 +197,11 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         marginLeft: 4,
     },
-    dividerSpacing: {
-        paddingTop: 24,
-        paddingBottom: 16,
-    },
-    alt: {
-        paddingTop: 16,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        width: '50%',
-        alignSelf: 'center',
-    },
     bottomSignin: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 40,
-        paddingBottom: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
         justifyContent: 'center',
     },
     bottomSigninText: {

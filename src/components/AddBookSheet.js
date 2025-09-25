@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [progress, setProgress] = useState('want_to_read');
+  const [showManualForm, setShowManualForm] = useState(false);
 
   const progressOptions = [
     { id: 'want_to_read', label: 'Want to Read', icon: 'bookmark-outline' },
@@ -29,14 +30,10 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
   ];
 
   const handleSubmit = () => {
-    if (!bookTitle.trim() || !bookAuthor.trim()) {
-      return; // Don't submit if title or author is empty
-    }
-    
     const bookData = {
       id: Date.now(),
-      title: bookTitle.trim(),
-      author: bookAuthor.trim(),
+      title: bookTitle.trim() || 'Unknown Title',
+      author: bookAuthor.trim() || 'Unknown Author',
       status: progress === 'want_to_read' ? 'wishlist' : progress === 'did_not_finish' ? 'dnf' : progress,
       rating,
       comment: comment.trim(),
@@ -54,19 +51,38 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
     onClose();
   };
 
+  const getStarIcon = (starPosition) => {
+    if (rating >= starPosition) {
+      return 'star';
+    } else if (rating >= starPosition - 0.5) {
+      return 'star-half';
+    } else {
+      return 'star-outline';
+    }
+  };
+
   const renderStars = () => {
     return (
       <View style={styles.starsContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <TouchableOpacity
             key={star}
-            onPress={() => setRating(star)}
-            style={styles.starButton}
+            onPress={() => {
+              if (rating === star) {
+                setRating(star - 0.5);
+              } else if (rating === star - 0.5) {
+                setRating(0);
+              } else {
+                setRating(star);
+              }
+            }}
+            style={styles.starTouchable}
+            activeOpacity={0.7}
           >
             <Ionicons
-              name={star <= rating ? 'star' : 'star-outline'}
+              name={getStarIcon(star)}
               size={32}
-              color={star <= rating ? '#FFD700' : '#71727A'}
+              color={rating >= star - 0.5 ? '#FFD700' : '#71727A'}
             />
           </TouchableOpacity>
         ))}
@@ -106,32 +122,45 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
                   placeholderTextColor="#71727A"
                 />
               </View>
-              <Text style={styles.orText}>or add manually</Text>
+              <TouchableOpacity
+                style={styles.manualButton}
+                onPress={() => setShowManualForm(!showManualForm)}
+              >
+                <Ionicons name="book" size={16} color="#2E0A09" />
+                <Text style={styles.manualButtonText}>Add Manually</Text>
+                <Ionicons
+                  name={showManualForm ? "chevron-up" : "chevron-down"}
+                  size={16}
+                  color="#2E0A09"
+                />
+              </TouchableOpacity>
             </View>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Book Details</Text>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Title *</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter book title"
-                  value={bookTitle}
-                  onChangeText={setBookTitle}
-                  placeholderTextColor="#71727A"
-                />
+            {showManualForm && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Book Details</Text>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Title</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Enter book title"
+                    value={bookTitle}
+                    onChangeText={setBookTitle}
+                    placeholderTextColor="#71727A"
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Author</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Enter author name"
+                    value={bookAuthor}
+                    onChangeText={setBookAuthor}
+                    placeholderTextColor="#71727A"
+                  />
+                </View>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Author *</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter author name"
-                  value={bookAuthor}
-                  onChangeText={setBookAuthor}
-                  placeholderTextColor="#71727A"
-                />
-              </View>
-            </View>
+            )}
 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Reading Status</Text>
@@ -181,13 +210,9 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
               />
             </View>
 
-            <TouchableOpacity 
-              style={[
-                styles.submitButton,
-                (!bookTitle.trim() || !bookAuthor.trim()) && styles.submitButtonDisabled
-              ]} 
+            <TouchableOpacity
+              style={styles.submitButton}
               onPress={handleSubmit}
-              disabled={!bookTitle.trim() || !bookAuthor.trim()}
             >
               <Ionicons name="add" size={20} color="#FFFFFF" />
               <Text style={styles.submitButtonText}>Add Book</Text>
@@ -209,8 +234,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    maxHeight: screenHeight * 0.9,
-    minHeight: screenHeight * 0.6,
+    height: screenHeight * 0.85,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 12,
   },
   header: {
     paddingTop: 12,
@@ -243,9 +272,10 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 8,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 16,
@@ -269,15 +299,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#2E0A09',
   },
-  orText: {
-    textAlign: 'center',
-    color: '#71727A',
-    fontSize: 14,
+  manualButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     marginTop: 12,
-    fontStyle: 'italic',
+    gap: 8,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  manualButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2E0A09',
   },
   inputContainer: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   inputLabel: {
     fontSize: 14,
@@ -296,23 +337,38 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
   },
   progressOptions: {
-    gap: 8,
+    gap: 12,
   },
   progressOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8F9FA',
-    padding: 16,
-    borderRadius: 12,
-    gap: 12,
+    backgroundColor: '#FFFFFF',
+    padding: 18,
+    borderRadius: 16,
+    gap: 14,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   selectedProgressOption: {
     backgroundColor: '#2E0A09',
+    borderColor: '#2E0A09',
+    shadowColor: '#2E0A09',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+    transform: [{ scale: 1.02 }],
   },
   progressOptionText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#71727A',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#374151',
+    flex: 1,
   },
   selectedProgressOptionText: {
     color: '#FFFFFF',
@@ -320,9 +376,9 @@ const styles = StyleSheet.create({
   starsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 8,
+    gap: 4,
   },
-  starButton: {
+  starTouchable: {
     padding: 4,
   },
   commentInput: {
@@ -332,7 +388,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#2E0A09',
     textAlignVertical: 'top',
-    minHeight: 100,
+    minHeight: 80,
   },
   submitButton: {
     flexDirection: 'row',
@@ -342,7 +398,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
-    marginBottom: 20,
+    marginBottom: 12,
   },
   submitButtonText: {
     fontSize: 16,

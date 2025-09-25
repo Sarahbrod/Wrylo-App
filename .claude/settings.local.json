@@ -36,7 +36,8 @@
       "Bash(sed:*)",
       "Bash(cat:*)",
       "Bash(git add:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

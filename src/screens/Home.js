@@ -1,16 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Home = ({ navigation }) => {
 
-  const onTrackReading = () => {
-    navigation.navigate('Library');
+  const onAddBooks = () => {
+    navigation.navigate('Library', { openAddBook: true });
   };
 
-  const onViewLibrary = () => {
-    navigation.navigate('Library');
-  };
 
   const onMoodMatcher = () => {
     navigation.navigate('MoodFlow');
@@ -26,86 +22,80 @@ const Home = ({ navigation }) => {
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Home</Text>
-          <Text style={styles.subtitle}>Welcome back to your reading journey</Text>
+          <Text style={styles.subtitle}>Begin your reading journey today</Text>
         </View>
 
         <View style={styles.content}>
-          <View style={styles.getStartedSection}>
-            <View style={styles.sectionHeaderSimple}>
-              <Text style={styles.sectionTitle}>Get started</Text>
-            </View>
-            <View style={styles.verticalCardContainer}>
-              <TouchableOpacity style={styles.getStartedCard} onPress={onTrackReading}>
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>Add Books</Text>
-                  <Text style={styles.cardDesc}>Start building your library</Text>
+          <View style={styles.addBooksSection}>
+            <TouchableOpacity style={styles.addBooksCard} onPress={onAddBooks}>
+              <View style={styles.addBooksContent}>
+                <View style={styles.addBooksIconLarge}>
+                  <Text style={styles.addBooksEmojiLarge}>📚</Text>
                 </View>
-                <View style={styles.arrowButton}>
-                  <Text style={styles.arrowButtonText}>→</Text>
+                <View style={styles.addBooksText}>
+                  <Text style={styles.addBooksTitle}>Start Your Library</Text>
+                  <Text style={styles.addBooksDesc}>Add your first book and begin tracking your reading journey. Discover new stories, track your progress, and build your personal collection.</Text>
+                  <View style={styles.addBooksFeatures}>
+                    <View style={styles.featureItem}>
+                      <Text style={styles.featureBullet}>•</Text>
+                      <Text style={styles.featureText}>Track reading progress</Text>
+                    </View>
+                    <View style={styles.featureItem}>
+                      <Text style={styles.featureBullet}>•</Text>
+                      <Text style={styles.featureText}>Rate and review books</Text>
+                    </View>
+                    <View style={styles.featureItem}>
+                      <Text style={styles.featureBullet}>•</Text>
+                      <Text style={styles.featureText}>Discover new reads</Text>
+                    </View>
+                  </View>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.getStartedCard} onPress={onViewLibrary}>
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>Set Goals</Text>
-                  <Text style={styles.cardDesc}>Create reading targets</Text>
-                </View>
-                <View style={styles.arrowButton}>
-                  <Text style={styles.arrowButtonText}>→</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.getStartedCard} onPress={onViewLibrary}>
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>Rate Books</Text>
-                  <Text style={styles.cardDesc}>Share your thoughts</Text>
-                </View>
-                <View style={styles.arrowButton}>
-                  <Text style={styles.arrowButtonText}>→</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.sectionWithExtraPadding}>
-            <View style={styles.sectionHeaderReduced}>
-              <Text style={styles.sectionTitle}>Mood curator</Text>
-            </View>
-
             <View style={styles.moodMatcherContainer}>
               <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
-                <ImageBackground
-                  source={{
-                    uri: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMwMCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzJFMEEwOTtzdG9wLW9wYWNpdHk6MC4xIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM3MTcyN0E7c3RvcC1vcGFjaXR5OjAuMDUiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIxODAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+CjxjaXJjbGUgY3g9IjI0MCIgY3k9IjQwIiByPSI4MCIgZmlsbD0iIzJFMEEwOSIgZmlsbC1vcGFjaXR5PSIwLjA4Ii8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iMTQwIiByPSI2MCIgZmlsbD0iIzcxNzI3QSIgZmlsbC1vcGFjaXR5PSIwLjA2Ii8+Cjxwb2x5Z29uIHBvaW50cz0iMjAwLDEwMCAyMjAsMTIwIDI0MCwxMDAgMjYwLDEyMCAyODAsMTAwIDMwMCwxMjAgMzAwLDE4MCAwLDE4MCIgZmlsbD0iIzJFMEEwOSIgZmlsbC1vcGFjaXR5PSIwLjA0Ii8+Cjwvc3ZnPgo='
-                  }}
+                <LinearGradient
+                  colors={['#2E0A09', '#4A1A18', '#2E0A09']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
                   style={styles.moodMatcherBackground}
-                  imageStyle={styles.moodMatcherBackgroundImage}
                 >
                   <View style={styles.moodMatcherContent}>
                     <View style={styles.moodMatcherText}>
-                      <Text style={styles.moodMatcherTitle}>Personalized Recommendations</Text>
-                      <Text style={styles.moodMatcherDesc}>Discover books that resonate with your current state of mind</Text>
+                      <Text style={styles.moodMatcherTitle}>Mood Curator</Text>
+                      <Text style={styles.moodMatcherDesc}>Discover personalized book recommendations that match your current mood and mindset</Text>
                     </View>
                     <View style={styles.moodMatcherIcon}>
-                      <Text style={styles.moodMatcherEmoji}>📚</Text>
+                      <Text style={styles.moodMatcherEmoji}>🎭</Text>
                     </View>
                   </View>
-                </ImageBackground>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={styles.sectionWithExtraPadding}>
-            <View style={styles.sectionHeaderReduced}>
-              <Text style={styles.sectionTitle}>Community</Text>
-            </View>
-
             <View style={styles.communityContainer}>
               <TouchableOpacity style={styles.communityCard} onPress={onJoinCommunity}>
-                <View style={styles.communityContent}>
-                  <View style={styles.communityText}>
-                    <Text style={styles.communityTitle}>Join the Book Community</Text>
-                    <Text style={styles.communityDesc}>Connect with fellow readers, share thoughts, and discover new perspectives</Text>
+                <LinearGradient
+                  colors={['#DBEAFE', '#BFDBFE', '#2563EB']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.communityGradient}
+                >
+                  <View style={styles.communityContent}>
+                    <View style={styles.communityText}>
+                      <Text style={styles.communityTitleNew}>Book Community</Text>
+                      <Text style={styles.communityDescNew}>Connect with fellow readers, share insights, and discover new literary adventures together</Text>
+                    </View>
+                    <View style={styles.communityIcon}>
+                      <Text style={styles.communityEmoji}>🎤</Text>
+                    </View>
                   </View>
-                </View>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
@@ -140,88 +130,100 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: '#71727A',
-    marginBottom: 20,
+    marginBottom: 8,
   },
   content: {
   },
   section: {
     marginBottom: 28,
   },
-  getStartedSection: {
-    backgroundColor: '#F6F4F1',
-    borderRadius: 16,
-    marginHorizontal: 20,
-    marginBottom: 32,
-    paddingVertical: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
+  addBooksSection: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    marginTop: 8,
   },
-  sectionWithExtraPadding: {
-    marginBottom: 28,
+  addBooksCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: '#2E0A09',
+    borderStyle: 'dashed',
+    minHeight: 180,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  addBooksContent: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 24,
+    paddingVertical: 28,
+  },
+  addBooksText: {
+    flex: 1,
+    alignItems: 'center',
+    textAlign: 'center',
     marginTop: 16,
   },
-  sectionHeaderSimple: {
+  addBooksTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#2E0A09',
     marginBottom: 8,
-    paddingHorizontal: 20,
+    letterSpacing: 0.3,
+    textAlign: 'center',
   },
-  sectionHeaderReduced: {
-    marginBottom: 8,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1D1D1D',
-    letterSpacing: 0.5,
-    marginBottom: 8,
-  },
-  verticalCardContainer: {
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  getStartedCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 18,
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#2E0A09',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1D1D1D',
-    marginBottom: 2,
-  },
-  cardDesc: {
-    fontSize: 12,
+  addBooksDesc: {
+    fontSize: 15,
     color: '#71727A',
+    lineHeight: 22,
+    letterSpacing: 0.2,
+    textAlign: 'center',
+    marginBottom: 16,
+    maxWidth: '90%',
   },
-  arrowButton: {
+  addBooksIconLarge: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     backgroundColor: '#F6F4F1',
-    width: 32,
-    height: 32,
-    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#2E0A09',
+    borderStyle: 'solid',
   },
-  arrowButtonText: {
-    color: '#2E0A09',
+  addBooksEmojiLarge: {
+    fontSize: 36,
+  },
+  addBooksFeatures: {
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  featureBullet: {
     fontSize: 16,
-    fontWeight: 'bold',
+    color: '#2E0A09',
+    fontWeight: '700',
+  },
+  featureText: {
+    fontSize: 14,
+    color: '#71727A',
+    fontWeight: '500',
+  },
+  sectionWithExtraPadding: {
+    marginBottom: 16,
+    marginTop: 8,
   },
   moodMatcherContainer: {
     paddingHorizontal: 20,
@@ -230,17 +232,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#2E0A09',
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
   },
   moodMatcherBackground: {
     width: '100%',
     minHeight: 100,
-  },
-  moodMatcherBackgroundImage: {
     borderRadius: 16,
   },
   moodMatcherContent: {
@@ -281,18 +276,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   communityCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#2E0A09',
     borderRadius: 16,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    overflow: 'hidden',
+  },
+  communityGradient: {
+    width: '100%',
+    minHeight: 100,
+    borderRadius: 16,
   },
   communityContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 20,
   },
   communityText: {
     flex: 1,
@@ -310,6 +306,32 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     opacity: 0.8,
     letterSpacing: 0.2,
+  },
+  communityTitleNew: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1E3A8A',
+    marginBottom: 6,
+    letterSpacing: 0.3,
+  },
+  communityDescNew: {
+    fontSize: 14,
+    color: '#374151',
+    lineHeight: 20,
+    opacity: 0.9,
+    letterSpacing: 0.2,
+  },
+  communityIcon: {
+    marginLeft: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(30, 58, 138, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  communityEmoji: {
+    fontSize: 20,
   },
   bottomSpacer: {
     height: 108,

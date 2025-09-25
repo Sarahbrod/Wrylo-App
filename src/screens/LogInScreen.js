@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native'
 import CustomInput from '../components/CustomInput/CustomInput';
 import CustomButton from '../components/CustomButton/CustomButton';
-import Divider from '../components/Divider/Divider';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
 import authService from '../services/authService';
 
@@ -57,10 +56,10 @@ const LogInScreen = ({ navigation }) => {
             if (__DEV__) {
                 console.error('Login error:', error);
             }
-            
+
             // Provide more specific error messages
             let errorMessage = 'We\'re having trouble connecting right now. Please check your internet connection and try again.';
-            
+
             if (error.code === 'ECONNABORTED') {
                 errorMessage = 'Request timed out. Please check your internet connection and try again.';
             } else if (error.code === 'NETWORK_ERROR' || error.message.includes('Network Error')) {
@@ -68,7 +67,7 @@ const LogInScreen = ({ navigation }) => {
             } else if (error.response?.status === 0) {
                 errorMessage = 'Cannot reach the server. Please check if the backend server is running and try again.';
             }
-            
+
             Alert.alert('Connection Issue', errorMessage);
         } finally {
             setLoading(false);
@@ -79,16 +78,6 @@ const LogInScreen = ({ navigation }) => {
         navigation.navigate('ForgotPassword');
     };
 
-    const onLogInGoogle = () => {
-        if (__DEV__) {
-            console.warn('Google login not implemented yet')
-        }
-    }
-    const onLogInApple = () => {
-        if (__DEV__) {
-            console.warn('Apple login not implemented yet')
-        }
-    }
     const onSignUpPressed = () => {
         navigation.navigate('SignUp');
     }
@@ -100,56 +89,51 @@ const LogInScreen = ({ navigation }) => {
     }
 
     return (
-        <KeyboardAvoidingView 
-            style={styles.safeArea} 
+        <KeyboardAvoidingView
+            style={styles.safeArea}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
             <View style={styles.container}>
-                    <Text style={styles.welcomeText}>Welcome back</Text>
-                    <Text style={styles.loginSubtext}>Log in to continue your reading journey</Text>
+                <Text style={styles.welcomeText}>Welcome back</Text>
+                <Text style={styles.loginSubtext}>Continue your reading journey</Text>
 
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Email</Text>
-                        <CustomInput
-                            placeholder="Enter your email"
-                            value={email}
-                            setValue={setEmail}
-                            keyboardType="email-address"
-                            autoCapitalize="none" />
-                        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-                    </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.inputLabel}>Email</Text>
+                    <CustomInput
+                        placeholder="Enter your email"
+                        value={email}
+                        setValue={setEmail}
+                        keyboardType="email-address"
+                        autoCapitalize="none" />
+                    {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                </View>
 
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Password</Text>
-                        <CustomInput
-                            placeholder="Enter your password"
-                            value={password}
-                            setValue={setPassword}
-                            secureTextEntry={true} />
-                        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.inputLabel}>Password</Text>
+                    <CustomInput
+                        placeholder="Enter your password"
+                        value={password}
+                        setValue={setPassword}
+                        secureTextEntry={true} />
+                    {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                    <View style={styles.forgotPasswordContainer}>
                         <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="LINK" />
                     </View>
-
-                    {loading ? (
-                        <ActivityIndicator size="large" color="#2E0A09" style={styles.loadingIndicator} />
-                    ) : (
-                        <CustomButton text="Log In" onPress={onLogInPressed} type="PRIMARY" />
-                    )}
-                    <View style={styles.dividerSpacing}>
-                        <Divider text="Or continue with" />
-                    </View>
-                    <View style={styles.alt}>
-                        <CustomButton onPress={onLogInGoogle} bgColor='#212121' fgColor="#FCF7F7" type="ICON" iconName="google" iconLibrary="AntDesign" />
-                        <CustomButton onPress={onLogInApple} bgColor='#212121' fgColor="#FCF7F7" type="ICON" iconName="apple1" iconLibrary="AntDesign" />
-                    </View>
-
-                    <View style={styles.bottomSignup}>
-                        <Text style={styles.bottomSignupText}>Don't have an account? </Text>
-                        <TouchableOpacity onPress={onSignUpPressed}>
-                            <Text style={styles.signupLinkText}>Create account</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
+
+                {loading ? (
+                    <ActivityIndicator size="large" color="#2E0A09" style={styles.loadingIndicator} />
+                ) : (
+                    <CustomButton text="Log In" onPress={onLogInPressed} type="PRIMARY" />
+                )}
+
+                <View style={styles.bottomSignup}>
+                    <Text style={styles.bottomSignupText}>Don't have an account? </Text>
+                    <TouchableOpacity onPress={onSignUpPressed}>
+                        <Text style={styles.signupLinkText}>Create account</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </KeyboardAvoidingView>
     );
 }
@@ -167,15 +151,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     welcomeText: {
-        fontSize: 32,
+        fontSize: 28,
         fontWeight: '700',
         fontFamily: 'LibreBaskerville_700Bold',
-        color: '#333',
+        color: '#2E0A09',
         textAlign: 'left',
         marginBottom: 8,
     },
     loginSubtext: {
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'LibreBaskerville_400Regular',
         color: '#71727A',
         textAlign: 'left',
@@ -194,19 +178,11 @@ const styles = StyleSheet.create({
         marginLeft: 4,
     },
 
-    dividerSpacing: {
-        paddingTop: 20,
-        paddingBottom: 12,
+    forgotPasswordContainer: {
+        alignItems: 'flex-start',
+        width: '100%',
     },
 
-    alt: {
-        paddingTop: 16,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        width: '50%',
-        alignSelf: 'center',
-    },
 
     bottomSignup: {
         flexDirection: 'row',

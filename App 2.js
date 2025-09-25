@@ -17,7 +17,7 @@ import GenreBooksScreen from './src/screens/GenreBooksScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import { AuthProvider } from './src/context/AuthContext';
-import ErrorBoundary from './src/components/ErrorBoundary';
+import { SearchProvider } from './src/context/SearchContext';
 
 const Stack = createStackNavigator();
 
@@ -34,20 +34,14 @@ function AuthNavigator() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <AuthProvider>
+    <AuthProvider>
+      <SearchProvider>
         <SafeAreaProvider>
           <NavigationContainer>
-          <Stack.Navigator
+          <Stack.Navigator 
             initialRouteName="Splash"
             screenOptions={{
               headerShown: false,
-              animationEnabled: true,
-              cardStyleInterpolator: ({ current }) => ({
-                cardStyle: {
-                  opacity: current.progress,
-                },
-              }),
             }}
           >
             <Stack.Screen name="Splash" component={SplashScreen} />
@@ -63,8 +57,8 @@ export default function App() {
           </NavigationContainer>
           <Toast />
         </SafeAreaProvider>
-      </AuthProvider>
-    </ErrorBoundary>
+      </SearchProvider>
+    </AuthProvider>
   );
 }
 
