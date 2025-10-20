@@ -22,44 +22,43 @@ const AccountScreen = ({ navigation }) => {
       icon: 'settings-outline',
       title: 'Preferences',
       subtitle: 'Reading goals, notifications, and more',
-      action: () => {},
+      action: () => { },
       color: '#2E0A09',
     },
     {
       icon: 'book-outline',
       title: 'Reading Statistics',
       subtitle: 'View your reading progress and history',
-      action: () => {},
+      action: () => { },
       color: '#2E0A09',
     },
     {
       icon: 'heart-outline',
       title: 'Favorites',
       subtitle: 'Your favorite books and authors',
-      action: () => {},
+      action: () => { },
       color: '#2E0A09',
     },
     {
       icon: 'help-circle-outline',
       title: 'Help & Support',
       subtitle: 'Get help and contact support',
-      action: () => {},
+      action: () => { },
       color: '#2E0A09',
     },
     {
       icon: 'information-circle-outline',
       title: 'About Wrylo',
       subtitle: 'App version and information',
-      action: () => {},
+      action: () => { },
       color: '#2E0A09',
     },
   ];
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Account</Text>
-        <Text style={styles.subtitle}>Manage your profile and preferences</Text>
+      <View style={styles.headerSection}>
+        <Text style={styles.headerTitle}>Account</Text>
       </View>
 
       <View style={styles.profileSection}>
@@ -69,8 +68,8 @@ const AccountScreen = ({ navigation }) => {
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>
-              {user?.firstName && user?.lastName 
-                ? `${user.firstName} ${user.lastName}` 
+              {user?.firstName && user?.lastName
+                ? `${user.firstName} ${user.lastName}`
                 : user?.username || 'Book Lover'}
             </Text>
             <Text style={styles.profileEmail}>
@@ -111,32 +110,26 @@ const AccountScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F6F4F1',
   },
   contentContainer: {
     paddingBottom: 110,
   },
-  header: {
-    paddingTop: 60,
+  headerSection: {
     paddingHorizontal: 20,
-    paddingBottom: 30,
-    backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    paddingTop: 80,
+    paddingBottom: 16,
   },
-  title: {
-    fontSize: 28,
+  headerTitle: {
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#2E0A09',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#71727A',
+    fontFamily: 'Playfair Display',
+    letterSpacing: 0.3,
   },
   profileSection: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingBottom: 20,
   },
   profileCard: {
     flexDirection: 'row',

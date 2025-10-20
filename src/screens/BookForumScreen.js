@@ -57,9 +57,8 @@ const BookForumScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Book Forum</Text>
-                <Text style={styles.subtitle}>Connect with fellow readers and share your thoughts</Text>
+            <View style={styles.headerSection}>
+                <Text style={styles.headerTitle}>Community</Text>
             </View>
 
             <ScrollView style={styles.topicsContainer} showsVerticalScrollIndicator={false}>
@@ -73,8 +72,8 @@ const BookForumScreen = ({ navigation }) => {
                             <Text style={styles.topicStat}>{topic.posts} posts</Text>
                             <Text style={styles.topicStat}>Last: {topic.lastActivity}</Text>
                         </View>
-                        <CustomButton 
-                            text="View Discussion" 
+                        <CustomButton
+                            text="View Discussion"
                             onPress={() => onTopicPressed(topic)}
                             type="TERTIARY"
                         />
@@ -83,9 +82,9 @@ const BookForumScreen = ({ navigation }) => {
             </ScrollView>
 
             <View style={styles.buttonContainer}>
-                <CustomButton 
-                    text="Back to Community" 
-                    onPress={onBackPressed} 
+                <CustomButton
+                    text="Back to Community"
+                    onPress={onBackPressed}
                     type="PRIMARY"
                 />
             </View>
@@ -96,38 +95,32 @@ const BookForumScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FA',
+        backgroundColor: '#F6F4F1',
     },
     contentContainer: {
         paddingBottom: 110,
     },
-    header: {
-        paddingTop: 60,
+    headerSection: {
         paddingHorizontal: 20,
-        paddingBottom: 12,
-        backgroundColor: '#F8F9FA',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        marginBottom: 20,
+        paddingTop: 80,
+        paddingBottom: 16,
     },
-    title: {
-        fontSize: 28,
+    headerTitle: {
+        fontSize: 26,
         fontWeight: 'bold',
         color: '#2E0A09',
-        marginBottom: 4,
-    },
-    subtitle: {
-        fontSize: 16,
-        color: '#71727A',
+        fontFamily: 'Playfair Display',
+        letterSpacing: 0.3,
     },
     topicsContainer: {
         flex: 1,
+        paddingHorizontal: 20,
     },
     topicCard: {
         backgroundColor: '#FFFFFF',
         borderRadius: 12,
         padding: 20,
-        marginBottom: 16,
+        marginBottom: 12,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,

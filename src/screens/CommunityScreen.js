@@ -32,11 +32,6 @@ const CommunityScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Community</Text>
-        <Text style={styles.subtitle}>Connect with fellow book lovers</Text>
-      </View>
-
       <View style={styles.featuresContainer}>
         {communityFeatures.map((feature, index) => (
           <TouchableOpacity key={index} style={styles.featureCard}>
@@ -57,7 +52,7 @@ const CommunityScreen = ({ navigation }) => {
           <Ionicons name="rocket-outline" size={48} color="#71727A" />
           <Text style={styles.comingSoonTitle}>Community Features Coming Soon!</Text>
           <Text style={styles.comingSoonText}>
-            We're building an amazing community experience where you can connect with other readers, 
+            We're building an amazing community experience where you can connect with other readers,
             share recommendations, and discover your next favorite book together.
           </Text>
           <TouchableOpacity style={styles.notifyButton}>
@@ -78,48 +73,31 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingBottom: 110,
   },
-  header: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 30,
-    backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#71727A',
-  },
   featuresContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingTop: 80,
+    paddingBottom: 20,
     gap: 12,
   },
   featureCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 16,
+    padding: 20,
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 56,
+    height: 56,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -129,7 +107,7 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#2E0A09',
     marginBottom: 4,
   },
@@ -145,24 +123,26 @@ const styles = StyleSheet.create({
   comingSoonCard: {
     backgroundColor: '#FFFFFF',
     padding: 32,
-    borderRadius: 16,
+    borderRadius: 24,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 8,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
   },
   comingSoonTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#2E0A09',
     marginTop: 16,
     marginBottom: 12,
     textAlign: 'center',
+    fontFamily: 'Playfair Display',
+    letterSpacing: 0.3,
   },
   comingSoonText: {
     fontSize: 14,
@@ -175,15 +155,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#2E0A09',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 14,
     gap: 8,
+    shadowColor: '#2E0A09',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
   },
   notifyButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: '#FFFFFF',
+    letterSpacing: 0.3,
   },
 });
 

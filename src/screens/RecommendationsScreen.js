@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import AddBookSheet from '../components/AddBookSheet';
 
 const RecommendationsScreen = ({ navigation }) => {
-  const [activeCategory, setActiveCategory] = useState('trending');
   const [showAddBookSheet, setShowAddBookSheet] = useState(false);
 
   const handleAddBook = (bookData) => {
@@ -13,13 +12,6 @@ const RecommendationsScreen = ({ navigation }) => {
     // Navigate to library after adding
     navigation.navigate('Library');
   };
-
-  const categories = [
-    { id: 'trending', label: 'Trending', icon: 'trending-up' },
-    { id: 'popular', label: 'Popular', icon: 'star' },
-    { id: 'new', label: 'New Releases', icon: 'flash' },
-    { id: 'genres', label: 'By Genre', icon: 'library' },
-  ];
 
   const recommendationSections = [
     {
@@ -33,12 +25,6 @@ const RecommendationsScreen = ({ navigation }) => {
       subtitle: 'Personalized picks just for you',
       icon: 'heart',
       color: '#4ECDC4',
-    },
-    {
-      title: 'Staff Picks',
-      subtitle: 'Curated by our book experts',
-      icon: 'star',
-      color: '#45B7D1',
     },
     {
       title: 'New & Noteworthy',
@@ -56,30 +42,8 @@ const RecommendationsScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Discover</Text>
-        <Text style={styles.subtitle}>Find your next great read</Text>
-      </View>
-
-      <View style={styles.categoriesContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoriesScroll}>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={[styles.categoryChip, activeCategory === category.id && styles.activeCategoryChip]}
-              onPress={() => setActiveCategory(category.id)}
-            >
-              <Ionicons 
-                name={category.icon} 
-                size={18} 
-                color={activeCategory === category.id ? '#FFFFFF' : '#71727A'} 
-              />
-              <Text style={[styles.categoryText, activeCategory === category.id && styles.activeCategoryText]}>
-                {category.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+      <View style={styles.headerSection}>
+        <Text style={styles.headerTitle}>Discover</Text>
       </View>
 
       <View style={styles.sectionsContainer}>
@@ -102,10 +66,10 @@ const RecommendationsScreen = ({ navigation }) => {
           <Ionicons name="sparkles-outline" size={48} color="#71727A" />
           <Text style={styles.comingSoonTitle}>Smart Recommendations Coming Soon!</Text>
           <Text style={styles.comingSoonText}>
-            We're building an AI-powered recommendation engine that will learn your preferences 
+            We're building an AI-powered recommendation engine that will learn your preferences
             and suggest books you'll love based on your reading history and ratings.
           </Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.wishlistButton}
             onPress={() => setShowAddBookSheet(true)}
           >
@@ -127,63 +91,22 @@ const RecommendationsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F6F4F1',
   },
   contentContainer: {
     paddingBottom: 110,
   },
-  header: {
-    paddingTop: 60,
+  headerSection: {
     paddingHorizontal: 20,
-    paddingBottom: 30,
-    backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    paddingTop: 80,
+    paddingBottom: 16,
   },
-  title: {
-    fontSize: 28,
+  headerTitle: {
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#2E0A09',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#71727A',
-  },
-  categoriesContainer: {
-    paddingVertical: 20,
-  },
-  categoriesScroll: {
-    paddingHorizontal: 20,
-    gap: 12,
-  },
-  categoryChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    gap: 6,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  activeCategoryChip: {
-    backgroundColor: '#2E0A09',
-  },
-  categoryText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#71727A',
-  },
-  activeCategoryText: {
-    color: '#FFFFFF',
+    fontFamily: 'Playfair Display',
+    letterSpacing: 0.3,
   },
   sectionsContainer: {
     paddingHorizontal: 20,
