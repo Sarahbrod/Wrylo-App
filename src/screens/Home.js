@@ -33,21 +33,10 @@ const Home = ({ navigation }) => {
                   <Text style={styles.addBooksEmojiLarge}>📚</Text>
                 </View>
                 <View style={styles.addBooksText}>
-                  <Text style={styles.addBooksTitle}>Start Your Library</Text>
-                  <Text style={styles.addBooksDesc}>Add your first book and begin tracking your reading journey. Discover new stories, track your progress, and build your personal collection.</Text>
-                  <View style={styles.addBooksFeatures}>
-                    <View style={styles.featureItem}>
-                      <Text style={styles.featureBullet}>•</Text>
-                      <Text style={styles.featureText}>Track reading progress</Text>
-                    </View>
-                    <View style={styles.featureItem}>
-                      <Text style={styles.featureBullet}>•</Text>
-                      <Text style={styles.featureText}>Rate and review books</Text>
-                    </View>
-                    <View style={styles.featureItem}>
-                      <Text style={styles.featureBullet}>•</Text>
-                      <Text style={styles.featureText}>Discover new reads</Text>
-                    </View>
+                  <Text style={styles.addBooksTitle}>Ready to Get Started?</Text>
+                  <Text style={styles.addBooksDesc}>Tap here to add your first book</Text>
+                  <View style={styles.addBookCTA}>
+                    <Text style={styles.ctaText}>+ Add a Book</Text>
                   </View>
                 </View>
               </View>
@@ -58,7 +47,7 @@ const Home = ({ navigation }) => {
             <View style={styles.moodMatcherContainer}>
               <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
                 <LinearGradient
-                  colors={['#2E0A09', '#4A1A18', '#2E0A09']}
+                  colors={['#D4A5B5', '#C499AA', '#B88C9F']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.moodMatcherBackground}
@@ -81,7 +70,7 @@ const Home = ({ navigation }) => {
             <View style={styles.communityContainer}>
               <TouchableOpacity style={styles.communityCard} onPress={onJoinCommunity}>
                 <LinearGradient
-                  colors={['#DBEAFE', '#BFDBFE', '#2563EB']}
+                  colors={['#7CA2E0', '#5B8DD6', '#3A78CC']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.communityGradient}
@@ -97,6 +86,19 @@ const Home = ({ navigation }) => {
                   </View>
                 </LinearGradient>
               </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.statsSection}>
+            <Text style={styles.statsSectionTitle}>Your Reading Stats</Text>
+            <View style={styles.statsCard}>
+              <View style={styles.statsEmptyState}>
+                <View style={styles.statsEmptyIcon}>
+                  <Text style={styles.statsEmptyEmoji}>📊</Text>
+                </View>
+                <Text style={styles.statsEmptyTitle}>No stats yet</Text>
+                <Text style={styles.statsEmptyDesc}>Start reading to track your progress and build your reading journey</Text>
+              </View>
             </View>
           </View>
 
@@ -122,10 +124,11 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '700',
-    color: '#1D1D1D',
+    color: '#481825',
     marginBottom: 8,
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 16,
@@ -140,53 +143,70 @@ const styles = StyleSheet.create({
   addBooksSection: {
     paddingHorizontal: 20,
     marginBottom: 20,
-    marginTop: 8,
+    marginTop: 0,
   },
   addBooksCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: '#2E0A09',
-    borderStyle: 'dashed',
     minHeight: 180,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
     elevation: 6,
   },
   addBooksContent: {
     flexDirection: 'column',
     alignItems: 'center',
     padding: 24,
-    paddingVertical: 28,
+    paddingVertical: 24,
   },
   addBooksText: {
     flex: 1,
     alignItems: 'center',
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 12,
+    width: '100%',
   },
   addBooksTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
-    color: '#2E0A09',
-    marginBottom: 8,
+    color: '#481825',
+    marginBottom: 4,
     letterSpacing: 0.3,
     textAlign: 'center',
   },
   addBooksDesc: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#71727A',
-    lineHeight: 22,
+    lineHeight: 20,
     letterSpacing: 0.2,
     textAlign: 'center',
     marginBottom: 16,
-    maxWidth: '90%',
+  },
+  addBookCTA: {
+    backgroundColor: '#8B3A5A',
+    paddingHorizontal: 28,
+    paddingVertical: 12,
+    borderRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  ctaText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 0.3,
   },
   addBooksIconLarge: {
     width: 80,
@@ -196,30 +216,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: '#2E0A09',
+    borderColor: '#E8E6E3',
     borderStyle: 'solid',
   },
   addBooksEmojiLarge: {
     fontSize: 36,
-  },
-  addBooksFeatures: {
-    alignItems: 'flex-start',
-    gap: 8,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  featureBullet: {
-    fontSize: 16,
-    color: '#2E0A09',
-    fontWeight: '700',
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#71727A',
-    fontWeight: '500',
   },
   sectionWithExtraPadding: {
     marginBottom: 16,
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   moodMatcherCard: {
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#481825',
     borderRadius: 16,
     overflow: 'hidden',
   },
@@ -249,13 +250,13 @@ const styles = StyleSheet.create({
   moodMatcherTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#481825',
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   moodMatcherDesc: {
     fontSize: 14,
-    color: '#F6F4F1',
+    color: '#481825',
     lineHeight: 20,
     opacity: 0.9,
     letterSpacing: 0.2,
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   communityCard: {
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#7CA2E0',
     borderRadius: 16,
     overflow: 'hidden',
   },
@@ -310,15 +311,15 @@ const styles = StyleSheet.create({
   communityTitleNew: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1E3A8A',
+    color: '#FFFFFF',
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   communityDescNew: {
     fontSize: 14,
-    color: '#374151',
+    color: '#F6F4F1',
     lineHeight: 20,
-    opacity: 0.9,
+    opacity: 0.95,
     letterSpacing: 0.2,
   },
   communityIcon: {
@@ -326,12 +327,68 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(30, 58, 138, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   communityEmoji: {
     fontSize: 20,
+  },
+  statsSection: {
+    paddingHorizontal: 20,
+    marginTop: 24,
+    marginBottom: 24,
+  },
+  statsSectionTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#481825',
+    marginBottom: 16,
+    letterSpacing: -0.3,
+  },
+  statsCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  statsEmptyState: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  statsEmptyIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#F6F4F1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  statsEmptyEmoji: {
+    fontSize: 32,
+  },
+  statsEmptyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#481825',
+    marginBottom: 8,
+    letterSpacing: 0.2,
+  },
+  statsEmptyDesc: {
+    fontSize: 14,
+    color: '#71727A',
+    textAlign: 'center',
+    lineHeight: 20,
+    letterSpacing: 0.2,
+    maxWidth: 280,
   },
   bottomSpacer: {
     height: 108,

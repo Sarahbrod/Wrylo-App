@@ -14,10 +14,10 @@ if (__DEV__) {
     // Android emulator uses 10.0.2.2 to reach host localhost
     API_BASE_URL = 'http://10.0.2.2:8000/api';
   } else {
-    // iOS simulator and web - use localhost for unified development
-    API_BASE_URL = 'http://localhost:8000/api';
+    // iOS simulator and physical devices - use local network IP
+    API_BASE_URL = 'http://10.0.0.156:8000/api';
   }
-  
+
   console.log(`Using API_BASE_URL: ${API_BASE_URL} for platform: ${Platform.OS}`);
   
   
@@ -538,7 +538,7 @@ class AuthService {
         if (!connectionTest.success) {
           return {
             success: false,
-            message: 'Cannot connect to server. Please ensure the backend server is running on localhost:8000 and try again.',
+            message: 'Cannot connect to server. Please ensure the backend server is running on 127.0.0.1:8000 and try again.',
           };
         }
         
@@ -914,6 +914,18 @@ class AuthService {
     } catch (error) {
       console.error('Error wiping login attempts:', error);
       return { success: false, message: error.message };
+    }
+  }
+
+  // Test connection to backend
+  async testConnection() {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/`, {
+        timeout: 5000,
+      });
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
   }
 

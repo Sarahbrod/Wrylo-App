@@ -183,24 +183,11 @@ const LibraryScreen = ({ navigation, route }) => {
   );
 
 
-  const renderProgressCard = (statusType, statusLabel, count) => {
+  const renderProgressCard = (statusType, statusLabel, count, booksForStatus) => {
     const isEmpty = count === 0;
 
-    // Icon for each status type
-    const getIcon = () => {
-      switch(statusType) {
-        case 'reading':
-          return 'book';
-        case 'finished':
-          return 'checkmark-circle';
-        case 'wishlist':
-          return 'heart';
-        case 'dnf':
-          return 'close-circle';
-        default:
-          return 'folder';
-      }
-    };
+    // Get the first 3 books for this status to show as cover images
+    const displayBooks = booksForStatus?.slice(0, 3) || [];
 
     return (
       <TouchableOpacity
@@ -212,16 +199,18 @@ const LibraryScreen = ({ navigation, route }) => {
         activeOpacity={0.7}
       >
         <View style={styles.cardContent}>
-          <View style={[
-            styles.cardIconContainer,
-            isEmpty && styles.cardIconContainerEmpty
-          ]}>
-            <Ionicons
-              name={getIcon()}
-              size={28}
-              color={isEmpty ? colors.onSurfaceVariant : colors.primary}
-            />
-          </View>
+          {displayBooks.length > 0 && (
+            <View style={styles.bookCoversContainer}>
+              {displayBooks.map((book, index) => (
+                <Image
+                  key={book.id}
+                  source={{ uri: book.coverImage }}
+                  style={[styles.miniBookCover, { marginLeft: index > 0 ? -12 : 0 }]}
+                  resizeMode="cover"
+                />
+              ))}
+            </View>
+          )}
           <View style={styles.cardTextContent}>
             <View style={styles.topicHeader}>
               <Text style={[
@@ -239,7 +228,7 @@ const LibraryScreen = ({ navigation, route }) => {
                 {isEmpty ? 'No books yet' : `${count} book${count !== 1 ? 's' : ''}`}
               </Text>
               {!isEmpty && (
-                <Ionicons name="chevron-forward" size={16} color={colors.onSurfaceVariant} />
+                <Ionicons name="chevron-forward" size={16} color={colors.onSurfaceVariant} style={styles.chevronIcon} />
               )}
             </View>
           </View>
@@ -304,10 +293,10 @@ const LibraryScreen = ({ navigation, route }) => {
       return (
         <ScrollView style={styles.topicsContainer} showsVerticalScrollIndicator={false}>
           <View style={styles.statusCardsContainer}>
-            {renderProgressCard('reading', 'Currently Reading', readingBooks.length)}
-            {renderProgressCard('finished', 'Finished', finishedBooks.length)}
-            {renderProgressCard('wishlist', 'Want to Read', wishlistBooks.length)}
-            {renderProgressCard('dnf', 'Did Not Finish', dnfBooks.length)}
+            {renderProgressCard('reading', 'Currently Reading', readingBooks.length, readingBooks)}
+            {renderProgressCard('finished', 'Finished', finishedBooks.length, finishedBooks)}
+            {renderProgressCard('wishlist', 'Want to Read', wishlistBooks.length, wishlistBooks)}
+            {renderProgressCard('dnf', 'Did Not Finish', dnfBooks.length, dnfBooks)}
           </View>
 
           <TouchableOpacity
@@ -466,7 +455,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.displaySmall,
-    color: colors.onBackground,
+    color: '#481825',
     marginBottom: 4,
   },
   subtitle: {
@@ -475,7 +464,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   addButton: {
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#481825',
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -493,37 +482,41 @@ const styles = StyleSheet.create({
   },
   topicCard: {
     ...componentStyles.card.large,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xs,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.xl,
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.outline,
     ...shadows.medium,
+    minHeight: 100,
   },
   topicCardEmpty: {
     backgroundColor: colors.surfaceVariant,
-    borderColor: colors.outlineVariant,
     opacity: 0.7,
   },
   cardContent: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     gap: spacing.lg,
   },
-  cardIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.primaryContainer,
-    justifyContent: 'center',
+  bookCoversContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  cardIconContainerEmpty: {
-    backgroundColor: colors.surfaceVariant,
+  miniBookCover: {
+    width: 50,
+    height: 75,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: colors.surface,
   },
   cardTextContent: {
     flex: 1,
+  },
+  chevronIcon: {
+    alignSelf: 'flex-start',
+    marginLeft: spacing.sm,
+    marginTop: 4,
   },
   topicHeader: {
     flexDirection: 'row',
@@ -600,7 +593,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   activeTab: {
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#481825',
   },
   tabText: {
     fontSize: 14,
@@ -633,8 +626,8 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   smallBookCover: {
-    width: 45,
-    height: 65,
+    width: 50,
+    height: 75,
     borderRadius: spacing.xs,
     resizeMode: 'cover',
   },
@@ -750,7 +743,7 @@ const styles = StyleSheet.create({
 
   // Status Cards Container
   statusCardsContainer: {
-    gap: spacing.lg,
+    gap: spacing.sm,
     marginTop: spacing.md,
     marginBottom: spacing.xl,
   },

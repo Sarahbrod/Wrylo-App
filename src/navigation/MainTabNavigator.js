@@ -70,18 +70,18 @@ const MainTabNavigator = () => {
           tabBarLabel: 'Library',
         }}
       />
-      <Tab.Screen 
-        name="Forum" 
+      <Tab.Screen
+        name="Discover"
         component={RecommendationsScreen}
         options={{
-          tabBarLabel: 'Forum',
+          tabBarLabel: 'Discover',
         }}
       />
-      <Tab.Screen 
-        name="Discover" 
+      <Tab.Screen
+        name="Forum"
         component={CommunityScreen}
         options={{
-          tabBarLabel: 'Discover',
+          tabBarLabel: 'Forum',
         }}
       />
       <Tab.Screen 

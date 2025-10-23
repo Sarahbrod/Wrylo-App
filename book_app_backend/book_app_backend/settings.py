@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-1$77j$-+6!*ci6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,10.0.0.252').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,10.0.0.156,10.0.0.252').split(',')
 
 
 # Application definition
@@ -157,6 +157,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8001",  # Updated Expo port
     "http://127.0.0.1:8081",
     "http://127.0.0.1:8001",
+    "http://10.0.0.156:8081",  # Local network access (current IP)
+    "http://10.0.0.156:8001",  # Local network access (current IP on port 8001)
     "http://10.0.0.252:8081",  # Local network access
     "http://10.0.2.2:8001",   # Android emulator
 ]

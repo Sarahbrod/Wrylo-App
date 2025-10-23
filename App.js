@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { registerRootComponent } from 'expo';
 
 import SplashScreen from './src/screens/SplashScreen';
 import LogInScreen from './src/screens/LogInScreen';
@@ -15,6 +14,7 @@ import BookForumScreen from './src/screens/BookForumScreen';
 import YearInReadingScreen from './src/screens/YearInReadingScreen';
 import GenreBooksScreen from './src/screens/GenreBooksScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen';
+import CategoryDetailScreen from './src/screens/CategoryDetailScreen';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import { AuthProvider } from './src/context/AuthContext';
 import ErrorBoundary from './src/components/ErrorBoundary';
@@ -58,6 +58,7 @@ export default function App() {
             <Stack.Screen name="YearInReading" component={YearInReadingScreen} />
             <Stack.Screen name="GenreBooks" component={GenreBooksScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen name="CategoryDetail" component={CategoryDetailScreen} />
           </Stack.Navigator>
           <StatusBar style="auto" />
           </NavigationContainer>
@@ -67,7 +68,3 @@ export default function App() {
     </ErrorBoundary>
   );
 }
-
-
-registerRootComponent(App);
-

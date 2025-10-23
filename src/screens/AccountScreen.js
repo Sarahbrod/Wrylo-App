@@ -12,46 +12,18 @@ const AccountScreen = ({ navigation }) => {
 
   const accountOptions = [
     {
-      icon: 'person-outline',
-      title: 'Edit Profile',
-      subtitle: 'Update your personal information',
-      action: () => navigation.navigate('EditProfile'),
-      color: '#2E0A09',
-    },
-    {
       icon: 'settings-outline',
       title: 'Preferences',
       subtitle: 'Reading goals, notifications, and more',
       action: () => { },
-      color: '#2E0A09',
-    },
-    {
-      icon: 'book-outline',
-      title: 'Reading Statistics',
-      subtitle: 'View your reading progress and history',
-      action: () => { },
-      color: '#2E0A09',
-    },
-    {
-      icon: 'heart-outline',
-      title: 'Favorites',
-      subtitle: 'Your favorite books and authors',
-      action: () => { },
-      color: '#2E0A09',
+      color: '#7CA2E0',
     },
     {
       icon: 'help-circle-outline',
       title: 'Help & Support',
       subtitle: 'Get help and contact support',
       action: () => { },
-      color: '#2E0A09',
-    },
-    {
-      icon: 'information-circle-outline',
-      title: 'About Wrylo',
-      subtitle: 'App version and information',
-      action: () => { },
-      color: '#2E0A09',
+      color: '#7CA2E0',
     },
   ];
 
@@ -77,7 +49,7 @@ const AccountScreen = ({ navigation }) => {
             </Text>
           </View>
           <TouchableOpacity style={styles.editProfileButton}>
-            <Ionicons name="pencil" size={16} color="#2E0A09" />
+            <Ionicons name="pencil" size={16} color="#481825" />
           </TouchableOpacity>
         </View>
       </View>
@@ -99,7 +71,7 @@ const AccountScreen = ({ navigation }) => {
 
       <View style={styles.logoutSection}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={20} color="#DC3545" />
+          <Ionicons name="log-out-outline" size={20} color="#EB5E3A" />
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
@@ -117,15 +89,14 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     paddingHorizontal: 20,
-    paddingTop: 80,
+    paddingTop: 60,
     paddingBottom: 16,
   },
   headerTitle: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    fontFamily: 'Playfair Display',
-    letterSpacing: 0.3,
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: -0.5,
   },
   profileSection: {
     paddingHorizontal: 20,
@@ -150,7 +121,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#481825',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -161,7 +132,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2E0A09',
+    color: '#481825',
     marginBottom: 4,
   },
   profileEmail: {
@@ -209,7 +180,7 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2E0A09',
+    color: '#481825',
     marginBottom: 4,
   },
   optionSubtitle: {
@@ -229,13 +200,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#DC3545',
+    borderColor: '#EB5E3A',
     gap: 8,
   },
   logoutText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#DC3545',
+    color: '#EB5E3A',
   },
 });
 
