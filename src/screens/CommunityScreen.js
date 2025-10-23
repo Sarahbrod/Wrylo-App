@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const CommunityScreen = ({ navigation }) => {
   const sampleGroups = [
@@ -29,19 +30,19 @@ const CommunityScreen = ({ navigation }) => {
       icon: 'chatbubbles',
       title: 'Book Discussions',
       subtitle: 'Join conversations about your favorite books',
-      color: '#EB5E3A',
+      gradient: ['#EB5E3A', '#D94826'],
     },
     {
       icon: 'star',
       title: 'Reviews & Ratings',
       subtitle: 'Share your thoughts and discover new books',
-      color: '#7CA2E0',
+      gradient: ['#7CA2E0', '#5B8DD6'],
     },
     {
       icon: 'trophy',
       title: 'Reading Challenges',
       subtitle: 'Compete with friends and track progress',
-      color: '#EB5E3A',
+      gradient: ['#EB5E3A', '#D94826'],
     },
   ];
 
@@ -71,12 +72,14 @@ const CommunityScreen = ({ navigation }) => {
         >
           {sampleGroups.map((group) => (
             <TouchableOpacity key={group.id} style={styles.groupCard}>
-              <Image
-                source={{ uri: group.image }}
-                style={styles.groupImage}
-                resizeMode="cover"
-              />
-              <View style={styles.groupOverlay}>
+              <View style={styles.groupImageContainer}>
+                <Image
+                  source={{ uri: group.image }}
+                  style={styles.groupImage}
+                  resizeMode="cover"
+                />
+              </View>
+              <View style={styles.groupInfo}>
                 <Text style={styles.groupName}>{group.name}</Text>
                 <Text style={styles.groupMembers}>{group.members} members</Text>
               </View>
@@ -88,9 +91,12 @@ const CommunityScreen = ({ navigation }) => {
       <View style={styles.featuresContainer}>
         {communityFeatures.map((feature, index) => (
           <TouchableOpacity key={index} style={styles.featureCard}>
-            <View style={[styles.iconContainer, { backgroundColor: feature.color }]}>
+            <LinearGradient
+              colors={feature.gradient}
+              style={styles.iconContainer}
+            >
               <Ionicons name={feature.icon} size={24} color="#FFFFFF" />
-            </View>
+            </LinearGradient>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>{feature.title}</Text>
               <Text style={styles.featureSubtitle}>{feature.subtitle}</Text>
@@ -170,42 +176,43 @@ const styles = StyleSheet.create({
   },
   groupCard: {
     width: 160,
-    height: 200,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  groupImageContainer: {
+    width: '100%',
+    height: 120,
+    backgroundColor: '#F6F4F1',
   },
   groupImage: {
     width: '100%',
     height: '100%',
-    position: 'absolute',
   },
-  groupOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(72, 24, 37, 0.5)',
-    justifyContent: 'flex-end',
+  groupInfo: {
     padding: 12,
   },
   groupName: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#481825',
     textAlign: 'left',
-    marginBottom: 2,
+    marginBottom: 4,
+    letterSpacing: 0.2,
   },
   groupMembers: {
-    fontSize: 11,
-    color: '#F6F4F1',
+    fontSize: 12,
+    color: '#71727A',
     textAlign: 'left',
-    opacity: 0.9,
+    letterSpacing: 0.1,
   },
   featuresContainer: {
     paddingHorizontal: 20,
@@ -235,13 +242,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
   },
   featureContent: {
     flex: 1,
   },
   featureTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: 'bold',
     color: '#481825',
     marginBottom: 4,
   },

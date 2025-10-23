@@ -28,15 +28,17 @@ const Home = ({ navigation }) => {
         <View style={styles.content}>
           <View style={styles.addBooksSection}>
             <TouchableOpacity style={styles.addBooksCard} onPress={onAddBooks}>
-              <View style={styles.addBooksContent}>
-                <View style={styles.addBooksIconLarge}>
-                  <Text style={styles.addBooksEmojiLarge}>📚</Text>
-                </View>
-                <View style={styles.addBooksText}>
-                  <Text style={styles.addBooksTitle}>Ready to Get Started?</Text>
-                  <Text style={styles.addBooksDesc}>Tap here to add your first book</Text>
-                  <View style={styles.addBookCTA}>
-                    <Text style={styles.ctaText}>+ Add a Book</Text>
+              <View style={styles.addBooksGradient}>
+                <View style={styles.addBooksContent}>
+                  <View style={styles.addBooksIconLarge}>
+                    <Text style={styles.addBooksEmojiLarge}>📚</Text>
+                  </View>
+                  <View style={styles.addBooksText}>
+                    <Text style={styles.addBooksTitle}>Ready to Get Started?</Text>
+                    <Text style={styles.addBooksDesc}>Tap here to add your first book</Text>
+                    <View style={styles.addBookCTA}>
+                      <Text style={styles.ctaText}>+ Add a Book</Text>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -46,12 +48,7 @@ const Home = ({ navigation }) => {
           <View style={styles.sectionWithExtraPadding}>
             <View style={styles.moodMatcherContainer}>
               <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
-                <LinearGradient
-                  colors={['#D4A5B5', '#C499AA', '#B88C9F']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.moodMatcherBackground}
-                >
+                <View style={styles.moodMatcherBackground}>
                   <View style={styles.moodMatcherContent}>
                     <View style={styles.moodMatcherText}>
                       <Text style={styles.moodMatcherTitle}>Mood Curator</Text>
@@ -61,7 +58,7 @@ const Home = ({ navigation }) => {
                       <Text style={styles.moodMatcherEmoji}>🎭</Text>
                     </View>
                   </View>
-                </LinearGradient>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -92,6 +89,14 @@ const Home = ({ navigation }) => {
           <View style={styles.statsSection}>
             <Text style={styles.statsSectionTitle}>Your Reading Stats</Text>
             <View style={styles.statsCard}>
+              <View style={styles.disabledGraph}>
+                <View style={styles.graphBar} style={[styles.graphBar, { height: 60, opacity: 0.3 }]} />
+                <View style={styles.graphBar} style={[styles.graphBar, { height: 80, opacity: 0.3 }]} />
+                <View style={styles.graphBar} style={[styles.graphBar, { height: 45, opacity: 0.3 }]} />
+                <View style={styles.graphBar} style={[styles.graphBar, { height: 70, opacity: 0.3 }]} />
+                <View style={styles.graphBar} style={[styles.graphBar, { height: 50, opacity: 0.3 }]} />
+                <View style={styles.graphBar} style={[styles.graphBar, { height: 90, opacity: 0.3 }]} />
+              </View>
               <View style={styles.statsEmptyState}>
                 <View style={styles.statsEmptyIcon}>
                   <Text style={styles.statsEmptyEmoji}>📊</Text>
@@ -149,21 +154,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     overflow: 'hidden',
-    minHeight: 180,
+    minHeight: 280,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.08,
     shadowRadius: 12,
-    elevation: 6,
+    elevation: 5,
+  },
+  addBooksGradient: {
+    width: '100%',
+    minHeight: 280,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
   },
   addBooksContent: {
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 24,
-    paddingVertical: 24,
+    paddingVertical: 32,
+    flex: 1,
   },
   addBooksText: {
     flex: 1,
@@ -187,20 +200,13 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     textAlign: 'center',
     marginBottom: 16,
+    opacity: 0.95,
   },
   addBookCTA: {
-    backgroundColor: '#8B3A5A',
+    backgroundColor: '#481825',
     paddingHorizontal: 28,
     paddingVertical: 12,
     borderRadius: 24,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
   },
   ctaText: {
     fontSize: 16,
@@ -230,14 +236,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   moodMatcherCard: {
-    backgroundColor: '#481825',
+    backgroundColor: '#DF6A49',
     borderRadius: 16,
     overflow: 'hidden',
+    shadowColor: '#C65D1E',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 6,
   },
   moodMatcherBackground: {
     width: '100%',
     minHeight: 100,
     borderRadius: 16,
+    backgroundColor: '#DF6A49',
   },
   moodMatcherContent: {
     flexDirection: 'row',
@@ -250,15 +265,15 @@ const styles = StyleSheet.create({
   moodMatcherTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#481825',
+    color: '#FFFFFF',
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   moodMatcherDesc: {
     fontSize: 14,
-    color: '#481825',
+    color: '#FFFFFF',
     lineHeight: 20,
-    opacity: 0.9,
+    opacity: 0.95,
     letterSpacing: 0.2,
   },
   moodMatcherIcon: {
@@ -266,7 +281,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(246, 244, 241, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -358,6 +373,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 3,
+  },
+  disabledGraph: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-around',
+    height: 100,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+  },
+  graphBar: {
+    width: 30,
+    backgroundColor: '#E8E6E3',
+    borderRadius: 4,
   },
   statsEmptyState: {
     alignItems: 'center',
