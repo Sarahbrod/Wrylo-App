@@ -1,11 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 const HomeOnboarding = ({ onGetStarted }) => {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.welcomeIcon}>📚</Text>
+                <Image 
+                    source={require('../../../assets/images/logo.png')} 
+                    style={styles.bookImage}
+                    resizeMode="contain"
+                />
                 <Text style={styles.title}>Welcome to FinanceEd!</Text>
                 <Text style={styles.subtitle}>Your reading journey starts here</Text>
                 
@@ -44,8 +48,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         maxWidth: 320,
     },
-    welcomeIcon: {
-        fontSize: 64,
+    bookImage: {
+        width: 80,
+        height: 80,
         marginBottom: 24,
     },
     title: {

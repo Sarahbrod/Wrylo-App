@@ -56,10 +56,9 @@ const BookForumScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Book Forum</Text>
-                <Text style={styles.subtitle}>Connect with fellow readers and share your thoughts</Text>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <View style={styles.headerSection}>
+                <Text style={styles.headerTitle}>Community</Text>
             </View>
 
             <ScrollView style={styles.topicsContainer} showsVerticalScrollIndicator={false}>
@@ -73,8 +72,8 @@ const BookForumScreen = ({ navigation }) => {
                             <Text style={styles.topicStat}>{topic.posts} posts</Text>
                             <Text style={styles.topicStat}>Last: {topic.lastActivity}</Text>
                         </View>
-                        <CustomButton 
-                            text="View Discussion" 
+                        <CustomButton
+                            text="View Discussion"
                             onPress={() => onTopicPressed(topic)}
                             type="TERTIARY"
                         />
@@ -83,13 +82,13 @@ const BookForumScreen = ({ navigation }) => {
             </ScrollView>
 
             <View style={styles.buttonContainer}>
-                <CustomButton 
-                    text="Back to Community" 
-                    onPress={onBackPressed} 
+                <CustomButton
+                    text="Back to Community"
+                    onPress={onBackPressed}
                     type="PRIMARY"
                 />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -97,36 +96,31 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F6F4F1',
-        paddingHorizontal: 24,
-        paddingTop: 60,
-        paddingBottom: 40,
     },
-    header: {
-        marginBottom: 30,
+    contentContainer: {
+        paddingBottom: 110,
     },
-    title: {
-        fontSize: 28,
-        fontWeight: '700',
-        fontFamily: 'LibreBaskerville_700Bold',
-        color: '#333',
-        textAlign: 'center',
-        marginBottom: 12,
+    headerSection: {
+        paddingHorizontal: 20,
+        paddingTop: 80,
+        paddingBottom: 16,
     },
-    subtitle: {
-        fontSize: 16,
-        fontFamily: 'LibreBaskerville_400Regular',
-        color: '#71727A',
-        textAlign: 'center',
-        lineHeight: 22,
+    headerTitle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#2E0A09',
+        fontFamily: 'Playfair Display',
+        letterSpacing: 0.3,
     },
     topicsContainer: {
         flex: 1,
+        paddingHorizontal: 20,
     },
     topicCard: {
         backgroundColor: '#FFFFFF',
         borderRadius: 12,
         padding: 20,
-        marginBottom: 16,
+        marginBottom: 12,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,

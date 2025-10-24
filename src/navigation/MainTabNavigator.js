@@ -22,10 +22,10 @@ const MainTabNavigator = () => {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Library') {
             iconName = focused ? 'library' : 'library-outline';
-          } else if (route.name === 'Recommendations') {
-            iconName = focused ? 'heart' : 'heart-outline';
-          } else if (route.name === 'Community') {
-            iconName = focused ? 'people' : 'people-outline';
+          } else if (route.name === 'Forum') {
+            iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
+          } else if (route.name === 'Discover') {
+            iconName = focused ? 'compass' : 'compass-outline';
           } else if (route.name === 'Account') {
             iconName = focused ? 'person' : 'person-outline';
           }
@@ -37,12 +37,12 @@ const MainTabNavigator = () => {
         tabBarStyle: {
           position: 'absolute',
           backgroundColor: '#FFFFFF',
-          borderRadius: 25,
+          borderRadius: 16,
           marginHorizontal: 20,
           marginBottom: 20,
-          paddingTop: 8,
-          paddingBottom: 8,
-          height: 60,
+          paddingTop: 12,
+          paddingBottom: 12,
+          height: 68,
           elevation: 10,
           shadowColor: '#000',
           shadowOffset: {
@@ -70,18 +70,18 @@ const MainTabNavigator = () => {
           tabBarLabel: 'Library',
         }}
       />
-      <Tab.Screen 
-        name="Recommendations" 
+      <Tab.Screen
+        name="Discover"
         component={RecommendationsScreen}
         options={{
-          tabBarLabel: 'For You',
+          tabBarLabel: 'Discover',
         }}
       />
-      <Tab.Screen 
-        name="Community" 
+      <Tab.Screen
+        name="Forum"
         component={CommunityScreen}
         options={{
-          tabBarLabel: 'Community',
+          tabBarLabel: 'Forum',
         }}
       />
       <Tab.Screen 

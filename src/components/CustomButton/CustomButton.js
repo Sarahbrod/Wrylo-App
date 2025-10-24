@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     container_LINK: {
         backgroundColor: 'transparent',
         padding: 5,
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
     },
 
     container_ICON: {

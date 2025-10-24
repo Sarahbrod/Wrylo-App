@@ -2,13 +2,13 @@
 // This file contains all design tokens for consistent styling across the app
 
 export const colors = {
-  // Primary brand colors
-  primary: '#7FABC7',
-  primaryDark: '#6B96B3',
-  primaryLight: '#A4C4D4',
-  secondary: '#7F9BEB',
-  secondaryDark: '#6B82C7',
-  secondaryLight: '#A4B4F0',
+  // Primary brand colors - Updated for color-blind accessibility
+  primary: '#2563EB', // Bright blue - distinguishable for most color-blind users
+  primaryDark: '#1D4ED8',
+  primaryLight: '#3B82F6',
+  secondary: '#7C3AED', // Purple - good contrast with blue
+  secondaryDark: '#6D28D9',
+  secondaryLight: '#8B5CF6',
 
   // Background colors
   background: '#F6F4F1',

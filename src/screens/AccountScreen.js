@@ -12,54 +12,25 @@ const AccountScreen = ({ navigation }) => {
 
   const accountOptions = [
     {
-      icon: 'person-outline',
-      title: 'Edit Profile',
-      subtitle: 'Update your personal information',
-      action: () => navigation.navigate('EditProfile'),
-      color: '#2E0A09',
-    },
-    {
       icon: 'settings-outline',
       title: 'Preferences',
       subtitle: 'Reading goals, notifications, and more',
-      action: () => {},
-      color: '#2E0A09',
-    },
-    {
-      icon: 'book-outline',
-      title: 'Reading Statistics',
-      subtitle: 'View your reading progress and history',
-      action: () => {},
-      color: '#2E0A09',
-    },
-    {
-      icon: 'heart-outline',
-      title: 'Favorites',
-      subtitle: 'Your favorite books and authors',
-      action: () => {},
-      color: '#2E0A09',
+      action: () => { },
+      color: '#7CA2E0',
     },
     {
       icon: 'help-circle-outline',
       title: 'Help & Support',
       subtitle: 'Get help and contact support',
-      action: () => {},
-      color: '#2E0A09',
-    },
-    {
-      icon: 'information-circle-outline',
-      title: 'About Wrylo',
-      subtitle: 'App version and information',
-      action: () => {},
-      color: '#2E0A09',
+      action: () => { },
+      color: '#7CA2E0',
     },
   ];
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Account</Text>
-        <Text style={styles.subtitle}>Manage your profile and preferences</Text>
+      <View style={styles.headerSection}>
+        <Text style={styles.headerTitle}>Account</Text>
       </View>
 
       <View style={styles.profileSection}>
@@ -69,8 +40,8 @@ const AccountScreen = ({ navigation }) => {
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>
-              {user?.firstName && user?.lastName 
-                ? `${user.firstName} ${user.lastName}` 
+              {user?.firstName && user?.lastName
+                ? `${user.firstName} ${user.lastName}`
                 : user?.username || 'Book Lover'}
             </Text>
             <Text style={styles.profileEmail}>
@@ -78,7 +49,7 @@ const AccountScreen = ({ navigation }) => {
             </Text>
           </View>
           <TouchableOpacity style={styles.editProfileButton}>
-            <Ionicons name="pencil" size={16} color="#2E0A09" />
+            <Ionicons name="pencil" size={16} color="#481825" />
           </TouchableOpacity>
         </View>
       </View>
@@ -100,7 +71,7 @@ const AccountScreen = ({ navigation }) => {
 
       <View style={styles.logoutSection}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={20} color="#DC3545" />
+          <Ionicons name="log-out-outline" size={20} color="#EB5E3A" />
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
@@ -111,32 +82,25 @@ const AccountScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F6F4F1',
   },
   contentContainer: {
-    paddingBottom: 100,
+    paddingBottom: 110,
   },
-  header: {
-    paddingTop: 60,
+  headerSection: {
     paddingHorizontal: 20,
-    paddingBottom: 30,
-    backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    paddingTop: 60,
+    paddingBottom: 16,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2E0A09',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#71727A',
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: -0.5,
   },
   profileSection: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingBottom: 20,
   },
   profileCard: {
     flexDirection: 'row',
@@ -157,7 +121,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#2E0A09',
+    backgroundColor: '#481825',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -168,7 +132,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2E0A09',
+    color: '#481825',
     marginBottom: 4,
   },
   profileEmail: {
@@ -216,7 +180,7 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2E0A09',
+    color: '#481825',
     marginBottom: 4,
   },
   optionSubtitle: {
@@ -236,13 +200,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#DC3545',
+    borderColor: '#EB5E3A',
     gap: 8,
   },
   logoutText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#DC3545',
+    color: '#EB5E3A',
   },
 });
 
