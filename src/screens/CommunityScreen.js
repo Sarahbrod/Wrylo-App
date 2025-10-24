@@ -1,9 +1,8 @@
-import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const CommunityScreen = ({ navigation }) => {
+const CommunityScreen = () => {
   const sampleGroups = [
     {
       id: 1,
@@ -178,27 +177,30 @@ const styles = StyleSheet.create({
     width: 160,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    overflow: 'hidden',
+    padding: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 5,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
   groupImageContainer: {
     width: '100%',
     height: 120,
     backgroundColor: '#F6F4F1',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 8,
   },
   groupImage: {
     width: '100%',
     height: '100%',
   },
   groupInfo: {
-    padding: 12,
+    gap: 4,
   },
   groupName: {
     fontSize: 15,

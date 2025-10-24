@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     progressStepActive: {
-        backgroundColor: '#2563EB',
+        backgroundColor: '#7CA2E0',
     },
     progressStepText: {
         fontSize: 14,
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     progressLineActive: {
-        backgroundColor: '#2563EB',
+        backgroundColor: '#7CA2E0',
     },
     content: {
         flex: 1,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
     },
     selectedCard: {
-        borderColor: '#2563EB',
+        borderColor: '#7CA2E0',
         transform: [{ scale: 1.02 }],
     },
     optionGradient: {
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     selectedGenreCard: {
-        borderColor: '#2563EB',
+        borderColor: '#7CA2E0',
         transform: [{ scale: 1.02 }],
     },
     genreIconContainer: {
