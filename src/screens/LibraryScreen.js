@@ -16,6 +16,7 @@ const LibraryScreen = ({ navigation, route }) => {
   const [showCreateCategorySheet, setShowCreateCategorySheet] = useState(false);
   const [showAddBookSheet, setShowAddBookSheet] = useState(false);
   const [customCategories, setCustomCategories] = useState([]);
+  const [prefilledBook, setPrefilledBook] = useState(null);
 
   // Sample book data - in a real app this would come from a database/API
   const sampleBooks = [
@@ -86,14 +87,18 @@ const LibraryScreen = ({ navigation, route }) => {
 
   const [books, setBooks] = useState(sampleBooks);
 
-  // Check if we should auto-open add book sheet when coming from Home
+  // Check if we should auto-open add book sheet when coming from Home or Recommendations
   useEffect(() => {
     if (route?.params?.openAddBook) {
       setShowAddBookSheet(true);
-      // Clear the parameter to avoid reopening on subsequent navigations
-      navigation.setParams({ openAddBook: undefined });
+      // Handle prefilled book from recommendations
+      if (route?.params?.prefilledBook) {
+        setPrefilledBook(route.params.prefilledBook);
+      }
+      // Clear the parameters to avoid reopening on subsequent navigations
+      navigation.setParams({ openAddBook: undefined, prefilledBook: undefined });
     }
-  }, [route?.params?.openAddBook]);
+  }, [route?.params?.openAddBook, route?.params?.prefilledBook]);
 
   const handleAddBook = (bookData) => {
     setBooks(prevBooks => [...prevBooks, bookData]);
@@ -408,8 +413,13 @@ const LibraryScreen = ({ navigation, route }) => {
 
       <AddBookSheet
         visible={showAddBookSheet}
-        onClose={() => setShowAddBookSheet(false)}
+        onClose={() => {
+          setShowAddBookSheet(false);
+          setPrefilledBook(null); // Clear prefilled data when closing
+        }}
         onAddBook={handleAddBook}
+        existingBooks={books}
+        prefilledBook={prefilledBook}
       />
     </>
   );

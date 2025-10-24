@@ -1,19 +1,81 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import AddBookSheet from '../components/AddBookSheet';
 import ReadingGoalsCard from '../components/ReadingGoalsCard';
 import BookCoverCard from '../components/BookCoverCard';
+import BookSearchResults from '../components/BookSearchResults';
+import { searchBooks } from '../services/bookService';
+import { useDebounce } from '../utils/useDebounce';
 
 const RecommendationsScreen = ({ navigation }) => {
   const [showAddBookSheet, setShowAddBookSheet] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
+  // Debounce the search query
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   const handleAddBook = (bookData) => {
     console.log('Adding book:', bookData);
     // Handle book addition logic here
     // Navigate to library after adding
     navigation.navigate('Library');
+  };
+
+  // Effect to perform search when debounced query changes
+  useEffect(() => {
+    const performSearch = async () => {
+      if (!debouncedSearchQuery || debouncedSearchQuery.trim().length < 2) {
+        setSearchResults([]);
+        setShowResults(false);
+        return;
+      }
+
+      setIsSearching(true);
+      setShowResults(true);
+
+      try {
+        const results = await searchBooks(debouncedSearchQuery, 15);
+        setSearchResults(results);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    performSearch();
+  }, [debouncedSearchQuery]);
+
+  // Handle search input change
+  const handleSearchChange = (text) => {
+    setSearchQuery(text);
+    if (text.trim().length > 0) {
+      setShowResults(true);
+    }
+  };
+
+  // Handle book selection from search results
+  const handleSelectBook = (book) => {
+    console.log('Selected book:', book);
+    setShowResults(false);
+    setSearchQuery('');
+    Keyboard.dismiss();
+    // Navigate to book detail page
+    navigation.navigate('BookDetail', { book });
+  };
+
+  // Handle clear search
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setShowResults(false);
+    Keyboard.dismiss();
   };
 
   const trendingBooks = [
@@ -38,6 +100,27 @@ const RecommendationsScreen = ({ navigation }) => {
       emoji: '✨',
       coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1663805647i/32620332.jpg'
     },
+    {
+      id: 4,
+      title: 'Fourth Wing',
+      author: 'Rebecca Yarros',
+      emoji: '🐉',
+      coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1701980900i/61431922.jpg'
+    },
+    {
+      id: 5,
+      title: 'The Silent Patient',
+      author: 'Alex Michaelides',
+      emoji: '🎨',
+      coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1668782119i/40097951.jpg'
+    },
+    {
+      id: 6,
+      title: 'Atomic Habits',
+      author: 'James Clear',
+      emoji: '⚡',
+      coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385i/40121378.jpg'
+    },
   ];
 
   const personalizedBooks = [
@@ -61,6 +144,27 @@ const RecommendationsScreen = ({ navigation }) => {
       author: 'TJ Klune',
       emoji: '🏠',
       coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1595335588i/45047384.jpg'
+    },
+    {
+      id: 4,
+      title: 'The Thursday Murder Club',
+      author: 'Richard Osman',
+      emoji: '🔍',
+      coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1583524047i/46000520.jpg'
+    },
+    {
+      id: 5,
+      title: 'Circe',
+      author: 'Madeline Miller',
+      emoji: '⚔️',
+      coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1565909496i/35959740.jpg'
+    },
+    {
+      id: 6,
+      title: 'The Song of Achilles',
+      author: 'Madeline Miller',
+      emoji: '🏺',
+      coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1620659080i/13623848.jpg'
     },
   ];
 
@@ -87,6 +191,36 @@ const RecommendationsScreen = ({ navigation }) => {
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.headerSection}>
         <Text style={styles.headerTitle}>Discover</Text>
+
+        {/* Search Input */}
+        <View style={styles.searchWrapper}>
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={20} color="#71727A" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search books, authors, genres..."
+              placeholderTextColor="#71727A"
+              value={searchQuery}
+              onChangeText={handleSearchChange}
+              onFocus={() => searchQuery.length > 0 && setShowResults(true)}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={handleClearSearch}>
+                <Ionicons name="close-circle" size={20} color="#71727A" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Search Results Dropdown */}
+          <BookSearchResults
+            visible={showResults}
+            results={searchResults}
+            loading={isSearching}
+            searchQuery={searchQuery}
+            onSelectBook={handleSelectBook}
+            maxHeight={450}
+          />
+        </View>
       </View>
 
       {/* Mood-Based Recommendations Card */}
@@ -220,8 +354,40 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '700',
     color: '#481825',
-    marginBottom: 8,
+    marginBottom: 16,
     letterSpacing: -0.5,
+  },
+  searchWrapper: {
+    position: 'relative',
+    zIndex: 1000,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E8E6E3',
+  },
+  searchIcon: {
+    marginRight: 4,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#481825',
+    paddingVertical: 0,
   },
   previewSection: {
     marginBottom: 32,

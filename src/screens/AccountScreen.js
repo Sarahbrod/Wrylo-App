@@ -36,7 +36,7 @@ const AccountScreen = ({ navigation }) => {
       <View style={styles.profileSection}>
         <View style={styles.profileCard}>
           <View style={styles.avatarContainer}>
-            <Ionicons name="person" size={32} color="#FFFFFF" />
+            <Ionicons name="person" size={48} color="#FFFFFF" />
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>
@@ -49,7 +49,7 @@ const AccountScreen = ({ navigation }) => {
             </Text>
           </View>
           <TouchableOpacity style={styles.editProfileButton}>
-            <Ionicons name="pencil" size={16} color="#481825" />
+            <Ionicons name="pencil" size={18} color="#481825" />
           </TouchableOpacity>
         </View>
       </View>
@@ -100,52 +100,78 @@ const styles = StyleSheet.create({
   },
   profileSection: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
   profileCard: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 16,
+    padding: 32,
+    paddingVertical: 40,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 6,
+    position: 'relative',
+  },
+  avatarContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: '#481825',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    shadowColor: '#481825',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  profileInfo: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  profileName: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#481825',
+    marginBottom: 6,
+    letterSpacing: 0.3,
+    textAlign: 'center',
+  },
+  profileEmail: {
+    fontSize: 15,
+    color: '#71727A',
+    letterSpacing: 0.2,
+    textAlign: 'center',
+  },
+  editProfileButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F6F4F1',
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  avatarContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#481825',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  profileInfo: {
-    flex: 1,
-  },
-  profileName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#481825',
-    marginBottom: 4,
-  },
-  profileEmail: {
-    fontSize: 14,
-    color: '#71727A',
-  },
-  editProfileButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F8F9FA',
-    alignItems: 'center',
-    justifyContent: 'center',
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
   optionsContainer: {
     paddingHorizontal: 20,

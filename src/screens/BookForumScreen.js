@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CustomButton from '../components/CustomButton/CustomButton';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
@@ -118,40 +117,44 @@ const styles = StyleSheet.create({
     },
     topicCard: {
         backgroundColor: '#FFFFFF',
-        borderRadius: 12,
+        borderRadius: 16,
         padding: 20,
-        marginBottom: 12,
+        marginBottom: 16,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: 4,
         },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowOpacity: 0.12,
+        shadowRadius: 12,
+        elevation: 5,
     },
     topicHeader: {
-        marginBottom: 12,
+        marginBottom: 16,
     },
     topicTitle: {
         fontSize: 18,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 4,
+        fontWeight: '700',
+        color: '#481825',
+        marginBottom: 6,
+        letterSpacing: 0.2,
     },
     topicDescription: {
         fontSize: 14,
         color: '#71727A',
         lineHeight: 20,
+        letterSpacing: 0.1,
     },
     topicStats: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 16,
+        marginBottom: 18,
+        paddingTop: 4,
     },
     topicStat: {
-        fontSize: 12,
-        color: '#999',
+        fontSize: 13,
+        color: '#71727A',
+        fontWeight: '500',
     },
     buttonContainer: {
         marginTop: 20,

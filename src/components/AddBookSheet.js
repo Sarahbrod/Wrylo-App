@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,71 @@ import {
   ScrollView,
   Modal,
   Dimensions,
+  Keyboard,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import BookSearchResults from './BookSearchResults';
+import { searchBooks } from '../services/bookService';
+import { useDebounce } from '../utils/useDebounce';
 
 const { height: screenHeight } = Dimensions.get('window');
 
-const AddBookSheet = ({ visible, onClose, onAddBook }) => {
+const AddBookSheet = ({ visible, onClose, onAddBook, existingBooks = [], prefilledBook = null }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const [bookTitle, setBookTitle] = useState('');
   const [bookAuthor, setBookAuthor] = useState('');
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [progress, setProgress] = useState('want_to_read');
   const [showManualForm, setShowManualForm] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [duplicateMessage, setDuplicateMessage] = useState('');
+
+  // Debounce the search query
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  // Handle prefilled book from recommendations
+  useEffect(() => {
+    if (prefilledBook && visible) {
+      setSelectedBook(prefilledBook);
+      setBookTitle(prefilledBook.title || '');
+      setBookAuthor(prefilledBook.author || '');
+      setShowManualForm(true);
+      setShowResults(false);
+      setSearchQuery('');
+    }
+  }, [prefilledBook, visible]);
+
+  // Effect to perform search when debounced query changes
+  useEffect(() => {
+    const performSearch = async () => {
+      if (!debouncedSearchQuery || debouncedSearchQuery.trim().length < 2) {
+        setSearchResults([]);
+        setShowResults(false);
+        return;
+      }
+
+      setIsSearching(true);
+      setShowResults(true);
+
+      try {
+        const results = await searchBooks(debouncedSearchQuery, 12);
+        setSearchResults(results);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    performSearch();
+  }, [debouncedSearchQuery]);
 
   const progressOptions = [
     { id: 'want_to_read', label: 'Want to Read', icon: 'bookmark-outline' },
@@ -29,25 +81,111 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
     { id: 'did_not_finish', label: 'Did Not Finish', icon: 'close-circle-outline' },
   ];
 
+  // Handle search input change
+  const handleSearchChange = (text) => {
+    setSearchQuery(text);
+    if (text.trim().length > 0) {
+      setShowResults(true);
+      setShowManualForm(false);
+    }
+  };
+
+  // Handle book selection from search results
+  const handleSelectBook = (book) => {
+    setSelectedBook(book);
+    setBookTitle(book.title);
+    setBookAuthor(book.author);
+    setSearchQuery('');
+    setShowResults(false);
+    setShowManualForm(true);
+    Keyboard.dismiss();
+  };
+
+  // Handle clear search
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setShowResults(false);
+    Keyboard.dismiss();
+  };
+
   const handleSubmit = () => {
+    // Clear previous messages
+    setSuccessMessage('');
+    setDuplicateMessage('');
+
+    // Check for duplicate book
+    const isDuplicate = existingBooks.some(book => {
+      // Check by Google Books ID if available
+      if (selectedBook?.googleBooksId && book.googleBooksId) {
+        return book.googleBooksId === selectedBook.googleBooksId;
+      }
+      // Otherwise check by title and author
+      return (
+        book.title.toLowerCase().trim() === bookTitle.toLowerCase().trim() &&
+        book.author.toLowerCase().trim() === bookAuthor.toLowerCase().trim()
+      );
+    });
+
+    if (isDuplicate) {
+      setDuplicateMessage('You have already added this book to your library!');
+      // Auto-hide duplicate message after 5 seconds
+      setTimeout(() => setDuplicateMessage(''), 5000);
+      return;
+    }
+
     const bookData = {
       id: Date.now(),
+      googleBooksId: selectedBook?.googleBooksId || null,
       title: bookTitle.trim() || 'Unknown Title',
       author: bookAuthor.trim() || 'Unknown Author',
       status: progress === 'want_to_read' ? 'wishlist' : progress === 'did_not_finish' ? 'dnf' : progress,
       rating,
       comment: comment.trim(),
       progress: progress === 'finished' ? 100 : progress === 'reading' ? 0 : 0,
-      coverImage: 'https://via.placeholder.com/300x400/f0f0f0/999999?text=Book',
+      coverImage: selectedBook?.coverUrl || 'https://via.placeholder.com/300x400/f0f0f0/999999?text=Book',
+      coverUrl: selectedBook?.coverUrl || '',
+      description: selectedBook?.description || '',
+      pageCount: selectedBook?.pageCount || 0,
+      categories: selectedBook?.categories || [],
+      publishedDate: selectedBook?.publishedDate || '',
     };
     onAddBook(bookData);
-    // Reset form
+
+    // Show success message
+    setSuccessMessage('Book added successfully! Add more books below.');
+
+    // Reset form but keep the modal open
     setSearchQuery('');
+    setSearchResults([]);
+    setShowResults(false);
     setBookTitle('');
     setBookAuthor('');
     setRating(0);
     setComment('');
     setProgress('want_to_read');
+    setShowManualForm(false);
+    setSelectedBook(null);
+
+    // Auto-hide success message after 5 seconds
+    setTimeout(() => setSuccessMessage(''), 5000);
+  };
+
+  const resetForm = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setShowResults(false);
+    setBookTitle('');
+    setBookAuthor('');
+    setRating(0);
+    setComment('');
+    setProgress('want_to_read');
+    setShowManualForm(false);
+    setSelectedBook(null);
+  };
+
+  const handleClose = () => {
+    resetForm();
     onClose();
   };
 
@@ -95,7 +233,7 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
       visible={visible}
       transparent={true}
       animationType="slide"
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View style={styles.overlay}>
         <View style={styles.sheetContainer}>
@@ -103,31 +241,72 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
             <View style={styles.dragHandle} />
             <View style={styles.headerContent}>
               <Text style={styles.headerTitle}>Add Book</Text>
-              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
                 <Ionicons name="close" size={24} color="#71727A" />
               </TouchableOpacity>
             </View>
           </View>
 
-          <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Success Message */}
+          {successMessage ? (
+            <View style={styles.successMessageContainer}>
+              <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+              <Text style={styles.successMessageText}>{successMessage}</Text>
+            </View>
+          ) : null}
+
+          {/* Duplicate Message */}
+          {duplicateMessage ? (
+            <View style={styles.duplicateMessageContainer}>
+              <Ionicons name="alert-circle" size={20} color="#F59E0B" />
+              <Text style={styles.duplicateMessageText}>{duplicateMessage}</Text>
+            </View>
+          ) : null}
+
+          <ScrollView style={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Search for Book</Text>
-              <View style={styles.searchContainer}>
-                <Ionicons name="search" size={20} color="#71727A" style={styles.searchIcon} />
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Enter book title or author"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                  placeholderTextColor="#71727A"
+              <View style={styles.searchWrapper}>
+                <View style={styles.searchContainer}>
+                  <Ionicons name="search" size={20} color="#71727A" style={styles.searchIcon} />
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Enter book title or author"
+                    value={searchQuery}
+                    onChangeText={handleSearchChange}
+                    placeholderTextColor="#71727A"
+                    onFocus={() => searchQuery.length > 0 && setShowResults(true)}
+                  />
+                  {searchQuery.length > 0 && (
+                    <TouchableOpacity onPress={handleClearSearch}>
+                      <Ionicons name="close-circle" size={20} color="#71727A" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+
+                {/* Search Results */}
+                <BookSearchResults
+                  visible={showResults}
+                  results={searchResults}
+                  loading={isSearching}
+                  searchQuery={searchQuery}
+                  onSelectBook={handleSelectBook}
+                  maxHeight={300}
                 />
               </View>
+
               <TouchableOpacity
                 style={styles.manualButton}
-                onPress={() => setShowManualForm(!showManualForm)}
+                onPress={() => {
+                  setShowManualForm(!showManualForm);
+                  setShowResults(false);
+                  setSearchQuery('');
+                }}
               >
                 <Ionicons name="book" size={16} color="#2E0A09" />
-                <Text style={styles.manualButtonText}>Add Manually</Text>
+                <Text style={styles.manualButtonText}>
+                  {showManualForm ? 'Hide Manual Entry' : 'Add Manually'}
+                </Text>
                 <Ionicons
                   name={showManualForm ? "chevron-up" : "chevron-down"}
                   size={16}
@@ -139,26 +318,64 @@ const AddBookSheet = ({ visible, onClose, onAddBook }) => {
             {showManualForm && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Book Details</Text>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputLabel}>Title</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Enter book title"
-                    value={bookTitle}
-                    onChangeText={setBookTitle}
-                    placeholderTextColor="#71727A"
-                  />
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputLabel}>Author</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Enter author name"
-                    value={bookAuthor}
-                    onChangeText={setBookAuthor}
-                    placeholderTextColor="#71727A"
-                  />
-                </View>
+
+                {/* Horizontal Book Card with Image Left */}
+                {selectedBook && selectedBook.coverUrl ? (
+                  <View style={styles.bookCardHorizontalLayout}>
+                    <View style={styles.bookCoverContainerLeft}>
+                      <Image
+                        source={{ uri: selectedBook.coverUrl }}
+                        style={styles.bookCoverImageLeft}
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <View style={styles.bookInfoRight}>
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>Title</Text>
+                        <TextInput
+                          style={styles.textInputWhite}
+                          placeholder="Enter book title"
+                          value={bookTitle}
+                          onChangeText={setBookTitle}
+                          placeholderTextColor="#71727A"
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>Author</Text>
+                        <TextInput
+                          style={styles.textInputWhite}
+                          placeholder="Enter author name"
+                          value={bookAuthor}
+                          onChangeText={setBookAuthor}
+                          placeholderTextColor="#71727A"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.inputLabel}>Title</Text>
+                      <TextInput
+                        style={styles.textInputWhite}
+                        placeholder="Enter book title"
+                        value={bookTitle}
+                        onChangeText={setBookTitle}
+                        placeholderTextColor="#71727A"
+                      />
+                    </View>
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.inputLabel}>Author</Text>
+                      <TextInput
+                        style={styles.textInputWhite}
+                        placeholder="Enter author name"
+                        value={bookAuthor}
+                        onChangeText={setBookAuthor}
+                        placeholderTextColor="#71727A"
+                      />
+                    </View>
+                  </View>
+                )}
               </View>
             )}
 
@@ -283,6 +500,10 @@ const styles = StyleSheet.create({
     color: '#2E0A09',
     marginBottom: 12,
   },
+  searchWrapper: {
+    position: 'relative',
+    zIndex: 1000,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -290,6 +511,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    gap: 8,
   },
   searchIcon: {
     marginRight: 12,
@@ -318,7 +540,7 @@ const styles = StyleSheet.create({
     color: '#2E0A09',
   },
   inputContainer: {
-    marginBottom: 12,
+    marginBottom: 0,
   },
   inputLabel: {
     fontSize: 14,
@@ -328,6 +550,16 @@ const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#2E0A09',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  textInputWhite: {
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -355,9 +587,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   selectedProgressOption: {
-    backgroundColor: '#2E0A09',
-    borderColor: '#2E0A09',
-    shadowColor: '#2E0A09',
+    backgroundColor: '#B4A5D6',
+    borderColor: '#B4A5D6',
+    shadowColor: '#B4A5D6',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -368,7 +600,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: '#374151',
-    flex: 1,
   },
   selectedProgressOptionText: {
     color: '#FFFFFF',
@@ -407,6 +638,146 @@ const styles = StyleSheet.create({
   },
   submitButtonDisabled: {
     backgroundColor: '#CCCCCC',
+  },
+  bookCardHorizontal: {
+    flexDirection: 'row',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 12,
+    gap: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  bookCoverContainerSmall: {
+    width: 60,
+    height: 90,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  bookCoverImageSmall: {
+    width: '100%',
+    height: '100%',
+  },
+  bookInfoHorizontal: {
+    flex: 1,
+    gap: 8,
+  },
+  bookCardVertical: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  bookCoverContainerCentered: {
+    width: 120,
+    height: 180,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    marginBottom: 16,
+  },
+  bookCoverImageCentered: {
+    width: '100%',
+    height: '100%',
+  },
+  bookInfoVertical: {
+    width: '100%',
+    gap: 12,
+  },
+  bookCardHorizontalLayout: {
+    flexDirection: 'row',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    gap: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    alignItems: 'center',
+  },
+  bookCoverContainerLeft: {
+    width: 100,
+    height: 150,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  bookCoverImageLeft: {
+    width: '100%',
+    height: '100%',
+  },
+  bookInfoRight: {
+    flex: 1,
+    gap: 12,
+  },
+  successMessageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#D1FAE5',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 8,
+    borderRadius: 12,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: '#10B981',
+  },
+  successMessageText: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#065F46',
+  },
+  duplicateMessageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 8,
+    borderRadius: 12,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: '#F59E0B',
+  },
+  duplicateMessageText: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#92400E',
   },
 });
 
