@@ -38,7 +38,7 @@ const Home = ({ navigation }) => {
   };
 
   const onMoodMatcher = () => {
-    navigation.navigate('MoodFlow');
+    navigation.navigate('MoodFlow', { sourceTab: 'Home' });
   };
 
   const onJoinCommunity = () => {
@@ -84,7 +84,11 @@ const Home = ({ navigation }) => {
                 onPress={() => navigation.navigate('Library')}
               >
                 <View style={styles.currentlyReadingHeader}>
-                  <Text style={styles.currentlyReadingLabel}>Currently Reading</Text>
+                  <Text style={styles.currentlyReadingLabel}>CURRENTLY READING</Text>
+                  <View style={styles.currentlyReadingBadge}>
+                    <View style={styles.pulseIndicator} />
+                    <Text style={styles.badgeText}>In Progress</Text>
+                  </View>
                 </View>
                 {currentlyReading && (
                   <View style={styles.currentlyReadingContent}>
@@ -94,16 +98,25 @@ const Home = ({ navigation }) => {
                         style={styles.bookCover}
                         resizeMode="cover"
                       />
+                      <View style={styles.coverOverlay}>
+                        <View style={styles.countryBadge}>
+                          <Text style={styles.countryBadgeText}>{currentlyReading.country}</Text>
+                        </View>
+                      </View>
                     </View>
                     <View style={styles.bookDetails}>
                       <Text style={styles.bookTitle} numberOfLines={2}>
                         {currentlyReading.title}
                       </Text>
                       <Text style={styles.bookAuthor} numberOfLines={1}>
-                        {currentlyReading.author}
+                        by {currentlyReading.author}
                       </Text>
                       {currentlyReading.progress && (
                         <View style={styles.progressSection}>
+                          <View style={styles.progressHeader}>
+                            <Text style={styles.progressLabel}>Reading Progress</Text>
+                            <Text style={styles.progressPercentage}>{currentlyReading.progress}%</Text>
+                          </View>
                           <View style={styles.progressBar}>
                             <View
                               style={[
@@ -112,38 +125,16 @@ const Home = ({ navigation }) => {
                               ]}
                             />
                           </View>
-                          <Text style={styles.progressText}>{currentlyReading.progress}% complete</Text>
                         </View>
                       )}
                     </View>
                   </View>
                 )}
               </TouchableOpacity>
-
-              {/* Finished Book Discussion Card */}
-              {recentlyFinished && (
-                <TouchableOpacity
-                  style={styles.discussionCard}
-                  onPress={() => navigation.navigate('Forum', { bookId: recentlyFinished.id })}
-                >
-                  <View style={styles.discussionHeader}>
-                    <View style={styles.discussionIconContainer}>
-                      <Text style={styles.discussionEmoji}>💬</Text>
-                    </View>
-                    <View style={styles.discussionTextContainer}>
-                      <Text style={styles.discussionTitle}>Just finished reading?</Text>
-                      <Text style={styles.discussionSubtitle}>See what people are saying about it</Text>
-                    </View>
-                  </View>
-                  <View style={styles.discussionCTA}>
-                    <Text style={styles.discussionCTAText}>Join Discussion</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
             </View>
           )}
 
-          <View style={styles.sectionWithExtraPadding}>
+          <View style={styles.cardSection}>
             <View style={styles.moodMatcherContainer}>
               <TouchableOpacity style={styles.moodMatcherCard} onPress={onMoodMatcher}>
                 <View style={styles.moodMatcherBackground}>
@@ -161,17 +152,30 @@ const Home = ({ navigation }) => {
             </View>
           </View>
 
-          <View style={styles.sectionWithExtraPadding}>
+          {/* Combined Community Card */}
+          <View style={styles.cardSection}>
             <View style={styles.communityContainer}>
-              <TouchableOpacity style={styles.communityCard} onPress={onJoinCommunity}>
-                <View style={styles.communityGradient}>
-                  <View style={styles.communityContent}>
-                    <View style={styles.communityText}>
-                      <Text style={styles.communityTitleNew}>Book Community</Text>
-                      <Text style={styles.communityDescNew}>Connect with fellow readers, share insights, and discover new literary adventures together</Text>
+              <TouchableOpacity style={styles.combinedCommunityCard} onPress={onJoinCommunity}>
+                <View style={styles.combinedCommunityContent}>
+                  <View style={styles.communityMainSection}>
+                    <View style={styles.communityIconLarge}>
+                      <Text style={styles.communityEmojiLarge}>🎤</Text>
                     </View>
-                    <View style={styles.communityIcon}>
-                      <Text style={styles.communityEmoji}>🎤</Text>
+                    <View style={styles.communityTextSection}>
+                      <Text style={styles.communityMainTitle}>Book Community</Text>
+                      <Text style={styles.communityMainDesc}>Connect with fellow readers and share insights</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.communityDivider} />
+
+                  <View style={styles.discussionSection}>
+                    <View style={styles.discussionIconSmall}>
+                      <Text style={styles.discussionEmojiSmall}>💬</Text>
+                    </View>
+                    <View style={styles.discussionTextSection}>
+                      <Text style={styles.discussionTitleSmall}>Just finished a book?</Text>
+                      <Text style={styles.discussionSubtitleSmall}>Join discussions and see what others think</Text>
                     </View>
                   </View>
                 </View>
@@ -180,7 +184,7 @@ const Home = ({ navigation }) => {
           </View>
 
           <View style={styles.statsSection}>
-            <Text style={styles.statsSectionTitle}>Your Reading Stats</Text>
+            <Text style={styles.statsSectionTitle}>Your Reading Journey</Text>
             <View style={styles.statsCard}>
               {!hasBooks ? (
                 // Empty state for new users
@@ -204,35 +208,62 @@ const Home = ({ navigation }) => {
               ) : (
                 // Active stats for users with books
                 <View style={styles.activeStatsContainer}>
-                  <View style={styles.statRow}>
-                    <View style={styles.statItem}>
-                      <View style={styles.statIconContainer}>
-                        <Text style={styles.statIcon}>📚</Text>
+                  {/* Visual Graph Section */}
+                  <View style={styles.statsGraphSection}>
+                    <View style={styles.activeGraph}>
+                      <View style={[styles.activeGraphBar, { height: '40%' }]}>
+                        <View style={styles.graphBarFill} />
                       </View>
-                      <View style={styles.statInfo}>
-                        <Text style={styles.statNumber}>{readingStats.booksThisYear}</Text>
-                        <Text style={styles.statLabel}>Books This Year</Text>
+                      <View style={[styles.activeGraphBar, { height: '65%' }]}>
+                        <View style={styles.graphBarFill} />
                       </View>
+                      <View style={[styles.activeGraphBar, { height: '30%' }]}>
+                        <View style={styles.graphBarFill} />
+                      </View>
+                      <View style={[styles.activeGraphBar, { height: '80%' }]}>
+                        <View style={styles.graphBarFill} />
+                      </View>
+                      <View style={[styles.activeGraphBar, { height: '45%' }]}>
+                        <View style={styles.graphBarFill} />
+                      </View>
+                      <View style={[styles.activeGraphBar, { height: '90%' }]}>
+                        <View style={styles.graphBarFill} />
+                      </View>
+                    </View>
+                    <View style={styles.graphLabels}>
+                      <Text style={styles.graphLabel}>J</Text>
+                      <Text style={styles.graphLabel}>F</Text>
+                      <Text style={styles.graphLabel}>M</Text>
+                      <Text style={styles.graphLabel}>A</Text>
+                      <Text style={styles.graphLabel}>M</Text>
+                      <Text style={styles.graphLabel}>J</Text>
                     </View>
                   </View>
 
-                  <View style={styles.statDivider} />
+                  {/* Stats Grid */}
+                  <View style={styles.statsGrid}>
+                    <View style={styles.statGridItem}>
+                      <View style={styles.statGridIconContainer}>
+                        <Text style={styles.statGridIcon}>📚</Text>
+                      </View>
+                      <Text style={styles.statGridNumber}>{readingStats.booksThisYear}</Text>
+                      <Text style={styles.statGridLabel}>Books Read</Text>
+                    </View>
 
-                  <View style={styles.statRow}>
-                    <View style={styles.statItem}>
-                      <View style={styles.statIconContainer}>
-                        <Text style={styles.statIcon}>🌍</Text>
+                    <View style={styles.statGridDivider} />
+
+                    <View style={styles.statGridItem}>
+                      <View style={styles.statGridIconContainer}>
+                        <Text style={styles.statGridIcon}>🌍</Text>
                       </View>
-                      <View style={styles.statInfo}>
-                        <Text style={styles.statNumber}>{readingStats.countriesRepresented.length}</Text>
-                        <Text style={styles.statLabel}>Countries</Text>
-                      </View>
+                      <Text style={styles.statGridNumber}>{readingStats.countriesRepresented.length}</Text>
+                      <Text style={styles.statGridLabel}>Countries</Text>
                     </View>
                   </View>
 
                   {readingStats.countriesRepresented.length > 0 && (
                     <View style={styles.countriesSection}>
-                      <Text style={styles.countriesLabel}>Reading from around the world:</Text>
+                      <Text style={styles.countriesLabel}>EXPLORING THE WORLD</Text>
                       <View style={styles.countriesList}>
                         {readingStats.countriesRepresented.map((country, index) => (
                           <View key={index} style={styles.countryTag}>
@@ -367,9 +398,8 @@ const styles = StyleSheet.create({
   addBooksEmojiLarge: {
     fontSize: 36,
   },
-  sectionWithExtraPadding: {
-    marginBottom: 16,
-    marginTop: 8,
+  cardSection: {
+    marginBottom: 20,
   },
   moodMatcherContainer: {
     paddingHorizontal: 20,
@@ -497,17 +527,103 @@ const styles = StyleSheet.create({
   communityEmoji: {
     fontSize: 20,
   },
+  // Combined Community Card Styles
+  combinedCommunityCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  combinedCommunityContent: {
+    padding: 20,
+    gap: 20,
+  },
+  communityMainSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  communityIconLarge: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#F6F4F1',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  communityEmojiLarge: {
+    fontSize: 28,
+  },
+  communityTextSection: {
+    flex: 1,
+    gap: 6,
+  },
+  communityMainTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: 0.2,
+  },
+  communityMainDesc: {
+    fontSize: 14,
+    color: '#71727A',
+    lineHeight: 20,
+    letterSpacing: 0.1,
+  },
+  communityDivider: {
+    height: 1,
+    backgroundColor: '#E8E6E3',
+  },
+  discussionSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  discussionIconSmall: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#7CA2E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  discussionEmojiSmall: {
+    fontSize: 22,
+  },
+  discussionTextSection: {
+    flex: 1,
+    gap: 4,
+  },
+  discussionTitleSmall: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: 0.2,
+  },
+  discussionSubtitleSmall: {
+    fontSize: 13,
+    color: '#71727A',
+    lineHeight: 18,
+    letterSpacing: 0.1,
+  },
   statsSection: {
     paddingHorizontal: 20,
-    marginTop: 32,
+    marginTop: 12,
     marginBottom: 24,
   },
   statsSectionTitle: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '700',
     color: '#481825',
     marginBottom: 20,
-    letterSpacing: -0.3,
+    letterSpacing: -0.5,
   },
   statsCard: {
     backgroundColor: '#FFFFFF',
@@ -586,36 +702,81 @@ const styles = StyleSheet.create({
     paddingBottom: 26,
   },
   currentlyReadingHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
   },
   currentlyReadingLabel: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 11,
+    fontWeight: '700',
     color: '#71727A',
-    letterSpacing: 0.5,
+    letterSpacing: 1.2,
+  },
+  currentlyReadingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F6F4F1',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+    gap: 6,
+  },
+  pulseIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#DF6A49',
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#481825',
+    letterSpacing: 0.3,
   },
   currentlyReadingContent: {
     flexDirection: 'row',
     gap: 18,
   },
   bookCoverFrame: {
-    width: 100,
-    height: 150,
-    borderRadius: 8,
+    width: 110,
+    height: 160,
+    borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: '#F6F4F1',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    position: 'relative',
   },
   bookCover: {
     width: '100%',
     height: '100%',
+  },
+  coverOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 8,
+  },
+  countryBadge: {
+    backgroundColor: 'rgba(72, 24, 37, 0.9)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  countryBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
   bookDetails: {
     flex: 1,
@@ -623,108 +784,174 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   bookTitle: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: '700',
     color: '#481825',
     letterSpacing: 0.2,
-    lineHeight: 24,
+    lineHeight: 26,
   },
   bookAuthor: {
     fontSize: 14,
     color: '#71727A',
     letterSpacing: 0.1,
+    fontWeight: '500',
   },
   progressSection: {
-    marginTop: 16,
-    gap: 6,
+    marginTop: 20,
+    gap: 10,
+  },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  progressLabel: {
+    fontSize: 11,
+    color: '#71727A',
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  progressPercentage: {
+    fontSize: 16,
+    color: '#481825',
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   progressBar: {
-    height: 8,
+    height: 10,
     backgroundColor: '#F6F4F1',
-    borderRadius: 4,
+    borderRadius: 6,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#481825',
-    borderRadius: 4,
-  },
-  progressText: {
-    fontSize: 12,
-    color: '#71727A',
-    fontWeight: '600',
+    backgroundColor: '#DF6A49',
+    borderRadius: 6,
   },
   // Active Stats Styles
   activeStatsContainer: {
-    gap: 24,
+    gap: 28,
   },
-  statRow: {
+  statsGraphSection: {
+    gap: 12,
+  },
+  activeGraph: {
     flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    height: 120,
+    paddingHorizontal: 10,
+    backgroundColor: '#F6F4F1',
+    borderRadius: 12,
+    paddingVertical: 16,
+    gap: 8,
   },
-  statItem: {
+  activeGraphBar: {
+    flex: 1,
+    backgroundColor: '#E8E6E3',
+    borderRadius: 6,
+    minHeight: 20,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  graphBarFill: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '100%',
+    backgroundColor: '#DF6A49',
+    borderRadius: 6,
+  },
+  graphLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  },
+  graphLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#71727A',
+    letterSpacing: 0.5,
+  },
+  statsGrid: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
-    flex: 1,
-  },
-  statIconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
     backgroundColor: '#F6F4F1',
+    borderRadius: 16,
+    padding: 20,
+  },
+  statGridItem: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 12,
+  },
+  statGridIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  statIcon: {
-    fontSize: 30,
+  statGridIcon: {
+    fontSize: 28,
   },
-  statInfo: {
-    gap: 6,
-    flex: 1,
-  },
-  statNumber: {
-    fontSize: 34,
+  statGridNumber: {
+    fontSize: 32,
     fontWeight: '700',
     color: '#481825',
     letterSpacing: -0.5,
   },
-  statLabel: {
-    fontSize: 15,
-    color: '#71727A',
-    fontWeight: '500',
-    letterSpacing: 0.2,
-  },
-  statDivider: {
-    height: 1,
-    backgroundColor: '#E8E6E3',
-    marginVertical: 8,
-  },
-  countriesSection: {
-    marginTop: 12,
-    gap: 14,
-  },
-  countriesLabel: {
+  statGridLabel: {
     fontSize: 13,
     color: '#71727A',
     fontWeight: '600',
     letterSpacing: 0.2,
   },
+  statGridDivider: {
+    width: 1,
+    height: 80,
+    backgroundColor: '#E8E6E3',
+    marginHorizontal: 20,
+  },
+  countriesSection: {
+    marginTop: 4,
+    gap: 16,
+  },
+  countriesLabel: {
+    fontSize: 10,
+    color: '#71727A',
+    fontWeight: '700',
+    letterSpacing: 1.2,
+  },
   countriesList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 10,
   },
   countryTag: {
     backgroundColor: '#F6F4F1',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#E8E6E3',
   },
   countryText: {
     fontSize: 12,
     color: '#481825',
     fontWeight: '600',
-    letterSpacing: 0.1,
+    letterSpacing: 0.2,
   },
   // Discussion Card Styles
   discussionCard: {

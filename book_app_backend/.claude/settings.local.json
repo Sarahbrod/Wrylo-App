@@ -21,7 +21,12 @@
       "Bash(do echo \"=== $file ===\")",
       "Bash(tail:*)",
       "Bash(done)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Read(//Users/sarahbrodrick/Desktop/Wrylo_App/**)",
+      "Bash(awk:*)",
+      "Bash(kill:*)",
+      "Bash(timeout 30 npx react-native start:*)",
+      "Bash(lsof:*)"
     ],
     "deny": []
   }

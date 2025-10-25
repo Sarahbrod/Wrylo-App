@@ -273,8 +273,10 @@ const scoreBooks = (books, moodData, energyMap, genreMap, depthMap) => {
       reasons.push('Popular choice');
     }
 
-    // Generate match percentage
-    const matchPercentage = Math.min(95, Math.max(60, Math.round(score)));
+    // Generate match percentage based on normalized score
+    // Maximum theoretical score is ~105, normalize to 0-98 range
+    const normalizedScore = Math.min(100, (score / 105) * 100);
+    const matchPercentage = Math.round(Math.min(98, normalizedScore));
 
     return {
       ...book,
@@ -404,13 +406,9 @@ const extractMoodTags = (book, moodData) => {
  * Generate a human-readable mood summary
  */
 const generateMoodSummary = (energy, genre, depth, energyMap, genreMap, depthMap) => {
-  const energyDesc = energyMap.description;
-  const genreDesc = genreMap.description;
-  const depthDesc = depthMap.description;
-
   return {
-    title: `Books for your ${energy.title.toLowerCase()} mood`,
-    description: `Based on your preferences, we've curated a selection of ${depthDesc}, ${energyDesc} ${genreDesc} books perfect for your current reading vibe.`,
+    title: `Your ${energy.title} Reading Match`,
+    description: `Curated ${genre.title} picks that match your current vibe`,
     emoji: `${energy.emoji} ${genre.emoji} ${depth.emoji}`,
     tags: [
       { label: energy.title, color: energy.color },
@@ -421,19 +419,125 @@ const generateMoodSummary = (energy, genre, depth, energyMap, genreMap, depthMap
 };
 
 /**
+ * Build expanded search queries with more variety for refreshing recommendations
+ */
+const buildExpandedSearchQueries = (genreMap, energyMap, depthMap) => {
+  const queries = [];
+
+  // Use ALL genre search terms (not just first 2)
+  genreMap.searchTerms.forEach(term => {
+    queries.push({
+      type: 'subject',
+      query: term,
+      weight: 2.0
+    });
+  });
+
+  // More diverse genre + energy combinations
+  genreMap.searchTerms.forEach(genreTerm => {
+    energyMap.keywords.forEach(energyKeyword => {
+      queries.push({
+        type: 'general',
+        query: `${genreTerm} ${energyKeyword}`,
+        weight: 1.5
+      });
+    });
+  });
+
+  // More depth combinations
+  genreMap.searchTerms.forEach(genreTerm => {
+    depthMap.keywords.forEach(depthKeyword => {
+      queries.push({
+        type: 'general',
+        query: `${genreTerm} ${depthKeyword}`,
+        weight: 1.2
+      });
+    });
+  });
+
+  // Add some randomized category searches
+  genreMap.categories.forEach(category => {
+    queries.push({
+      type: 'subject',
+      query: category,
+      weight: 1.8
+    });
+  });
+
+  return queries;
+};
+
+/**
+ * Fetch books from queries with expanded results
+ */
+const fetchBooksFromQueriesExpanded = async (queries, maxBooksPerQuery = 25) => {
+  const bookPromises = queries.map(async ({ type, query }) => {
+    try {
+      if (type === 'subject') {
+        return await searchBooksByField(query, 'subject', maxBooksPerQuery);
+      } else {
+        return await searchBooks(query, maxBooksPerQuery);
+      }
+    } catch (error) {
+      console.error(`Query failed for "${query}":`, error);
+      return [];
+    }
+  });
+
+  const results = await Promise.all(bookPromises);
+  return results.flat();
+};
+
+/**
  * Refresh recommendations with different results
- * (Uses same criteria but skips already seen books)
+ * (Uses same criteria but fetches more books and skips already seen ones)
  */
 export const refreshRecommendations = async (moodData, excludeBookIds = []) => {
-  const results = await getRecommendations(moodData);
+  try {
+    const { energy, genre, depth } = moodData;
 
-  // Filter out already seen books
-  const filteredRecommendations = results.recommendations.filter(
-    book => !excludeBookIds.includes(book.googleBooksId)
-  );
+    if (!energy || !genre || !depth) {
+      throw new Error('Invalid mood data');
+    }
 
-  return {
-    ...results,
-    recommendations: filteredRecommendations
-  };
+    // Get mood mappings
+    const energyMap = MOOD_MAPPINGS.energy[energy.id];
+    const genreMap = MOOD_MAPPINGS.genre[genre.id];
+    const depthMap = MOOD_MAPPINGS.depth[depth.id];
+
+    // Build expanded search queries with more variety
+    const searchQueries = buildExpandedSearchQueries(genreMap, energyMap, depthMap);
+
+    // Fetch MORE books per query to get fresh results
+    const allBooks = await fetchBooksFromQueriesExpanded(searchQueries, 25);
+
+    // Remove duplicates
+    const uniqueBooks = removeDuplicateBooks(allBooks);
+
+    // Filter out already seen books FIRST
+    const unseenBooks = uniqueBooks.filter(
+      book => !excludeBookIds.includes(book.googleBooksId)
+    );
+
+    // Score and rank the unseen books
+    const scoredBooks = scoreBooks(unseenBooks, moodData, energyMap, genreMap, depthMap);
+
+    // Sort by score and get top recommendations
+    const topRecommendations = scoredBooks
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 10);
+
+    // Generate mood summary
+    const moodSummary = generateMoodSummary(energy, genre, depth, energyMap, genreMap, depthMap);
+
+    return {
+      recommendations: topRecommendations,
+      moodSummary,
+      totalFound: scoredBooks.length,
+      moodData
+    };
+  } catch (error) {
+    console.error('Refresh recommendations error:', error);
+    throw error;
+  }
 };

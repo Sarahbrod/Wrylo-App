@@ -21,4 +21,10 @@ urlpatterns = [
     path('library/', views.UserLibraryView.as_view(), name='user_library'),
     path('library/<int:pk>/', views.UserLibraryDetailView.as_view(), name='user_library_detail'),
     path('library/add-external/', views.add_external_book_to_library, name='add_external_book'),
+
+    # Mood-based recommendation endpoints
+    path('recommendations/mood/', views.get_mood_recommendations, name='mood_recommendations'),
+    path('recommendations/saved/', views.get_saved_recommendations, name='saved_recommendations'),
+    path('recommendations/<int:recommendation_id>/dismiss/', views.dismiss_recommendation, name='dismiss_recommendation'),
+    path('recommendations/<int:recommendation_id>/save/', views.save_recommendation, name='save_recommendation'),
 ]

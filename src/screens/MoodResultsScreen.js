@@ -8,7 +8,8 @@ import {
   Image,
   ActivityIndicator,
   Dimensions,
-  Alert
+  Alert,
+  Linking
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,12 +19,13 @@ import { getRecommendations, refreshRecommendations } from '../services/recommen
 const { width } = Dimensions.get('window');
 
 const MoodResultsScreen = ({ route, navigation }) => {
-  const { moodData } = route.params || {};
+  const { moodData, sourceTab } = route.params || {};
   const [recommendations, setRecommendations] = useState([]);
   const [moodSummary, setMoodSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [dismissedBooks, setDismissedBooks] = useState([]);
+  const [bookStatuses, setBookStatuses] = useState({});
 
   const [fontsLoaded] = useFonts({
     LibreBaskerville_400Regular,
@@ -66,7 +68,16 @@ const MoodResultsScreen = ({ route, navigation }) => {
   };
 
   const handleRetakeQuiz = () => {
-    navigation.navigate('MoodFlow');
+    navigation.navigate('MoodFlow', { sourceTab });
+  };
+
+  const handleClose = () => {
+    if (sourceTab) {
+      // Navigate to Main tab navigator with the specific tab
+      navigation.navigate('Main', { screen: sourceTab });
+    } else {
+      navigation.goBack();
+    }
   };
 
   const handleAddToLibrary = (book) => {
@@ -86,6 +97,37 @@ const MoodResultsScreen = ({ route, navigation }) => {
     setRecommendations(recommendations.filter(book => book.googleBooksId !== bookId));
   };
 
+  const handleBuyBook = async (book) => {
+    // Try to open Google Books purchase page
+    const googleBooksUrl = `https://books.google.com/books?id=${book.googleBooksId}`;
+
+    try {
+      const supported = await Linking.canOpenURL(googleBooksUrl);
+      if (supported) {
+        await Linking.openURL(googleBooksUrl);
+      } else {
+        Alert.alert('Error', 'Unable to open book purchase page');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Unable to open book purchase page');
+    }
+  };
+
+  const handleCategorySelect = (bookId, category) => {
+    setBookStatuses({
+      ...bookStatuses,
+      [bookId]: category
+    });
+
+    // Show feedback
+    const categoryLabels = {
+      'want': 'Want to Read',
+      'reading': 'Currently Reading',
+      'finished': 'Finished'
+    };
+    Alert.alert('Added!', `Marked as "${categoryLabels[category]}"`);
+  };
+
   const renderMoodSummary = () => {
     if (!moodSummary) return null;
 
@@ -101,9 +143,9 @@ const MoodResultsScreen = ({ route, navigation }) => {
           {moodSummary.tags.map((tag, index) => (
             <View
               key={index}
-              style={[styles.moodTag, { backgroundColor: tag.color + '20', borderColor: tag.color }]}
+              style={styles.moodTag}
             >
-              <Text style={[styles.moodTagText, { color: tag.color }]}>{tag.label}</Text>
+              <Text style={styles.moodTagText}>{tag.label}</Text>
             </View>
           ))}
         </View>
@@ -119,14 +161,17 @@ const MoodResultsScreen = ({ route, navigation }) => {
             onPress={handleRefresh}
             disabled={refreshing}
           >
-            <Ionicons
-              name="shuffle"
-              size={18}
-              color="#FFFFFF"
-              style={refreshing && styles.spinning}
-            />
+            {refreshing ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Ionicons
+                name="shuffle"
+                size={18}
+                color="#FFFFFF"
+              />
+            )}
             <Text style={styles.refreshButtonText}>
-              {refreshing ? 'Loading...' : 'More Books'}
+              {refreshing ? 'Finding Books...' : 'More Books'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -135,7 +180,10 @@ const MoodResultsScreen = ({ route, navigation }) => {
   };
 
   const renderBookCard = (book, index) => {
-    const matchColor = book.matchPercentage >= 80 ? '#10B981' : book.matchPercentage >= 70 ? '#7CA2E0' : '#F59E0B';
+    // Brand color matching: green for high match, blue for good, orange for moderate
+    const matchColor = book.matchPercentage >= 85 ? '#4CAF50' : book.matchPercentage >= 75 ? '#89A8E2' : '#DF6B4B';
+    const currentStatus = bookStatuses[book.googleBooksId];
+    const showMatchBadge = book.matchPercentage >= 70; // Only show if meaningful
 
     return (
       <View key={book.googleBooksId || index} style={styles.bookCard}>
@@ -153,10 +201,12 @@ const MoodResultsScreen = ({ route, navigation }) => {
               style={styles.bookCover}
               resizeMode="cover"
             />
-            {/* Match Badge */}
-            <View style={[styles.matchBadge, { backgroundColor: matchColor }]}>
-              <Text style={styles.matchBadgeText}>{book.matchPercentage}%</Text>
-            </View>
+            {/* Match Badge - only show if percentage is meaningful */}
+            {showMatchBadge && (
+              <View style={[styles.matchBadge, { backgroundColor: matchColor }]}>
+                <Text style={styles.matchBadgeText}>{book.matchPercentage}%</Text>
+              </View>
+            )}
           </View>
 
           {/* Book Info */}
@@ -191,7 +241,7 @@ const MoodResultsScreen = ({ route, navigation }) => {
             {/* Match Reasons */}
             {book.matchReasons && book.matchReasons.length > 0 && (
               <View style={styles.reasonsContainer}>
-                <Ionicons name="checkmark-circle" size={14} color="#7CA2E0" />
+                <Ionicons name="checkmark-circle" size={14} color="#89A8E2" />
                 <Text style={styles.reasonText} numberOfLines={1}>
                   {book.matchReasons.join(' • ')}
                 </Text>
@@ -220,20 +270,86 @@ const MoodResultsScreen = ({ route, navigation }) => {
 
         {/* Action Buttons */}
         <View style={styles.bookActions}>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => handleAddToLibrary(book)}
-          >
-            <Ionicons name="add-circle" size={20} color="#FFFFFF" />
-            <Text style={styles.addButtonText}>Add to Library</Text>
-          </TouchableOpacity>
+          {/* Category Buttons Row */}
+          <View style={styles.categoryButtons}>
+            <TouchableOpacity
+              style={[
+                styles.categoryButton,
+                currentStatus === 'want' && styles.categoryButtonActive
+              ]}
+              onPress={() => handleCategorySelect(book.googleBooksId, 'want')}
+            >
+              <Ionicons
+                name={currentStatus === 'want' ? 'bookmark' : 'bookmark-outline'}
+                size={16}
+                color={currentStatus === 'want' ? '#89A8E2' : '#71727A'}
+              />
+              <Text style={[
+                styles.categoryButtonText,
+                currentStatus === 'want' && styles.categoryButtonTextActive
+              ]}>
+                Want
+              </Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.dismissButton}
-            onPress={() => handleDismiss(book.googleBooksId)}
-          >
-            <Ionicons name="close-circle-outline" size={20} color="#71727A" />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.categoryButton,
+                currentStatus === 'reading' && styles.categoryButtonActive
+              ]}
+              onPress={() => handleCategorySelect(book.googleBooksId, 'reading')}
+            >
+              <Ionicons
+                name={currentStatus === 'reading' ? 'book' : 'book-outline'}
+                size={16}
+                color={currentStatus === 'reading' ? '#89A8E2' : '#71727A'}
+              />
+              <Text style={[
+                styles.categoryButtonText,
+                currentStatus === 'reading' && styles.categoryButtonTextActive
+              ]}>
+                Reading
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.categoryButton,
+                currentStatus === 'finished' && styles.categoryButtonActive
+              ]}
+              onPress={() => handleCategorySelect(book.googleBooksId, 'finished')}
+            >
+              <Ionicons
+                name={currentStatus === 'finished' ? 'checkmark-circle' : 'checkmark-circle-outline'}
+                size={16}
+                color={currentStatus === 'finished' ? '#89A8E2' : '#71727A'}
+              />
+              <Text style={[
+                styles.categoryButtonText,
+                currentStatus === 'finished' && styles.categoryButtonTextActive
+              ]}>
+                Done
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Buy Button and Dismiss */}
+          <View style={styles.actionButtonsRow}>
+            <TouchableOpacity
+              style={styles.buyButton}
+              onPress={() => handleBuyBook(book)}
+            >
+              <Ionicons name="cart-outline" size={18} color="#FFFFFF" />
+              <Text style={styles.buyButtonText}>Buy Book</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.dismissButton}
+              onPress={() => handleDismiss(book.googleBooksId)}
+            >
+              <Ionicons name="close-circle-outline" size={22} color="#71727A" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -277,7 +393,7 @@ const MoodResultsScreen = ({ route, navigation }) => {
   if (!fontsLoaded) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#7CA2E0" />
+        <ActivityIndicator size="large" color="#89A8E2" />
       </View>
     );
   }
@@ -290,7 +406,9 @@ const MoodResultsScreen = ({ route, navigation }) => {
             <Ionicons name="arrow-back" size={24} color="#2E0A09" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Recommendations</Text>
-          <View style={styles.placeholder} />
+          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+            <Ionicons name="close" size={24} color="#2E0A09" />
+          </TouchableOpacity>
         </View>
         {renderEmptyState()}
       </View>
@@ -305,12 +423,14 @@ const MoodResultsScreen = ({ route, navigation }) => {
           <Ionicons name="arrow-back" size={24} color="#2E0A09" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Your Recommendations</Text>
-        <View style={styles.placeholder} />
+        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+          <Ionicons name="close" size={24} color="#2E0A09" />
+        </TouchableOpacity>
       </View>
 
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#7CA2E0" />
+          <ActivityIndicator size="large" color="#89A8E2" />
           <Text style={styles.loadingText}>Finding perfect books for you...</Text>
         </View>
       ) : (
@@ -358,8 +478,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 60,
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 24,
     backgroundColor: '#F6F4F1',
+    zIndex: 10,
+    gap: 16,
   },
   backButton: {
     width: 40,
@@ -375,24 +497,38 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
     color: '#2E0A09',
     fontFamily: 'LibreBaskerville_700Bold',
+    flex: 1,
+    textAlign: 'center',
   },
-  placeholder: {
+  closeButton: {
     width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 16,
+    paddingHorizontal: 40,
   },
   loadingText: {
     fontSize: 16,
     color: '#71727A',
     fontFamily: 'LibreBaskerville_400Regular',
+    textAlign: 'center',
   },
   scrollView: {
     flex: 1,
@@ -402,55 +538,58 @@ const styles = StyleSheet.create({
   },
   moodSummaryContainer: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 24,
+    borderRadius: 16,
+    padding: 20,
     marginBottom: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
   },
   moodHeader: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   moodEmojis: {
-    fontSize: 48,
-    marginBottom: 12,
+    fontSize: 40,
+    marginBottom: 10,
   },
   moodTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
-    color: '#481825',
+    color: '#2E0A09',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
     fontFamily: 'LibreBaskerville_700Bold',
   },
   moodDescription: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#71727A',
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 20,
     fontFamily: 'LibreBaskerville_400Regular',
   },
   moodTags: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 10,
-    marginBottom: 20,
+    gap: 8,
+    marginBottom: 16,
   },
   moodTag: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1.5,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    backgroundColor: '#89A8E2' + '20',
+    borderColor: '#89A8E2',
   },
   moodTagText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
+    color: '#89A8E2',
   },
   actionsRow: {
     flexDirection: 'row',
@@ -462,29 +601,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F6F4F1',
-    paddingVertical: 14,
-    borderRadius: 12,
-    gap: 8,
-    borderWidth: 1.5,
-    borderColor: '#E8E6E3',
+    paddingVertical: 12,
+    borderRadius: 10,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   retakeButtonText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#481825',
+    color: '#2E0A09',
   },
   refreshButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7CA2E0',
-    paddingVertical: 14,
-    borderRadius: 12,
-    gap: 8,
+    backgroundColor: '#89A8E2',
+    paddingVertical: 12,
+    borderRadius: 10,
+    gap: 6,
   },
   refreshButtonText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
   },
@@ -594,7 +733,7 @@ const styles = StyleSheet.create({
   },
   reasonText: {
     fontSize: 11,
-    color: '#7CA2E0',
+    color: '#89A8E2',
     fontWeight: '600',
     flex: 1,
   },
@@ -619,23 +758,56 @@ const styles = StyleSheet.create({
     color: '#71727A',
   },
   bookActions: {
-    flexDirection: 'row',
     borderTopWidth: 1,
     borderTopColor: '#F6F4F1',
     padding: 12,
-    gap: 12,
+    gap: 10,
   },
-  addButton: {
+  categoryButtons: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 8,
+  },
+  categoryButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#481825',
+    backgroundColor: '#F6F4F1',
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    gap: 4,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  categoryButtonActive: {
+    backgroundColor: '#EBF2FE',
+    borderColor: '#89A8E2',
+  },
+  categoryButtonText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#71727A',
+  },
+  categoryButtonTextActive: {
+    color: '#89A8E2',
+  },
+  actionButtonsRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  buyButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#89A8E2',
     paddingVertical: 12,
     borderRadius: 10,
-    gap: 8,
+    gap: 6,
   },
-  addButtonText: {
+  buyButtonText: {
     fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
