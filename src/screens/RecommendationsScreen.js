@@ -227,7 +227,7 @@ const RecommendationsScreen = ({ navigation }) => {
       <View style={styles.moodSection}>
         <TouchableOpacity
           style={styles.moodCard}
-          onPress={() => navigation.navigate('MoodFlow')}
+          onPress={() => navigation.navigate('MoodFlow', { sourceTab: 'Discover' })}
         >
           <View style={styles.moodContent}>
             <View style={styles.moodIconContainer}>

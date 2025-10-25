@@ -4,7 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, LibreBaskerville_400Regular, LibreBaskerville_700Bold } from '@expo-google-fonts/libre-baskerville';
 
-const MoodFlowScreen = ({ navigation }) => {
+const MoodFlowScreen = ({ navigation, route }) => {
+    const { sourceTab } = route.params || {};
     const [currentStep, setCurrentStep] = useState(1);
     const [moodData, setMoodData] = useState({
         energy: null,
@@ -61,7 +62,7 @@ const MoodFlowScreen = ({ navigation }) => {
         } else {
             // Complete the flow
             setTimeout(() => {
-                navigation.navigate('MoodResults', { moodData: newMoodData });
+                navigation.navigate('MoodResults', { moodData: newMoodData, sourceTab });
             }, 500);
         }
     };
@@ -117,14 +118,11 @@ const MoodFlowScreen = ({ navigation }) => {
                         onPress={() => handleSelection(1, option)}
                         activeOpacity={0.8}
                     >
-                        <LinearGradient
-                            colors={[option.color + '20', option.color + '10']}
-                            style={styles.optionGradient}
-                        >
+                        <View style={[styles.optionIconContainer, { backgroundColor: option.color + '20' }]}>
                             <Text style={styles.optionEmoji}>{option.emoji}</Text>
-                            <Text style={styles.optionTitle}>{option.title}</Text>
-                            <Text style={styles.optionSubtitle}>{option.subtitle}</Text>
-                        </LinearGradient>
+                        </View>
+                        <Text style={styles.optionTitle}>{option.title}</Text>
+                        <Text style={styles.optionSubtitle}>{option.subtitle}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -136,24 +134,22 @@ const MoodFlowScreen = ({ navigation }) => {
             <Text style={styles.stepTitle}>What genre calls to you?</Text>
             <Text style={styles.stepSubtitle}>Choose what matches your current mood</Text>
 
-            <ScrollView style={styles.scrollableOptions} showsVerticalScrollIndicator={false}>
-                <View style={styles.genreGrid}>
-                    {genreOptions.map((option) => (
-                        <TouchableOpacity
-                            key={option.id}
-                            style={[styles.genreCard, moodData.genre?.id === option.id && styles.selectedGenreCard]}
-                            onPress={() => handleSelection(2, option)}
-                            activeOpacity={0.8}
-                        >
-                            <View style={[styles.genreIconContainer, { backgroundColor: option.color + '20' }]}>
-                                <Text style={styles.genreEmoji}>{option.emoji}</Text>
-                            </View>
-                            <Text style={styles.genreTitle}>{option.title}</Text>
-                            <Text style={styles.genreSubtitle}>{option.subtitle}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </ScrollView>
+            <View style={styles.genreGrid}>
+                {genreOptions.map((option) => (
+                    <TouchableOpacity
+                        key={option.id}
+                        style={[styles.genreCard, moodData.genre?.id === option.id && styles.selectedGenreCard]}
+                        onPress={() => handleSelection(2, option)}
+                        activeOpacity={0.8}
+                    >
+                        <View style={[styles.genreIconContainer, { backgroundColor: option.color + '20' }]}>
+                            <Text style={styles.genreEmoji}>{option.emoji}</Text>
+                        </View>
+                        <Text style={styles.genreTitle}>{option.title}</Text>
+                        <Text style={styles.genreSubtitle}>{option.subtitle}</Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
         </View>
     );
 
@@ -170,14 +166,13 @@ const MoodFlowScreen = ({ navigation }) => {
                         onPress={() => handleSelection(3, option)}
                         activeOpacity={0.8}
                     >
-                        <LinearGradient
-                            colors={[option.color + '20', option.color + '10']}
-                            style={styles.depthGradient}
-                        >
+                        <View style={[styles.depthIconContainer, { backgroundColor: option.color + '20' }]}>
                             <Text style={styles.depthEmoji}>{option.emoji}</Text>
+                        </View>
+                        <View style={styles.depthTextContainer}>
                             <Text style={styles.depthTitle}>{option.title}</Text>
                             <Text style={styles.depthSubtitle}>{option.subtitle}</Text>
-                        </LinearGradient>
+                        </View>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -264,7 +259,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     progressStepActive: {
-        backgroundColor: '#7CA2E0',
+        backgroundColor: '#89A8E2',
     },
     progressStepText: {
         fontSize: 14,
@@ -281,78 +276,91 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     progressLineActive: {
-        backgroundColor: '#7CA2E0',
+        backgroundColor: '#89A8E2',
     },
     content: {
         flex: 1,
         paddingHorizontal: 20,
     },
     stepContainer: {
-        flex: 1,
-        minHeight: 400,
+        paddingBottom: 20,
     },
     stepTitle: {
-        fontSize: 28,
+        fontSize: 22,
         fontWeight: '700',
         fontFamily: 'LibreBaskerville_700Bold',
         color: '#2E0A09',
         textAlign: 'center',
-        marginBottom: 8,
+        marginBottom: 6,
     },
     stepSubtitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'LibreBaskerville_400Regular',
         color: '#71727A',
         textAlign: 'center',
-        marginBottom: 40,
-        lineHeight: 22,
+        marginBottom: 24,
+        lineHeight: 20,
     },
     optionsContainer: {
-        gap: 16,
+        gap: 12,
     },
     optionCard: {
         borderRadius: 16,
-        overflow: 'hidden',
         borderWidth: 2,
         borderColor: 'transparent',
+        backgroundColor: '#FFFFFF',
+        padding: 16,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 3,
     },
     selectedCard: {
-        borderColor: '#7CA2E0',
-        transform: [{ scale: 1.02 }],
+        borderColor: '#89A8E2',
+        borderWidth: 3,
+        shadowColor: '#89A8E2',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 6,
     },
-    optionGradient: {
-        padding: 24,
+    optionIconContainer: {
+        width: 56,
+        height: 56,
+        borderRadius: 28,
+        justifyContent: 'center',
         alignItems: 'center',
-    },
-    optionEmoji: {
-        fontSize: 48,
         marginBottom: 12,
     },
+    optionEmoji: {
+        fontSize: 28,
+    },
     optionTitle: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: '700',
         color: '#2E0A09',
         marginBottom: 4,
-    },
-    optionSubtitle: {
-        fontSize: 14,
-        color: '#71727A',
         textAlign: 'center',
     },
-    scrollableOptions: {
-        flex: 1,
+    optionSubtitle: {
+        fontSize: 12,
+        color: '#71727A',
+        textAlign: 'center',
     },
     genreGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 12,
         justifyContent: 'space-between',
+        paddingBottom: 20,
     },
     genreCard: {
         width: '48%',
         backgroundColor: '#FFFFFF',
         borderRadius: 16,
-        padding: 20,
+        padding: 12,
         alignItems: 'center',
         borderWidth: 2,
         borderColor: 'transparent',
@@ -361,60 +369,77 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 8,
         elevation: 2,
+        marginBottom: 6,
     },
     selectedGenreCard: {
-        borderColor: '#7CA2E0',
-        transform: [{ scale: 1.02 }],
+        borderColor: '#89A8E2',
+        borderWidth: 3,
+        shadowColor: '#89A8E2',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 6,
     },
     genreIconContainer: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: 44,
+        height: 44,
+        borderRadius: 22,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 12,
+        marginBottom: 10,
     },
     genreEmoji: {
-        fontSize: 24,
+        fontSize: 20,
     },
     genreTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '700',
         color: '#2E0A09',
-        marginBottom: 4,
+        marginBottom: 3,
         textAlign: 'center',
     },
     genreSubtitle: {
-        fontSize: 12,
+        fontSize: 11,
         color: '#71727A',
         textAlign: 'center',
     },
     depthCard: {
         borderRadius: 16,
-        overflow: 'hidden',
         borderWidth: 2,
         borderColor: 'transparent',
-    },
-    depthGradient: {
-        padding: 20,
+        backgroundColor: '#FFFFFF',
+        padding: 16,
         flexDirection: 'row',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 3,
+        gap: 14,
+    },
+    depthIconContainer: {
+        width: 56,
+        height: 56,
+        borderRadius: 28,
+        justifyContent: 'center',
         alignItems: 'center',
     },
     depthEmoji: {
-        fontSize: 32,
-        marginRight: 16,
+        fontSize: 28,
+    },
+    depthTextContainer: {
+        flex: 1,
     },
     depthTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '700',
         color: '#2E0A09',
-        marginBottom: 2,
-        flex: 1,
+        marginBottom: 4,
     },
     depthSubtitle: {
-        fontSize: 14,
+        fontSize: 13,
         color: '#71727A',
-        flex: 1,
     },
 });
 
