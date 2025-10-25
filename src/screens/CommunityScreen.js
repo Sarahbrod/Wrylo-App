@@ -8,19 +8,33 @@ const CommunityScreen = () => {
       id: 1,
       name: 'Mystery Lovers',
       members: 234,
-      image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop'
+      emoji: '🔍',
+      gradient: ['#4A148C', '#7B1FA2'],
+      image: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=400&fit=crop'
     },
     {
       id: 2,
       name: 'Sci-Fi Enthusiasts',
       members: 187,
-      image: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=400&h=400&fit=crop'
+      emoji: '🚀',
+      gradient: ['#0D47A1', '#1976D2'],
+      image: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=400&fit=crop'
     },
     {
       id: 3,
       name: 'Romance Readers',
       members: 456,
-      image: 'https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=400&h=400&fit=crop'
+      emoji: '💕',
+      gradient: ['#C2185B', '#E91E63'],
+      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop'
+    },
+    {
+      id: 4,
+      name: 'Fantasy Realm',
+      members: 312,
+      emoji: '⚔️',
+      gradient: ['#1B5E20', '#388E3C'],
+      image: 'https://images.unsplash.com/photo-1618328474085-3628ea603e47?w=400&h=400&fit=crop'
     },
   ];
 
@@ -77,10 +91,17 @@ const CommunityScreen = () => {
                   style={styles.groupImage}
                   resizeMode="cover"
                 />
+                <LinearGradient
+                  colors={['transparent', 'rgba(0,0,0,0.7)']}
+                  style={styles.groupImageOverlay}
+                />
               </View>
               <View style={styles.groupInfo}>
                 <Text style={styles.groupName}>{group.name}</Text>
-                <Text style={styles.groupMembers}>{group.members} members</Text>
+                <View style={styles.groupMembersRow}>
+                  <Ionicons name="people" size={14} color="#7CA2E0" />
+                  <Text style={styles.groupMembers}>{group.members} members</Text>
+                </View>
               </View>
             </TouchableOpacity>
           ))}
@@ -144,7 +165,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   previewSection: {
-    marginBottom: 32,
+    marginBottom: 16,
   },
   previewHeader: {
     flexDirection: 'row',
@@ -171,56 +192,92 @@ const styles = StyleSheet.create({
   groupsScrollContainer: {
     paddingHorizontal: 20,
     gap: 16,
-    paddingVertical: 8,
+    paddingVertical: 16,
   },
   groupCard: {
-    width: 160,
+    width: 180,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 12,
+    borderRadius: 20,
+    padding: 14,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
     elevation: 3,
   },
   groupImageContainer: {
     width: '100%',
-    height: 120,
+    height: 140,
     backgroundColor: '#F6F4F1',
-    borderRadius: 8,
+    borderRadius: 12,
     overflow: 'hidden',
-    marginBottom: 8,
+    marginBottom: 12,
+    position: 'relative',
   },
   groupImage: {
     width: '100%',
     height: '100%',
   },
+  groupImageOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '50%',
+  },
+  groupEmojiContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  groupEmojiGradient: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  groupEmoji: {
+    fontSize: 24,
+  },
   groupInfo: {
-    gap: 4,
+    gap: 6,
   },
   groupName: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '700',
     color: '#481825',
     textAlign: 'left',
-    marginBottom: 4,
     letterSpacing: 0.2,
+    lineHeight: 22,
+  },
+  groupMembersRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   groupMembers: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#71727A',
-    textAlign: 'left',
+    fontWeight: '600',
     letterSpacing: 0.1,
   },
   featuresContainer: {
     paddingHorizontal: 20,
-    paddingTop: 4,
+    paddingTop: 8,
     paddingBottom: 20,
-    gap: 12,
+    gap: 16,
   },
   featureCard: {
     flexDirection: 'row',
@@ -228,6 +285,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 18,
     borderRadius: 16,
+    marginHorizontal: 2,
+    marginVertical: 4,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

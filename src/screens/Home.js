@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const Home = ({ navigation }) => {
   // State to track if user has books and reading data
@@ -25,9 +26,9 @@ const Home = ({ navigation }) => {
 
   const [recentlyFinished] = useState({
     id: 2,
-    title: 'The Midnight Library',
-    author: 'Matt Haig',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1602190253i/52578297.jpg',
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385i/40121378.jpg',
   });
 
   const hasBooks = userBooks.length > 0;
@@ -152,36 +153,47 @@ const Home = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Combined Community Card */}
-          <View style={styles.cardSection}>
-            <View style={styles.communityContainer}>
-              <TouchableOpacity style={styles.combinedCommunityCard} onPress={onJoinCommunity}>
-                <View style={styles.combinedCommunityContent}>
-                  <View style={styles.communityMainSection}>
-                    <View style={styles.communityIconLarge}>
-                      <Text style={styles.communityEmojiLarge}>🎤</Text>
+          {/* Just Finished Reading Card */}
+          {recentlyFinished && (
+            <View style={styles.finishedSection}>
+              <View style={styles.cardSection}>
+                <TouchableOpacity
+                  style={styles.finishedBookCard}
+                  onPress={() => navigation.navigate('Forum', { bookId: recentlyFinished.id })}
+                >
+                  <View style={styles.finishedCardHeader}>
+                    <Text style={styles.finishedCardTitle}>Just Finished</Text>
+                    <Text style={styles.finishedCardSubtitle}>Share your thoughts with the community</Text>
+                  </View>
+
+                  <View style={styles.finishedBookPreview}>
+                    <View style={styles.finishedBookCoverFrame}>
+                      <Image
+                        source={{ uri: recentlyFinished.coverUrl }}
+                        style={styles.finishedBookCover}
+                        resizeMode="cover"
+                      />
                     </View>
-                    <View style={styles.communityTextSection}>
-                      <Text style={styles.communityMainTitle}>Book Community</Text>
-                      <Text style={styles.communityMainDesc}>Connect with fellow readers and share insights</Text>
+                    <View style={styles.finishedBookDetails}>
+                      <Text style={styles.finishedBookTitle} numberOfLines={2}>
+                        {recentlyFinished.title}
+                      </Text>
+                      <Text style={styles.finishedBookAuthor} numberOfLines={1}>
+                        by {recentlyFinished.author}
+                      </Text>
+                      <View style={styles.finishedBadge}>
+                        <Text style={styles.finishedBadgeText}>Finished Reading</Text>
+                      </View>
                     </View>
                   </View>
 
-                  <View style={styles.communityDivider} />
-
-                  <View style={styles.discussionSection}>
-                    <View style={styles.discussionIconSmall}>
-                      <Text style={styles.discussionEmojiSmall}>💬</Text>
-                    </View>
-                    <View style={styles.discussionTextSection}>
-                      <Text style={styles.discussionTitleSmall}>Just finished a book?</Text>
-                      <Text style={styles.discussionSubtitleSmall}>Join discussions and see what others think</Text>
-                    </View>
+                  <View style={styles.discussionCTA}>
+                    <Text style={styles.discussionCTAText}>Join the Discussion</Text>
                   </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          )}
 
           <View style={styles.statsSection}>
             <Text style={styles.statsSectionTitle}>Your Reading Journey</Text>
@@ -210,33 +222,55 @@ const Home = ({ navigation }) => {
                 <View style={styles.activeStatsContainer}>
                   {/* Visual Graph Section */}
                   <View style={styles.statsGraphSection}>
+                    <View style={styles.graphHeader}>
+                      <Text style={styles.graphTitle}>Books Read This Year</Text>
+                      <Text style={styles.graphSubtitle}>Monthly breakdown</Text>
+                    </View>
                     <View style={styles.activeGraph}>
-                      <View style={[styles.activeGraphBar, { height: '40%' }]}>
-                        <View style={styles.graphBarFill} />
+                      <View style={styles.graphBarContainer}>
+                        <View style={[styles.activeGraphBar, { height: '40%' }]}>
+                          <View style={styles.graphBarFill} />
+                        </View>
+                        <Text style={styles.graphBarCount}>2</Text>
                       </View>
-                      <View style={[styles.activeGraphBar, { height: '65%' }]}>
-                        <View style={styles.graphBarFill} />
+                      <View style={styles.graphBarContainer}>
+                        <View style={[styles.activeGraphBar, { height: '65%' }]}>
+                          <View style={styles.graphBarFill} />
+                        </View>
+                        <Text style={styles.graphBarCount}>3</Text>
                       </View>
-                      <View style={[styles.activeGraphBar, { height: '30%' }]}>
-                        <View style={styles.graphBarFill} />
+                      <View style={styles.graphBarContainer}>
+                        <View style={[styles.activeGraphBar, { height: '30%' }]}>
+                          <View style={styles.graphBarFill} />
+                        </View>
+                        <Text style={styles.graphBarCount}>1</Text>
                       </View>
-                      <View style={[styles.activeGraphBar, { height: '80%' }]}>
-                        <View style={styles.graphBarFill} />
+                      <View style={styles.graphBarContainer}>
+                        <View style={[styles.activeGraphBar, { height: '80%' }]}>
+                          <View style={styles.graphBarFill} />
+                        </View>
+                        <Text style={styles.graphBarCount}>4</Text>
                       </View>
-                      <View style={[styles.activeGraphBar, { height: '45%' }]}>
-                        <View style={styles.graphBarFill} />
+                      <View style={styles.graphBarContainer}>
+                        <View style={[styles.activeGraphBar, { height: '45%' }]}>
+                          <View style={styles.graphBarFill} />
+                        </View>
+                        <Text style={styles.graphBarCount}>2</Text>
                       </View>
-                      <View style={[styles.activeGraphBar, { height: '90%' }]}>
-                        <View style={styles.graphBarFill} />
+                      <View style={styles.graphBarContainer}>
+                        <View style={[styles.activeGraphBar, { height: '90%' }]}>
+                          <View style={styles.graphBarFill} />
+                        </View>
+                        <Text style={styles.graphBarCount}>5</Text>
                       </View>
                     </View>
                     <View style={styles.graphLabels}>
-                      <Text style={styles.graphLabel}>J</Text>
-                      <Text style={styles.graphLabel}>F</Text>
-                      <Text style={styles.graphLabel}>M</Text>
-                      <Text style={styles.graphLabel}>A</Text>
-                      <Text style={styles.graphLabel}>M</Text>
-                      <Text style={styles.graphLabel}>J</Text>
+                      <Text style={styles.graphLabel}>Jan</Text>
+                      <Text style={styles.graphLabel}>Feb</Text>
+                      <Text style={styles.graphLabel}>Mar</Text>
+                      <Text style={styles.graphLabel}>Apr</Text>
+                      <Text style={styles.graphLabel}>May</Text>
+                      <Text style={styles.graphLabel}>Jun</Text>
                     </View>
                   </View>
 
@@ -247,7 +281,7 @@ const Home = ({ navigation }) => {
                         <Text style={styles.statGridIcon}>📚</Text>
                       </View>
                       <Text style={styles.statGridNumber}>{readingStats.booksThisYear}</Text>
-                      <Text style={styles.statGridLabel}>Books Read</Text>
+                      <Text style={styles.statGridLabel}>Books This Year</Text>
                     </View>
 
                     <View style={styles.statGridDivider} />
@@ -257,7 +291,7 @@ const Home = ({ navigation }) => {
                         <Text style={styles.statGridIcon}>🌍</Text>
                       </View>
                       <Text style={styles.statGridNumber}>{readingStats.countriesRepresented.length}</Text>
-                      <Text style={styles.statGridLabel}>Countries</Text>
+                      <Text style={styles.statGridLabel}>Countries Explored</Text>
                     </View>
                   </View>
 
@@ -527,91 +561,167 @@ const styles = StyleSheet.create({
   communityEmoji: {
     fontSize: 20,
   },
-  // Combined Community Card Styles
-  combinedCommunityCard: {
+  // Finished Book Card Styles
+  finishedSection: {
+    paddingHorizontal: 20,
+    marginBottom: 12,
+  },
+  finishedSectionTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#481825',
+    marginBottom: 16,
+    letterSpacing: -0.5,
+  },
+  finishedBookCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 5,
-  },
-  combinedCommunityContent: {
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
     padding: 20,
-    gap: 20,
-  },
-  communityMainSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: 16,
   },
-  communityIconLarge: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#F6F4F1',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  communityEmojiLarge: {
-    fontSize: 28,
-  },
-  communityTextSection: {
-    flex: 1,
+  finishedCardHeader: {
     gap: 6,
+    marginBottom: 4,
   },
-  communityMainTitle: {
-    fontSize: 18,
+  finishedCardTitle: {
+    fontSize: 20,
     fontWeight: '700',
     color: '#481825',
     letterSpacing: 0.2,
   },
-  communityMainDesc: {
+  finishedCardSubtitle: {
+    fontSize: 14,
+    color: '#71727A',
+    letterSpacing: 0.1,
+  },
+  finishedBookHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  finishedIconLarge: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#7CA2E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#7CA2E0',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  finishedEmojiLarge: {
+    fontSize: 32,
+  },
+  finishedTextSection: {
+    flex: 1,
+    gap: 6,
+  },
+  finishedMainTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: 0.2,
+  },
+  finishedMainDesc: {
     fontSize: 14,
     color: '#71727A',
     lineHeight: 20,
     letterSpacing: 0.1,
   },
-  communityDivider: {
-    height: 1,
-    backgroundColor: '#E8E6E3',
-  },
-  discussionSection: {
+  finishedBookPreview: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
+    gap: 16,
+    backgroundColor: '#F6F4F1',
+    padding: 16,
+    borderRadius: 12,
   },
-  discussionIconSmall: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#7CA2E0',
-    justifyContent: 'center',
-    alignItems: 'center',
+  finishedBookCoverFrame: {
+    width: 90,
+    height: 135,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#E8E6E3',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
   },
-  discussionEmojiSmall: {
-    fontSize: 22,
+  finishedBookCover: {
+    width: '100%',
+    height: '100%',
   },
-  discussionTextSection: {
+  finishedBookDetails: {
     flex: 1,
-    gap: 4,
+    justifyContent: 'center',
+    gap: 8,
   },
-  discussionTitleSmall: {
-    fontSize: 15,
+  finishedBookTitle: {
+    fontSize: 16,
     fontWeight: '700',
     color: '#481825',
-    letterSpacing: 0.2,
+    lineHeight: 22,
   },
-  discussionSubtitleSmall: {
+  finishedBookAuthor: {
     fontSize: 13,
     color: '#71727A',
-    lineHeight: 18,
-    letterSpacing: 0.1,
+    fontWeight: '500',
+  },
+  finishedBadge: {
+    backgroundColor: '#E3F2FD',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+    marginTop: 4,
+    borderWidth: 1.5,
+    borderColor: '#7CA2E0',
+  },
+  finishedBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#7CA2E0',
+    letterSpacing: 0.5,
+  },
+  discussionCTA: {
+    backgroundColor: '#7CA2E0',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#7CA2E0',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  discussionCTAText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 0.3,
   },
   statsSection: {
     paddingHorizontal: 20,
@@ -834,26 +944,54 @@ const styles = StyleSheet.create({
     gap: 28,
   },
   statsGraphSection: {
-    gap: 12,
+    gap: 16,
+  },
+  graphHeader: {
+    gap: 4,
+    marginBottom: 4,
+  },
+  graphTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: 0.2,
+  },
+  graphSubtitle: {
+    fontSize: 12,
+    color: '#71727A',
+    fontWeight: '500',
+    letterSpacing: 0.1,
   },
   activeGraph: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    height: 120,
+    height: 140,
     paddingHorizontal: 10,
     backgroundColor: '#F6F4F1',
     borderRadius: 12,
     paddingVertical: 16,
+    paddingTop: 24,
+    gap: 8,
+  },
+  graphBarContainer: {
+    flex: 1,
+    alignItems: 'center',
     gap: 8,
   },
   activeGraphBar: {
-    flex: 1,
+    width: '100%',
     backgroundColor: '#E8E6E3',
     borderRadius: 6,
     minHeight: 20,
     position: 'relative',
     overflow: 'hidden',
+  },
+  graphBarCount: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#481825',
+    letterSpacing: 0.2,
   },
   graphBarFill: {
     position: 'absolute',
@@ -917,6 +1055,13 @@ const styles = StyleSheet.create({
     color: '#71727A',
     fontWeight: '600',
     letterSpacing: 0.2,
+  },
+  statGridTimeframe: {
+    fontSize: 11,
+    color: '#DF6A49',
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    marginTop: 2,
   },
   statGridDivider: {
     width: 1,
