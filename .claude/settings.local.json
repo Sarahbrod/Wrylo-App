@@ -37,7 +37,21 @@
       "Bash(cat:*)",
       "Bash(git add:*)",
       "Bash(chmod:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(watchman watch-del-all:*)",
+      "Bash(xcrun simctl:*)",
+      "Bash(open -a Simulator)",
+      "Bash(pod install)",
+      "Bash(xcodebuild:*)",
+      "Bash(timeout 8 npm start:*)",
+      "Bash(xargs kill:*)",
+      "Bash(npx expo-doctor)",
+      "Bash(git push)",
+      "Bash(xcode-select:*)",
+      "Bash(EXPO_DEVTOOLS_LISTEN_ADDRESS=localhost npx expo start:*)",
+      "Bash(killall:*)",
+      "Bash(pod install:*)",
+      "Read(//var/folders/01/gxfypy8j6xq7jln80jhwxbzc0000gn/T/**)"
     ],
     "deny": []
   }

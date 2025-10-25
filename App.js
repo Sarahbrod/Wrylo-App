@@ -10,6 +10,7 @@ import LogInScreen from './src/screens/LogInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 import MoodFlowScreen from './src/screens/MoodFlowScreen';
+import MoodResultsScreen from './src/screens/MoodResultsScreen';
 import BookForumScreen from './src/screens/BookForumScreen';
 import BookDetailScreen from './src/screens/BookDetailScreen';
 import YearInReadingScreen from './src/screens/YearInReadingScreen';
@@ -55,6 +56,7 @@ export default function App() {
             <Stack.Screen name="Auth" component={AuthNavigator} />
             <Stack.Screen name="Main" component={MainTabNavigator} />
             <Stack.Screen name="MoodFlow" component={MoodFlowScreen} />
+            <Stack.Screen name="MoodResults" component={MoodResultsScreen} />
             <Stack.Screen name="BookForum" component={BookForumScreen} />
             <Stack.Screen name="BookDetail" component={BookDetailScreen} />
             <Stack.Screen name="YearInReading" component={YearInReadingScreen} />

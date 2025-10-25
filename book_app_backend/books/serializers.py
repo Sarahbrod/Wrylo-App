@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Book, BookTag, BookMood, BookGenre, UserLibrary
+from .models import Book, BookTag, BookMood, BookGenre, UserLibrary, UserRecommendation
 
 
 class BookTagSerializer(serializers.ModelSerializer):
@@ -25,7 +25,9 @@ class BookSerializer(serializers.ModelSerializer):
             'id', 'title', 'author', 'isbn', 'description', 'genre',
             'published_year', 'year', 'page_count', 'cover_image_url',
             'average_rating', 'rating_count', 'popularity_score',
-            'tags', 'moods', 'google_books_id', 'openlibrary_id'
+            'tags', 'moods', 'google_books_id', 'openlibrary_id',
+            # Mood-based fields
+            'energy_level', 'reading_depth', 'reading_pace', 'theme_tags'
         ]
 
     def get_tags(self, obj):
@@ -128,3 +130,49 @@ class ExternalBookSerializer(serializers.Serializer):
             if identifier.get('type') in ['ISBN_13', 'ISBN_10']:
                 return identifier.get('identifier')
         return None
+
+
+class MoodQuizDataSerializer(serializers.Serializer):
+    """Serializer for mood quiz input data"""
+    energy = serializers.ChoiceField(choices=['high', 'medium', 'low'])
+    genre = serializers.CharField(max_length=50)
+    depth = serializers.ChoiceField(choices=['light', 'medium', 'deep'])
+
+
+class BookRecommendationSerializer(BookSerializer):
+    """Extended book serializer with recommendation metadata"""
+    match_score = serializers.FloatField(read_only=True)
+    match_percentage = serializers.IntegerField(read_only=True)
+    match_reasons = serializers.ListField(child=serializers.CharField(), read_only=True)
+    mood_tags = serializers.ListField(child=serializers.CharField(), read_only=True)
+
+    class Meta(BookSerializer.Meta):
+        fields = BookSerializer.Meta.fields + [
+            'match_score', 'match_percentage', 'match_reasons', 'mood_tags'
+        ]
+
+
+class UserRecommendationSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)
+    book_id = serializers.IntegerField(write_only=True, required=False)
+
+    class Meta:
+        model = UserRecommendation
+        fields = [
+            'id', 'book', 'book_id', 'mood_energy', 'mood_genre', 'mood_depth',
+            'match_score', 'match_percentage', 'match_reasons',
+            'dismissed', 'saved', 'viewed', 'created_at'
+        ]
+        read_only_fields = ['match_score', 'match_percentage', 'match_reasons']
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
+
+class MoodSummarySerializer(serializers.Serializer):
+    """Serializer for mood summary display"""
+    title = serializers.CharField()
+    description = serializers.CharField()
+    emoji = serializers.CharField()
+    tags = serializers.ListField(child=serializers.DictField())
